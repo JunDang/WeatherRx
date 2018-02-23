@@ -1,0 +1,83 @@
+PODS:
+  - Alamofire (4.6.0)
+  - Cartography (2.0.0)
+  - Differentiator (3.0.2)
+  - FXBlurView (1.6.4)
+  - Reachability (3.2)
+  - Realm (3.1.1):
+    - Realm/Headers (= 3.1.1)
+  - Realm/Headers (3.1.1)
+  - RealmSwift (3.1.1):
+    - Realm (= 3.1.1)
+  - RxAlamofire (4.0.0):
+    - RxAlamofire/Core (= 4.0.0)
+  - RxAlamofire/Core (4.0.0):
+    - Alamofire (~> 4.5)
+    - RxSwift (~> 4.0)
+  - RxBlocking (4.1.2):
+    - RxSwift (~> 4.0)
+  - RxCocoa (4.1.2):
+    - RxSwift (~> 4.0)
+  - RxDataSources (3.0.2):
+    - Differentiator (~> 3.0)
+    - RxCocoa (~> 4.0)
+    - RxSwift (~> 4.0)
+  - RxGesture (1.2.1):
+    - RxCocoa (~> 4.0)
+    - RxSwift (~> 4.0)
+  - RxRealm (0.7.5):
+    - RealmSwift (~> 3.0)
+    - RxSwift (~> 4.0)
+  - RxRealmDataSources (0.2.9):
+    - RealmSwift (~> 3.0)
+    - RxCocoa (~> 4.0)
+    - RxRealm (~> 0.7.3)
+    - RxSwift (~> 4.0)
+  - RxSwift (4.1.2)
+  - RxTest (4.1.2):
+    - RxSwift (~> 4.0)
+  - Unbox (2.5.0)
+  - UnboxedAlamofire (2.0.4):
+    - Alamofire (~> 4.1)
+    - Unbox (~> 2.0)
+
+DEPENDENCIES:
+  - Cartography (= 2.0.0)
+  - FXBlurView
+  - Reachability
+  - RealmSwift
+  - RxAlamofire
+  - RxBlocking
+  - RxCocoa
+  - RxDataSources
+  - RxGesture
+  - RxRealm
+  - RxRealmDataSources
+  - RxSwift
+  - RxTest
+  - Unbox
+  - UnboxedAlamofire
+
+SPEC CHECKSUMS:
+  Alamofire: f41a599bd63041760b26d393ec1069d9d7b917f4
+  Cartography: d295eb25ab54bb57eecd8c2f04e9648c850f1281
+  Differentiator: a87be69eba49ec4ab460c7671143ee3a9eececfd
+  FXBlurView: db786c2561cb49a09ae98407f52460096ab8a44f
+  Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
+  Realm: 42d1c38a5b1bbcc828b48a7ce702cb86fc68adf4
+  RealmSwift: d31937ca6a6ee54acde64ec839523c0a3c04924b
+  RxAlamofire: 6ea579ac53bf14cb4bc7049a3866e5a769989b1d
+  RxBlocking: f6054985901412fc8c02daa84e92d4ba68c61389
+  RxCocoa: d88ba0f1f6abf040011a9eb4b539324fc426843a
+  RxDataSources: cb7c31e652a87ebb919da45f716bbb87b3765f6b
+  RxGesture: c278eb05b187abd47e11e65464ae4de53ab71d95
+  RxRealm: a6c6c0a07cb61f34209969ca6657734edfdfff30
+  RxRealmDataSources: 798303f1d7db18d80da9e95bab9605010378040e
+  RxSwift: e49536837d9901277638493ea537394d4b55f570
+  RxTest: e634f15fd2c2cd0e0120132ef7a4f7be69ad0393
+  Unbox: 30e437e6151a6de16139375fd4e8dd9a664cfbf7
+  UnboxedAlamofire: e803f471553e3aecec711f5d50f80cda6c65feaa
+
+PODFILE CHECKSUM: 48f5c2fb617c310f015c8505ae8e4be46b21281a
+
+COCOAPODS: 1.4.0
