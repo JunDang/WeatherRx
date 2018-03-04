@@ -11,6 +11,8 @@
 		440DD629B6F1D52A490FCE3A /* Pods_WeatherRx.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7BE1A50EF82869D17538990 /* Pods_WeatherRx.framework */; };
 		87CECF8BA2B83F971EB5A57B /* Pods_WeatherRxAbstract_WeatherRxTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D107C3096939C90CBF909C31 /* Pods_WeatherRxAbstract_WeatherRxTests.framework */; };
 		A13C734B1C0BEDEFB800E046 /* Pods_WeatherRxTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D74E5165AC8AD9406BE19B5 /* Pods_WeatherRxTests.framework */; };
+		A50D28E620470FE200351630 /* FlickrViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50D28E520470FE200351630 /* FlickrViewModel.swift */; };
+		A50D28E720470FE200351630 /* FlickrViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50D28E520470FE200351630 /* FlickrViewModel.swift */; };
 		A5146B661F799A2600EE1DF7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5146B651F799A2600EE1DF7 /* AppDelegate.swift */; };
 		A5146B681F799A2600EE1DF7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5146B671F799A2600EE1DF7 /* ViewController.swift */; };
 		A5146B6B1F799A2600EE1DF7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A5146B691F799A2600EE1DF7 /* Main.storyboard */; };
@@ -46,6 +48,7 @@
 		8771C2A03DB283ACA10F2E12 /* Pods-WeatherRxAbstract-WeatherRxTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeatherRxAbstract-WeatherRxTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WeatherRxAbstract-WeatherRxTests/Pods-WeatherRxAbstract-WeatherRxTests.debug.xcconfig"; sourceTree = "<group>"; };
 		8D12167DD68C741DD6116DB8 /* Pods-WeatherRx.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeatherRx.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WeatherRx/Pods-WeatherRx.debug.xcconfig"; sourceTree = "<group>"; };
 		8D74E5165AC8AD9406BE19B5 /* Pods_WeatherRxTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WeatherRxTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A50D28E520470FE200351630 /* FlickrViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrViewModel.swift; sourceTree = "<group>"; };
 		A5146B621F799A2600EE1DF7 /* WeatherRx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherRx.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5146B651F799A2600EE1DF7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A5146B671F799A2600EE1DF7 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -103,9 +106,18 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		A50D28E420470FB600351630 /* View Models */ = {
+			isa = PBXGroup;
+			children = (
+				A50D28E520470FE200351630 /* FlickrViewModel.swift */,
+			);
+			path = "View Models";
+			sourceTree = "<group>";
+		};
 		A5146B591F799A2500EE1DF7 = {
 			isa = PBXGroup;
 			children = (
+				A50D28E420470FB600351630 /* View Models */,
 				A54D8B9B203B2109005B7FE8 /* Helpers */,
 				A5146B8D1F7C455B00EE1DF7 /* Services */,
 				A5146B871F799D5400EE1DF7 /* Model */,
@@ -470,6 +482,7 @@
 				A5146B8B1F799D7E00EE1DF7 /* Weather.swift in Sources */,
 				A5146BCB1F7EBB6B00EE1DF7 /* FlickrService.swift in Sources */,
 				A5EE3C8F201FA89500B65EA2 /* FlickrPhoto.swift in Sources */,
+				A50D28E620470FE200351630 /* FlickrViewModel.swift in Sources */,
 				A5146B661F799A2600EE1DF7 /* AppDelegate.swift in Sources */,
 				A54D8BA6203F09B4005B7FE8 /* InternetAPI.swift in Sources */,
 			);
@@ -486,6 +499,7 @@
 				A5146BCC1F7EBB6B00EE1DF7 /* FlickrService.swift in Sources */,
 				A5146B7B1F799A2600EE1DF7 /* WeatherRxTests.swift in Sources */,
 				A54D8BA7203F09B4005B7FE8 /* InternetAPI.swift in Sources */,
+				A50D28E720470FE200351630 /* FlickrViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

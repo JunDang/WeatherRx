@@ -20,19 +20,12 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let flickrPhotoResult = FlickrService(lat: "43.6532" , lon: "-79.3832", currentWeather: "cloudy")
-        //FlickrService.instanceFlickr.retrieveImageAtLat(lat: 43.6532, lon: -79.3832)
-      /*  FlickrService().retrieveImageAtLat(lat: "43.6532", lon: "-79.3832", currentWeather: "snow"){ flickrPhotos, error  in
-            guard let flickrPhotos = flickrPhotos else { return }
-            //let listOfFlickrPhotos: [FlickrPhoto] = try? unbox(dictionaries: flickrPhotos, allowInvalidElements: true) as [FlickrPhoto]
-            if let error = error {
-                print("Unable to forward photos (\(error))")
-            }
-            //self.render(image: image)
-            return
-        }*/
+        setup()
+        layoutView()
+      
+        let image = try? FlickrService().searchPhotoAtLat(lat: "43.6532" , lon: "-79.3832", currentWeather: "cloudy")
+        self.render(image: image)
        
-        // Do any additional setup after loading the view, typically from a nib.
     }
 
     override func didReceiveMemoryWarning() {

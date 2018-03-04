@@ -10,7 +10,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-typealias JSONObject = [String: Any]
+/*typealias JSONObject = [String: Any]
 
 protocol InternetAPIProtocol {
     static func composeURL(from baseURL: String, parameters: [String:String]) -> URL
@@ -24,4 +24,4 @@ struct InternetAPI: InternetAPIProtocol {
         let url = try! components.asURL()
         return url
     }
-}
+}*/
