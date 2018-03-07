@@ -37,24 +37,46 @@ class FlickrViewModel {
     
     func bindToBackgroundImage() {
       
-        try? apiType.searchPhotoAtLat(lat:lat, lon: lon, currentWeather: currentWeather)
-            .do(onNext: { image in
-                self.imageCache.setObject(image, forKey: "\(self.lat)" + "\(self.lon)" + "\(self.currentWeather)" as NSString)
-            },onError: { [weak self] e in
-                guard let strongSelf = self else { return }
-                DispatchQueue.main.async {
-                    strongSelf.showError(error: e)
-                }
-            })
-        .bind(to:backgroundImage)
-        .disposed(by:bag)
-        }
+             try? apiType.searchImageURLAtLat(lat:lat, lon: lon, currentWeather: currentWeather)
+            .flatMap {imageURL in
+                self.retrieveImage(imageURL: imageURL, imageCache: self.imageCache as! imageCachingProtocol)
+          
+            }
+            .bind(to:backgroundImage)
+            .disposed(by:bag)
+        
     
        
     }
     
+func retrieveImage(imageURL: NSURL, imageCache: imageCachingProtocol) -> Observable<UIImage> {
+    if let imageFromCache = imageCache.imageFromURLFromChache(url: imageURL) {
+        return Observable.just(imageFromCache)
+    } else {
+        return apiType.sendRequest(to: imageURL)
+            .do(onNext: { (imageFromRequest) in
+                imageCache.saveImageToCache(image: imageFromRequest, url: imageURL)
+            }
+                ,onError: <#T##((Error) throws -> Void)?##((Error) throws -> Void)?##(Error) throws -> Void#>
+                ,onCompleted: {
+                    
+            })
+        
+        
+    }
     
+}
     
-    
+   /* .do(onNext: { image in
+    self.imageCache.setObject(image, forKey: "\(self.lat)" + "\(self.lon)" + "\(self.currentWeather)" as NSString)
+    },onError: { [weak self] e in
+    guard let strongSelf = self else { return }
+    DispatchQueue.main.async {
+    strongSelf.showError(error: e)
+    }
+    })
+    .bind(to:backgroundImage)
+    .disposed(by:bag)
+}*/
     
 }

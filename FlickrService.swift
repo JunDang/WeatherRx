@@ -21,12 +21,14 @@ typealias JSONObject = [String: Any]
 protocol InternetAPIProtocol {
     static func composeURL(from baseURL: String, parameters: [String:String]) -> URL
 }
-protocol imageCachingProtocl {
+protocol imageCachingProtocol {
+    var imageCache: NSCache<AnyObject, AnyObject> { get }
     func saveImageToCache(image: UIImage?, url: NSURL)
     func imageFromURLFromChache(url: NSURL) -> UIImage?
 }
 protocol FlickrAPIProtocol: InternetAPIProtocol {
-    static func searchPhotoAtLat(lat: Double, lon: Double, currentWeather:String) throws -> Observable <UIImage>
+    static func searchImageURLAtLat(lat: Double, lon: Double, currentWeather:String) throws -> Observable <NSURL>
+    static func sendRequest(to URL: NSURL) -> Observable<UIImage>
 }
 // MARK: -URL Components
 struct FlickrAPI {
@@ -35,7 +37,8 @@ struct FlickrAPI {
     static let searchMethod = "flickr.photos.search"
 }
 
-struct FlickrService: FlickrAPIProtocol {
+struct FlickrService: FlickrAPIProtocol, imageCachingProtocol {
+    let backgroundImage = Variable<UIImage?>(nil)
     
     //MARK: - errors
     enum flickrRequestError: Error {
@@ -50,7 +53,7 @@ struct FlickrService: FlickrAPIProtocol {
         let url = try! components.asURL()
         return url
     }
-    //MARK: - Search Photo Image
+   /* //MARK: - Search Photo Image
    static func searchPhotoAtLat(lat: Double, lon: Double, currentWeather:String) -> Observable <UIImage> {
         guard let urlEncodedcurrentWeather = currentWeather.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) else {
             return Observable.error(flickrRequestError.invalidJSONData)
@@ -70,10 +73,9 @@ struct FlickrService: FlickrAPIProtocol {
         
         let flickrURL = FlickrService.composeURL(from: FlickrAPI.baseURLString, parameters: parameters)
         return RxAlamofire.requestJSON(.get, flickrURL)
-            .map ({ (response, json) -> URLRequestConvertible in
+            .map ({ (response, json) in //-> URLRequestConvertible in
                guard let dict = json as? JSONObject else {
-                //return Observable<Any>.never() as! URLRequestConvertible
-                throw flickrRequestError.invalidJSONData
+                  throw flickrRequestError.invalidJSONData
                }
                 let flickrPhotoResult: FlickrPhotoResult = try unbox(dictionary: dict)
                 let flickrPhotos = flickrPhotoResult.flickrPhotoResult!.flickrPhotos
@@ -83,7 +85,7 @@ struct FlickrService: FlickrAPIProtocol {
                 return imageURL
              })
              .flatMap ({ imageURL in
-                 RxAlamofire
+                  RxAlamofire
                  .requestData(imageURL)
                  .catchError { error in
                     return Observable.never()
@@ -94,7 +96,7 @@ struct FlickrService: FlickrAPIProtocol {
                     return image!
                  }
              //.asDriver(onErrorJustReturn: UIImage(named:"banff")!)
-            }
+            }*/
     
     let imageCache = NSCache<AnyObject, AnyObject>()
     func saveImageToCache(image: UIImage?, url: NSURL) {
@@ -105,6 +107,68 @@ struct FlickrService: FlickrAPIProtocol {
     func imageFromURLFromChache(url: NSURL) -> UIImage? {
         return imageCache.object(forKey: url) as? UIImage
     }
+    static func searchImageURLAtLat(lat: Double, lon: Double, currentWeather:String) -> Observable <NSURL> {
+        guard let urlEncodedcurrentWeather = currentWeather.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) else {
+            return Observable.error(flickrRequestError.invalidJSONData)
+        }
+        let parameters = [
+            "method": FlickrAPI.searchMethod,
+            "api_key": FlickrAPI.apiKey,
+            "format": "json",
+            "nojsoncallback": "1",
+            "per_page": "25",
+            "lat": "\(lat)",
+            "lon": "\(lon)",
+            "text": urlEncodedcurrentWeather,
+            "interestingness-desc&tags": "scenic,landscape,nature,colorful",
+            "tagmode": "all"
+        ]
+        
+        let flickrURL = FlickrService.composeURL(from: FlickrAPI.baseURLString, parameters: parameters)
+        return RxAlamofire.requestJSON(.get, flickrURL)
+            .map ({ (response, json) in
+                guard let dict = json as? JSONObject else {
+                    throw flickrRequestError.invalidJSONData
+                }
+                let flickrPhotoResult: FlickrPhotoResult = try unbox(dictionary: dict)
+                let flickrPhotos = flickrPhotoResult.flickrPhotoResult!.flickrPhotos
+                let randomIndex = Int(arc4random_uniform(UInt32(flickrPhotos.count)))
+                let photo = flickrPhotos[randomIndex]
+                let imageURL = photo.createImageURL()
+                return imageURL
+            })
+   }
+  /*  func retrieveImage(imageURL: NSURL, imageCache: imageCachingProtocol) -> Observable<UIImage> {
+         if let imageFromCache = imageCache.imageFromURLFromChache(url: imageURL) {
+            return Observable.just(imageFromCache)
+         } else {
+             return sendRequest(to: imageURL)
+             .do(onNext: { (imageFromRequest) in
+                 imageCache.saveImageToCache(image: imageFromRequest, url: imageURL)
+                }
+                ,onError: <#T##((Error) throws -> Void)?##((Error) throws -> Void)?##(Error) throws -> Void#>
+                    ,onCompleted: {
+                       
+                })
+            
+           
+                 }
+        
+       }*/
+
+
+    static func sendRequest(to URL: NSURL) -> Observable<UIImage> {
+        return RxAlamofire
+            .requestData(URL as! URLRequestConvertible)
+            .catchError { error in
+                return Observable.never()
+        }
+       .map{ (response, data) -> UIImage in
+       let image = UIImage(data: data)
+       return image!
+      }
+   }
+    
  }
 
     
