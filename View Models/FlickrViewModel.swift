@@ -43,16 +43,16 @@ class FlickrViewModel {
       try? apiType.searchImageURLAtLat(lat:lat, lon: lon, currentWeather: currentWeather)
         .flatMap ({imageURL -> Observable<UIImage> in
             if let imageFromCache = self.imageCacheType.imageFromURLFromChache(url: imageURL) {
-                return Observable.just(imageFromCache)
+              return Observable.just(imageFromCache)
             } else {
-                return self.apiType.sendRequest(to: imageURL)
-                    .do(onNext: { (imageFromRequest) in
-                        self.imageCacheType.saveImageToCache(image: imageFromRequest, url: imageURL)
-                    })
+              return self.apiType.sendRequest(to: imageURL)
+                .do(onNext: { (imageFromRequest) in
+                   self.imageCacheType.saveImageToCache(image: imageFromRequest, url: imageURL)
+                })
             }
-        })
-        .bind(to:backgroundImage)
-        .disposed(by:bag)
+       })
+       .bind(to:backgroundImage)
+       .disposed(by:bag)
     }
     
  }

@@ -41,60 +41,7 @@ struct FlickrService: FlickrAPIProtocol, InternetAPIProtocol {
         let url = try! components.asURL()
         return url
     }
-   /* //MARK: - Search Photo Image
-   static func searchPhotoAtLat(lat: Double, lon: Double, currentWeather:String) -> Observable <UIImage> {
-        guard let urlEncodedcurrentWeather = currentWeather.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) else {
-            return Observable.error(flickrRequestError.invalidJSONData)
-        }
-        let parameters = [
-            "method": FlickrAPI.searchMethod,
-            "api_key": FlickrAPI.apiKey,
-            "format": "json",
-            "nojsoncallback": "1",
-            "per_page": "25",
-            "lat": "\(lat)",
-            "lon": "\(lon)",
-            "text": urlEncodedcurrentWeather,
-            "interestingness-desc&tags": "scenic,landscape,flower,tree,nature,insects,water,sea,cloud,leaf,colorful",
-            "tagmode": "all"
-        ]
-        
-        let flickrURL = FlickrService.composeURL(from: FlickrAPI.baseURLString, parameters: parameters)
-        return RxAlamofire.requestJSON(.get, flickrURL)
-            .map ({ (response, json) in //-> URLRequestConvertible in
-               guard let dict = json as? JSONObject else {
-                  throw flickrRequestError.invalidJSONData
-               }
-                let flickrPhotoResult: FlickrPhotoResult = try unbox(dictionary: dict)
-                let flickrPhotos = flickrPhotoResult.flickrPhotoResult!.flickrPhotos
-                let randomIndex = Int(arc4random_uniform(UInt32(flickrPhotos.count)))
-                let photo = flickrPhotos[randomIndex]
-                let imageURL = photo.createImageURL() as! URLRequestConvertible
-                return imageURL
-             })
-             .flatMap ({ imageURL in
-                  RxAlamofire
-                 .requestData(imageURL)
-                 .catchError { error in
-                    return Observable.never()
-                   }
-                })
-             .map{ (response, data) -> UIImage in
-                    let image = UIImage(data: data)
-                    return image!
-                 }
-             //.asDriver(onErrorJustReturn: UIImage(named:"banff")!)
-            }*/
-    
-   /* let imageCache = NSCache<AnyObject, AnyObject>()
-    func saveImageToCache(image: UIImage?, url: NSURL) {
-        if let image = image {
-            imageCache.setObject(image, forKey: url)
-        }
-    }
-    func imageFromURLFromChache(url: NSURL) -> UIImage? {
-        return imageCache.object(forKey: url) as? UIImage
-    }*/
+  
     static func searchImageURLAtLat(lat: Double, lon: Double, currentWeather:String) -> Observable <NSURL> {
         guard let urlEncodedcurrentWeather = currentWeather.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) else {
             return Observable.error(flickrRequestError.invalidJSONData)
@@ -108,7 +55,7 @@ struct FlickrService: FlickrAPIProtocol, InternetAPIProtocol {
             "lat": "\(lat)",
             "lon": "\(lon)",
             "text": urlEncodedcurrentWeather,
-            "interestingness-desc&tags": "scenic,landscape,nature,colorful",
+            "interestingness-desc&tags": "scenic,sea,lake,leaf,nature,colorful",
             "tagmode": "all"
         ]
         
@@ -128,28 +75,9 @@ struct FlickrService: FlickrAPIProtocol, InternetAPIProtocol {
                 return imageURL
             })
    }
-  /*  func retrieveImage(imageURL: NSURL, imageCache: imageCachingProtocol) -> Observable<UIImage> {
-         if let imageFromCache = imageCache.imageFromURLFromChache(url: imageURL) {
-            return Observable.just(imageFromCache)
-         } else {
-             return sendRequest(to: imageURL)
-             .do(onNext: { (imageFromRequest) in
-                 imageCache.saveImageToCache(image: imageFromRequest, url: imageURL)
-                }
-                ,onError: <#T##((Error) throws -> Void)?##((Error) throws -> Void)?##(Error) throws -> Void#>
-                    ,onCompleted: {
-                       
-                })
-            
-           
-                 }
-        
-       }*/
-
-
+  
     static func sendRequest(to imageURL: NSURL) -> Observable<UIImage> {
         let request = URLRequest(url: imageURL as URL)
-        print("URL: " + "\(request)")
         return RxAlamofire
             .requestData(request)
             .catchError { error in
