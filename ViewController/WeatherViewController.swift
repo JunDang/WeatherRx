@@ -1,48 +1,52 @@
 //
-//  ViewController.swift
+//  WeatherViewController.swift
 //  WeatherRx
 //
-//  Created by Jun Dang on 2017-09-25.
-//  Copyright © 2017 Jun Dang. All rights reserved.
+//  Created by Jun Dang on 2018-03-07.
+//  Copyright © 2018 Jun Dang. All rights reserved.
 //
 
-/*import UIKit
+import UIKit
 import Cartography
 import FXBlurView
-import Unbox
+import RxSwift
+import RxCocoa
 
-class ViewController: UIViewController {
+
+class WeatherViewController: UIViewController {
+  fileprivate let gradientView = UIView()
+  fileprivate let overlayView = UIImageView()
+  fileprivate let backgroundView = UIImageView()
+  fileprivate let scrollView = UIScrollView()
     
-    fileprivate let gradientView = UIView()
-    fileprivate let overlayView = UIImageView()
-    fileprivate let backgroundView = UIImageView()
-    fileprivate let scrollView = UIScrollView()
+  private let bag = DisposeBag()
+  fileprivate var flickrViewModel: FlickrViewModel = FlickrViewModel(lat: 43.6232, lon: -79.3832, currentWeather: "sunny", apiType: FlickrService.self, imageCacheType: ImageCaching.self)
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setup()
-        layoutView()
-      
-       // let image = try? FlickrService().searchPhotoAtLat(lat: "43.6532" , lon: "-79.3832", currentWeather: "cloudy")
-        self.render(image: image)
-       
-    }
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    setup()
+    layoutView()
+    bindBackground()
+ 
+  }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+  override func didReceiveMemoryWarning() {
+    super.didReceiveMemoryWarning()
+    // Dispose of any resources that can be recreated.
+  }
+  func bindBackground() {
+     flickrViewModel.backgroundImage.asDriver()
+       .drive(onNext: { [weak self] backgroundImage in
+          self?.backgroundView.image = backgroundImage
+          self?.overlayView.image = backgroundImage?.blurredImage(withRadius: 10, iterations: 20, tintColor: UIColor.clear)
+          self?.overlayView.alpha = 0
+        })
+       .disposed(by: bag)
     }
-
-    func render(image: UIImage?){
-        if let image = image {
-            backgroundView.image = image
-            overlayView.image = image.blurredImage(withRadius: 10, iterations: 20, tintColor: UIColor.clear)
-            overlayView.alpha = 0
-        }
-    }
+ 
 }
 
-private extension ViewController{
+private extension WeatherViewController{
     func setup(){
         backgroundView.contentMode = .scaleAspectFill
         backgroundView.clipsToBounds = true
@@ -59,7 +63,7 @@ private extension ViewController{
 }
 
 // MARK: Layout
-extension ViewController{
+extension WeatherViewController{
     func layoutView() {
         constrain(backgroundView) { view in
             view.top == view.superview!.top
@@ -85,7 +89,5 @@ extension ViewController{
             view.left == view.superview!.left
             view.right == view.superview!.right
         }
-  }
-}*/
-
-
+    }
+}
