@@ -24,7 +24,7 @@ class FlickrViewModel {
     let currentWeather: String
     
     // MARK: - Output
-    let backgroundImage = BehaviorRelay<UIImage?>(value: nil)
+    var backgroundImage = BehaviorRelay<UIImage?>(value: nil)
     
     // MARK: - Init
     init(lat: Double, lon: Double, currentWeather:String, apiType: FlickrAPIProtocol.Type = FlickrService.self, imageCacheType: ImageCachingProtocol.Type = ImageCaching.self) {
@@ -39,22 +39,35 @@ class FlickrViewModel {
     }
     
     func bindToBackgroundImage() {
-      
-      try? apiType.searchImageURLAtLat(lat:lat, lon: lon, currentWeather: currentWeather)
-        .flatMap ({imageURL -> Observable<UIImage> in
-            if let imageFromCache = self.imageCacheType.imageFromURLFromChache(url: imageURL) {
-              return Observable.just(imageFromCache)
-            } else {
-              return self.apiType.sendRequest(to: imageURL)
-                .do(onNext: { (imageFromRequest) in
-                   self.imageCacheType.saveImageToCache(image: imageFromRequest, url: imageURL)
-                })
-            }
-       })
-       .bind(to:backgroundImage)
-       .disposed(by:bag)
+  
+        if let imageURL = try? apiType.searchImageURLAtLat(lat:lat, lon: lon, currentWeather: currentWeather) {
+            imageURL.flatMap ({imageURL -> Observable<UIImage> in
+                if let imageFromCache = self.imageCacheType.imageFromURLFromChache(url: imageURL) {
+                    print("imageFromCache")
+                    return Observable.just(imageFromCache)
+                } else {
+                    return self.apiType.sendRequest(to: imageURL)
+                        .do(onNext: { (imageFromRequest) in
+                            self.imageCacheType.saveImageToCache(image: imageFromRequest, url: imageURL)
+                            print("saveImageToCache")
+                            }, onError: { e in
+                            print("errorViewModel: " + "\(e)")
+                        })
+                 }
+               })
+                .catchError { error in
+                    print("errorViewModel: " + "\(error)")
+                    return Observable.just(UIImage(named: "banff")!)
+               }
+              //.catchErrorJustReturn(UIImage(named: "banff")!)
+                .bind(to:backgroundImage)
+                .disposed(by:bag)
+         } else {
+            Observable.just(UIImage(named: "banff")!)
+              .bind(to:backgroundImage)
+              .disposed(by:bag)
+        }
     }
-    
  }
     
    

@@ -20,7 +20,7 @@ class WeatherViewController: UIViewController {
   fileprivate let scrollView = UIScrollView()
     
   private let bag = DisposeBag()
-  fileprivate var flickrViewModel: FlickrViewModel = FlickrViewModel(lat: 43.6232, lon: -79.3832, currentWeather: "sunny", apiType: FlickrService.self, imageCacheType: ImageCaching.self)
+  fileprivate var flickrViewModel: FlickrViewModel = FlickrViewModel(lat: 43.6532, lon: -79.3832, currentWeather: "sunny", apiType: FlickrService.self, imageCacheType: ImageCaching.self)
 
   override func viewDidLoad() {
     super.viewDidLoad()

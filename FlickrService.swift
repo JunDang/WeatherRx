@@ -33,6 +33,9 @@ struct FlickrService: FlickrAPIProtocol, InternetAPIProtocol {
         case unknown
         case invalidJSONData
         case failedRequest
+        case URLCannotBeEncoded
+        case emptyAlbum
+        case noImageFound
     }
     //MARK: - compose url
     static func composeURL(from baseURL: String = "", parameters: [String:String] = [:]) -> URL {
@@ -42,9 +45,10 @@ struct FlickrService: FlickrAPIProtocol, InternetAPIProtocol {
         return url
     }
   
-    static func searchImageURLAtLat(lat: Double, lon: Double, currentWeather:String) -> Observable <NSURL> {
+    static func searchImageURLAtLat(lat: Double, lon: Double, currentWeather:String) throws -> Observable <NSURL> {
         guard let urlEncodedcurrentWeather = currentWeather.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) else {
-            return Observable.error(flickrRequestError.invalidJSONData)
+            //return Observable.error(flickrRequestError.URLCannotBeEncoded)
+            throw flickrRequestError.URLCannotBeEncoded
         }
         let parameters = [
             "method": FlickrAPI.searchMethod,
@@ -54,8 +58,10 @@ struct FlickrService: FlickrAPIProtocol, InternetAPIProtocol {
             "per_page": "25",
             "lat": "\(lat)",
             "lon": "\(lon)",
-            "text": urlEncodedcurrentWeather,
-            "interestingness-desc&tags": "scenic,sea,lake,leaf,nature,colorful",
+            //"text": urlEncodedcurrentWeather,
+            "accuracy": "11",
+            "sort": urlEncodedcurrentWeather + "scenic,landscape,flower,tree,nature,insects,water,sea,cloud,leaf,colorful",
+            //"group_id": "34427469792@N01",
             "tagmode": "all"
         ]
         
@@ -63,11 +69,14 @@ struct FlickrService: FlickrAPIProtocol, InternetAPIProtocol {
         print("flickrURL: " + "\(flickrURL)")
         return RxAlamofire.requestJSON(.get, flickrURL)
             .map ({ (response, json) in
-                guard let dict = json as? JSONObject else {
+               guard let dict = json as? JSONObject else {
                     throw flickrRequestError.invalidJSONData
                 }
                 let flickrPhotoResult: FlickrPhotoResult = try unbox(dictionary: dict)
                 let flickrPhotos = flickrPhotoResult.flickrPhotoResult!.flickrPhotos
+                guard flickrPhotos.count > 1 else {
+                    throw flickrRequestError.emptyAlbum
+                }
                 let randomIndex = Int(arc4random_uniform(UInt32(flickrPhotos.count)))
                 let photo = flickrPhotos[randomIndex]
                 let imageURL = photo.createImageURL()
@@ -84,8 +93,12 @@ struct FlickrService: FlickrAPIProtocol, InternetAPIProtocol {
                 return Observable.never()
         }
        .map{ (response, data) -> UIImage in
-       let image = UIImage(data: data)
-       return image!
+        print("dataCount: " + "\(data.count)")
+        guard data.count > 5000 else {
+            throw flickrRequestError.noImageFound
+        }
+        let image = UIImage(data: data)
+        return image!
       }
    }
     
