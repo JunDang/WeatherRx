@@ -1,17 +1,17 @@
 PODS:
-  - Alamofire (4.6.0)
-  - Cartography (2.0.0)
+  - Alamofire (4.7.1)
+  - Cartography (3.0.1)
   - Differentiator (3.0.2)
   - FXBlurView (1.6.4)
   - Reachability (3.2)
-  - Realm (3.1.1):
-    - Realm/Headers (= 3.1.1)
-  - Realm/Headers (3.1.1)
-  - RealmSwift (3.1.1):
-    - Realm (= 3.1.1)
-  - RxAlamofire (4.0.0):
-    - RxAlamofire/Core (= 4.0.0)
-  - RxAlamofire/Core (4.0.0):
+  - Realm (3.3.1):
+    - Realm/Headers (= 3.3.1)
+  - Realm/Headers (3.3.1)
+  - RealmSwift (3.3.1):
+    - Realm (= 3.3.1)
+  - RxAlamofire (4.1.0):
+    - RxAlamofire/Core (= 4.1.0)
+  - RxAlamofire/Core (4.1.0):
     - Alamofire (~> 4.5)
     - RxSwift (~> 4.0)
   - RxBlocking (4.1.2):
@@ -42,7 +42,7 @@ PODS:
     - Unbox (~> 2.0)
 
 DEPENDENCIES:
-  - Cartography (= 2.0.0)
+  - Cartography
   - FXBlurView
   - Reachability
   - RealmSwift
@@ -59,14 +59,14 @@ DEPENDENCIES:
   - UnboxedAlamofire
 
 SPEC CHECKSUMS:
-  Alamofire: f41a599bd63041760b26d393ec1069d9d7b917f4
-  Cartography: d295eb25ab54bb57eecd8c2f04e9648c850f1281
+  Alamofire: 68d7d521118d49c615a8d2214d87cdf525599d30
+  Cartography: f8c899bb0f5cf20758644a8eea59a75e98a03a5d
   Differentiator: a87be69eba49ec4ab460c7671143ee3a9eececfd
   FXBlurView: db786c2561cb49a09ae98407f52460096ab8a44f
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
-  Realm: 42d1c38a5b1bbcc828b48a7ce702cb86fc68adf4
-  RealmSwift: d31937ca6a6ee54acde64ec839523c0a3c04924b
-  RxAlamofire: 6ea579ac53bf14cb4bc7049a3866e5a769989b1d
+  Realm: 63ebf4903b446b0bdf2131244eb1e1549925c724
+  RealmSwift: f28fe8507bdfb8f1c924962401b83e7b9d7abb5c
+  RxAlamofire: 96a2bff4694a1609bb59c57b53d99ea7a0ddc64a
   RxBlocking: f6054985901412fc8c02daa84e92d4ba68c61389
   RxCocoa: d88ba0f1f6abf040011a9eb4b539324fc426843a
   RxDataSources: cb7c31e652a87ebb919da45f716bbb87b3765f6b
@@ -78,6 +78,6 @@ SPEC CHECKSUMS:
   Unbox: 30e437e6151a6de16139375fd4e8dd9a664cfbf7
   UnboxedAlamofire: e803f471553e3aecec711f5d50f80cda6c65feaa
 
-PODFILE CHECKSUM: 48f5c2fb617c310f015c8505ae8e4be46b21281a
+PODFILE CHECKSUM: 75b8f63876273e1946dc3db88c99f428100acff1
 
 COCOAPODS: 1.4.0

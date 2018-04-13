@@ -6,7 +6,7 @@ abstract_target 'WeatherRxAbstract' do
     pod 'Reachability'
     pod ‘RxAlamofire'
     pod 'Unbox'
-    pod 'Cartography', '2.0.0'
+    pod 'Cartography'
     pod 'FXBlurView'
     pod 'RxSwift'
     pod 'RxCocoa'
