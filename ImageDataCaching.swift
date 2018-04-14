@@ -23,5 +23,4 @@ class ImageDataCaching: ImageDataCachingProtocol {
          return imageDataCashe.object(forKey: url) as? NSData
     }
     
-    
 }

@@ -11,11 +11,8 @@ import RxSwift
 
 
 protocol FlickrAPIProtocol {
-    
     static func searchImageURL(lat: Double, lon: Double, currentWeather:String) throws -> Observable <NSURL>
-    //static func sendRequest(to URL: NSURL) -> Observable<UIImage>
     static func createSearchParameters(lat: Double, lon: Double, currentWeather:String) -> Observable<[String:String]>
     static func sendRequest(to URL: NSURL) -> Observable<NSData>
     static func getImage(imageURL: NSURL, cache: ImageDataCachingProtocol.Type) -> Observable<UIImage?>
-    
 }

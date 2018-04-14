@@ -20,9 +20,8 @@ class WeatherViewController: UIViewController {
   fileprivate let scrollView = UIScrollView()
     
   private let bag = DisposeBag()
- /* fileprivate var flickrViewModel: FlickrViewModel = FlickrViewModel(lat: 43.6532, lon: -79.3832, currentWeather: "sunny", apiType: FlickrService.self,  imageDataCacheType: ImageDataCaching.self)*/
 
-  override func viewDidLoad() {
+    override func viewDidLoad() {
     super.viewDidLoad()
     setup()
     layoutView()
@@ -35,10 +34,8 @@ class WeatherViewController: UIViewController {
     // Dispose of any resources that can be recreated.
   }
   func bindBackground() {
-   
-    let flickrViewModel: FlickrViewModel = FlickrViewModel(lat: 43.6532, lon: -79.3832, currentWeather: "sunny", apiType: FlickrService.self, imageDataCacheType: ImageDataCaching.self/*imageCacheType: ImageCaching.self*/)
-    print("bindBackground")
-     flickrViewModel.backgroundImage.asDriver()
+      let flickrViewModel: FlickrViewModel = FlickrViewModel(lat: 43.6532, lon: -79.3832, currentWeather: "sunny", apiType: FlickrService.self, imageDataCacheType: ImageDataCaching.self)
+      flickrViewModel.backgroundImage.asDriver()
          .drive(onNext: { [weak self] backgroundImage in
           self?.backgroundView.image = backgroundImage
           self?.overlayView.image = backgroundImage?.blurredImage(withRadius: 10, iterations: 20, tintColor: UIColor.clear)
@@ -46,8 +43,7 @@ class WeatherViewController: UIViewController {
         })
        .disposed(by: bag)
     }
- 
-}
+ }
 
 private extension WeatherViewController{
     func setup(){

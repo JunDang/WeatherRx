@@ -44,6 +44,7 @@ struct FlickrService: FlickrAPIProtocol, InternetAPIProtocol {
         let url = try! components.asURL()
         return url
     }
+    
     static func createSearchParameters(lat: Double, lon: Double, currentWeather:String) -> Observable<[String:String]> {
         return Observable.create { observer -> Disposable in
             if let urlEncodedcurrentWeather = currentWeather.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) {
@@ -56,9 +57,7 @@ struct FlickrService: FlickrAPIProtocol, InternetAPIProtocol {
                     "lat": "\(lat)",
                     "lon": "\(lon)",
                     "text": urlEncodedcurrentWeather,
-                    //"accuracy": "11",
-                    //"sort": "scenic,landscape,flower,tree,nature,insects,water,sea,cloud,leaf,colorful",
-                    "group_id": "92767609@N00",//"92767609@N00", "1463451@N25"
+                    "group_id": "92767609@N00",
                     "tagmode": "all"
                 ]
                 observer.onNext(parameters)
@@ -71,8 +70,7 @@ struct FlickrService: FlickrAPIProtocol, InternetAPIProtocol {
     }
     
     static func searchImageURL(lat: Double, lon: Double, currentWeather:String) -> Observable<NSURL> {
-       
-        return createSearchParameters(lat: lat, lon: lon, currentWeather:currentWeather).flatMap ({ parameters -> Observable<NSURL> in
+          return createSearchParameters(lat: lat, lon: lon, currentWeather:currentWeather).flatMap ({ parameters -> Observable<NSURL> in
             let flickrURL = FlickrService.composeURL(from: FlickrAPI.baseURLString, parameters: parameters)
             print("flickrURL: " + "\(flickrURL)")
             return RxAlamofire.requestJSON(.get, flickrURL)
@@ -93,44 +91,7 @@ struct FlickrService: FlickrAPIProtocol, InternetAPIProtocol {
                 })
            })
      }
-    
- 
-   /* static func searchImageURLAtLatLng(parameters: [String: String]) -> Observable <NSURL> {
-        let flickrURL = FlickrService.composeURL(from: FlickrAPI.baseURLString, parameters: parameters)
-        print("flickrURL: " + "\(flickrURL)")
-        return RxAlamofire.requestJSON(.get, flickrURL)
-            .map ({ (response, json) in
-                guard let dict = json as? JSONObject else {
-                    throw flickrRequestError.invalidJSONData
-                }
-                let flickrPhotoResult: FlickrPhotoResult = try unbox(dictionary: dict)
-                let flickrPhotos = flickrPhotoResult.flickrPhotoResult!.flickrPhotos
-                guard flickrPhotos.count > 0 else {
-                    throw flickrRequestError.emptyAlbum
-                }
-                let randomIndex = Int(arc4random_uniform(UInt32(flickrPhotos.count)))
-                let photo = flickrPhotos[randomIndex]
-                let imageURL = photo.createImageURL()
-                print("imageURL: " + "\(imageURL)")
-                return imageURL
-            })
-    }*/
-   /* static func sendRequest(to imageURL: NSURL) -> Observable<UIImage> {
-        let request = URLRequest(url: imageURL as URL)
-        return RxAlamofire
-            .requestData(request)
-            .catchError { error in
-                return Observable.never()
-        }
-       .map{ (response, data) -> UIImage in
-        print("dataCount: " + "\(data.count)")
-        guard data.count > 3000 else {
-            throw flickrRequestError.imageNotExist
-        }
-        let image = UIImage(data: data)
-        return image!
-      }
-   }*/
+  
    static func sendRequest(to imageURL: NSURL) -> Observable<NSData> {
         let request = URLRequest(url: imageURL as URL)
         return RxAlamofire
@@ -147,25 +108,9 @@ struct FlickrService: FlickrAPIProtocol, InternetAPIProtocol {
                  print("data: " + "\(data)")
                  return data as NSData
                 }
-                
-        }
+          }
     }
-   /* static func sendRequest(to imageURL: NSURL) -> Observable<UIImage> {
-        let request = URLRequest(url: imageURL as URL)
-        return RxAlamofire
-            .requestData(request)
-            .catchError { error in
-                return Observable.never()
-            }
-            .filter {(response, data) in
-                data.count > 5000
-            }
-            .map{ (response, data) -> UIImage in
-                print("dataCount: " + "\(data.count)")
-                let image = UIImage(data: data)
-                return image!
-        }
-    }*/
+   
     static func getImage(imageURL: NSURL, cache: ImageDataCachingProtocol.Type) -> Observable<UIImage?> {
         if let imageDataFromCache = cache.imageDataFromURLFromChache(url: imageURL) {
             let imageFromCache = UIImage(data: imageDataFromCache as Data)
@@ -181,8 +126,7 @@ struct FlickrService: FlickrAPIProtocol, InternetAPIProtocol {
                     let imageFromRequest = UIImage(data: imageDataFromRequest as Data)
                     return imageFromRequest
                 })
-          
-        }
+         }
     }
     
  }
