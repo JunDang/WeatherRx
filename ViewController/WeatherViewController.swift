@@ -28,7 +28,7 @@ class WeatherViewController: UIViewController {
     bindBackground()
  
   }
-
+    //Lincoln: lat: 40.8136, lon: -96.7026
   override func didReceiveMemoryWarning() {
     super.didReceiveMemoryWarning()
     // Dispose of any resources that can be recreated.

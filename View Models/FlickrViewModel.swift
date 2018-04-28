@@ -39,7 +39,7 @@ class FlickrViewModel {
      func bindToBackgroundImage() {
         try?apiType.searchImageURL(lat: lat, lon: lon, currentWeather:currentWeather)
             .flatMap ({imageURL  -> Observable<UIImage?> in
-                 self.apiType.getImage(imageURL: imageURL, cache: self.imageDataCacheType)
+               return self.apiType.getImage(imageURL: imageURL, cache: self.imageDataCacheType)
                     .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
           })
              .catchError { error in

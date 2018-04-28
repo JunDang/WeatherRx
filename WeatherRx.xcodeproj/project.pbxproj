@@ -15,8 +15,6 @@
 		A50D28E720470FE200351630 /* FlickrViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50D28E520470FE200351630 /* FlickrViewModel.swift */; };
 		A50D28EB20503D5E00351630 /* WeatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50D28EA20503D5E00351630 /* WeatherViewController.swift */; };
 		A50D28EC20503D5E00351630 /* WeatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50D28EA20503D5E00351630 /* WeatherViewController.swift */; };
-		A50D28FA205221B000351630 /* InternetAPIProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50D28F9205221B000351630 /* InternetAPIProtocol.swift */; };
-		A50D28FB205221B000351630 /* InternetAPIProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50D28F9205221B000351630 /* InternetAPIProtocol.swift */; };
 		A50D28FD2052220900351630 /* FlickrAPIProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50D28FC2052220900351630 /* FlickrAPIProtocol.swift */; };
 		A50D28FE2052220900351630 /* FlickrAPIProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50D28FC2052220900351630 /* FlickrAPIProtocol.swift */; };
 		A5146B661F799A2600EE1DF7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5146B651F799A2600EE1DF7 /* AppDelegate.swift */; };
@@ -31,6 +29,11 @@
 		A5146BCB1F7EBB6B00EE1DF7 /* FlickrService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5146BCA1F7EBB6B00EE1DF7 /* FlickrService.swift */; };
 		A5146BCC1F7EBB6B00EE1DF7 /* FlickrService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5146BCA1F7EBB6B00EE1DF7 /* FlickrService.swift */; };
 		A5146BCE1F7EBBCC00EE1DF7 /* FlickrServiceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5146BCD1F7EBBCC00EE1DF7 /* FlickrServiceTest.swift */; };
+		A51F452B208D714B00ACCAB7 /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51F452A208D714B00ACCAB7 /* TestData.swift */; };
+		A51F45302090C7C300ACCAB7 /* InternetAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51F452F2090C7C300ACCAB7 /* InternetAPI.swift */; };
+		A51F45312090C7CE00ACCAB7 /* InternetAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51F452F2090C7C300ACCAB7 /* InternetAPI.swift */; };
+		A51F45332090D08600ACCAB7 /* MockFlickrService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51F45322090D08600ACCAB7 /* MockFlickrService.swift */; };
+		A51F45372093607700ACCAB7 /* FlickrViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51F45362093607700ACCAB7 /* FlickrViewModelTests.swift */; };
 		A57F6DB52072B5AE00509E7E /* ImageDataCaching.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57F6DB42072B5AE00509E7E /* ImageDataCaching.swift */; };
 		A57F6DB62072B5AE00509E7E /* ImageDataCaching.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57F6DB42072B5AE00509E7E /* ImageDataCaching.swift */; };
 		A57F6DB82072D00400509E7E /* ImageDataCachingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57F6DB72072D00400509E7E /* ImageDataCachingProtocol.swift */; };
@@ -58,7 +61,6 @@
 		8D74E5165AC8AD9406BE19B5 /* Pods_WeatherRxTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WeatherRxTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A50D28E520470FE200351630 /* FlickrViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrViewModel.swift; sourceTree = "<group>"; };
 		A50D28EA20503D5E00351630 /* WeatherViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewController.swift; sourceTree = "<group>"; };
-		A50D28F9205221B000351630 /* InternetAPIProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternetAPIProtocol.swift; sourceTree = "<group>"; };
 		A50D28FC2052220900351630 /* FlickrAPIProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrAPIProtocol.swift; sourceTree = "<group>"; };
 		A5146B621F799A2600EE1DF7 /* WeatherRx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherRx.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5146B651F799A2600EE1DF7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -74,6 +76,10 @@
 		A5146B931F7C731F00EE1DF7 /* WeatherTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeatherTest.swift; sourceTree = "<group>"; };
 		A5146BCA1F7EBB6B00EE1DF7 /* FlickrService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlickrService.swift; sourceTree = "<group>"; };
 		A5146BCD1F7EBBCC00EE1DF7 /* FlickrServiceTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlickrServiceTest.swift; sourceTree = "<group>"; };
+		A51F452A208D714B00ACCAB7 /* TestData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestData.swift; sourceTree = "<group>"; };
+		A51F452F2090C7C300ACCAB7 /* InternetAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternetAPI.swift; sourceTree = "<group>"; };
+		A51F45322090D08600ACCAB7 /* MockFlickrService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFlickrService.swift; sourceTree = "<group>"; };
+		A51F45362093607700ACCAB7 /* FlickrViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrViewModelTests.swift; sourceTree = "<group>"; };
 		A57F6DB42072B5AE00509E7E /* ImageDataCaching.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDataCaching.swift; sourceTree = "<group>"; };
 		A57F6DB72072D00400509E7E /* ImageDataCachingProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDataCachingProtocol.swift; sourceTree = "<group>"; };
 		A5EE3C8E201FA89500B65EA2 /* FlickrPhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrPhoto.swift; sourceTree = "<group>"; };
@@ -137,7 +143,6 @@
 		A50D28ED2051AD6C00351630 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
-				A50D28F9205221B000351630 /* InternetAPIProtocol.swift */,
 				A50D28FC2052220900351630 /* FlickrAPIProtocol.swift */,
 				A57F6DB72072D00400509E7E /* ImageDataCachingProtocol.swift */,
 			);
@@ -147,8 +152,8 @@
 		A5146B591F799A2500EE1DF7 = {
 			isa = PBXGroup;
 			children = (
-				A50D28ED2051AD6C00351630 /* Protocols */,
 				A50D28E920503D0A00351630 /* ViewController */,
+				A50D28ED2051AD6C00351630 /* Protocols */,
 				A50D28E420470FB600351630 /* View Models */,
 				A54D8B9B203B2109005B7FE8 /* Helpers */,
 				A5146B8D1F7C455B00EE1DF7 /* Services */,
@@ -186,10 +191,12 @@
 		A5146B791F799A2600EE1DF7 /* WeatherRxTests */ = {
 			isa = PBXGroup;
 			children = (
+				A51F4529208D712D00ACCAB7 /* Mocks */,
 				A5146B7A1F799A2600EE1DF7 /* WeatherRxTests.swift */,
 				A5146B7C1F799A2600EE1DF7 /* Info.plist */,
 				A5146B931F7C731F00EE1DF7 /* WeatherTest.swift */,
 				A5146BCD1F7EBBCC00EE1DF7 /* FlickrServiceTest.swift */,
+				A51F45362093607700ACCAB7 /* FlickrViewModelTests.swift */,
 			);
 			path = WeatherRxTests;
 			sourceTree = "<group>";
@@ -208,8 +215,18 @@
 			children = (
 				A5146BCA1F7EBB6B00EE1DF7 /* FlickrService.swift */,
 				A57F6DB42072B5AE00509E7E /* ImageDataCaching.swift */,
+				A51F452F2090C7C300ACCAB7 /* InternetAPI.swift */,
 			);
 			name = Services;
+			sourceTree = "<group>";
+		};
+		A51F4529208D712D00ACCAB7 /* Mocks */ = {
+			isa = PBXGroup;
+			children = (
+				A51F452A208D714B00ACCAB7 /* TestData.swift */,
+				A51F45322090D08600ACCAB7 /* MockFlickrService.swift */,
+			);
+			path = Mocks;
 			sourceTree = "<group>";
 		};
 		A54D8B9B203B2109005B7FE8 /* Helpers */ = {
@@ -517,7 +534,7 @@
 				A5EE3C8F201FA89500B65EA2 /* FlickrPhoto.swift in Sources */,
 				A50D28E620470FE200351630 /* FlickrViewModel.swift in Sources */,
 				A50D28EB20503D5E00351630 /* WeatherViewController.swift in Sources */,
-				A50D28FA205221B000351630 /* InternetAPIProtocol.swift in Sources */,
+				A51F45302090C7C300ACCAB7 /* InternetAPI.swift in Sources */,
 				A50D28FD2052220900351630 /* FlickrAPIProtocol.swift in Sources */,
 				A5146B661F799A2600EE1DF7 /* AppDelegate.swift in Sources */,
 				A57F6DB52072B5AE00509E7E /* ImageDataCaching.swift in Sources */,
@@ -530,15 +547,18 @@
 			files = (
 				A57F6DB62072B5AE00509E7E /* ImageDataCaching.swift in Sources */,
 				A5146B8C1F799D7E00EE1DF7 /* Weather.swift in Sources */,
+				A51F45332090D08600ACCAB7 /* MockFlickrService.swift in Sources */,
 				A50D28EC20503D5E00351630 /* WeatherViewController.swift in Sources */,
 				A5EE3C90201FA89500B65EA2 /* FlickrPhoto.swift in Sources */,
+				A51F45312090C7CE00ACCAB7 /* InternetAPI.swift in Sources */,
+				A51F452B208D714B00ACCAB7 /* TestData.swift in Sources */,
 				A5146BCE1F7EBBCC00EE1DF7 /* FlickrServiceTest.swift in Sources */,
 				A5146B941F7C731F00EE1DF7 /* WeatherTest.swift in Sources */,
 				A5146BCC1F7EBB6B00EE1DF7 /* FlickrService.swift in Sources */,
 				A50D28FE2052220900351630 /* FlickrAPIProtocol.swift in Sources */,
+				A51F45372093607700ACCAB7 /* FlickrViewModelTests.swift in Sources */,
 				A5146B7B1F799A2600EE1DF7 /* WeatherRxTests.swift in Sources */,
 				A57F6DB92072D00400509E7E /* ImageDataCachingProtocol.swift in Sources */,
-				A50D28FB205221B000351630 /* InternetAPIProtocol.swift in Sources */,
 				A50D28E720470FE200351630 /* FlickrViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

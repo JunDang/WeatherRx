@@ -10,11 +10,6 @@ import Foundation
 import Unbox
 import RealmSwift
 
-enum PhotosResult {
-    case success(FlickrPhotoResult)
-    case failure(Error)
-}
-
 
 
 class FlickrPhoto: Unboxable {
@@ -41,8 +36,7 @@ class FlickrPhotos: Unboxable {
     convenience required init(unboxer: Unboxer) throws {
         self.init()
         flickrPhotos = try unboxer.unbox(key: "photo")
-        
-    }
+     }
 }
 
 class FlickrPhotoResult: Unboxable {

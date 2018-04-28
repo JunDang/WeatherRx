@@ -24,9 +24,10 @@ struct FlickrAPI {
     static let baseURLString = "https://api.flickr.com/services/rest/"
     static let apiKey = "5a45bd8e5e5a3424a42246944f98d7fd"
     static let searchMethod = "flickr.photos.search"
+  
 }
 
-struct FlickrService: FlickrAPIProtocol, InternetAPIProtocol {
+struct FlickrService: FlickrAPIProtocol {
       
    //MARK: - errors
     enum flickrRequestError: Error {
@@ -37,47 +38,18 @@ struct FlickrService: FlickrAPIProtocol, InternetAPIProtocol {
         case emptyAlbum
         case imageNotExist
     }
-    //MARK: - compose url
-    static func composeURL(from baseURL: String = "", parameters: [String:String] = [:]) -> URL {
-        var components = URLComponents(string: baseURL)!
-        components.queryItems = parameters.map(URLQueryItem.init)
-        let url = try! components.asURL()
-        return url
-    }
-    
-    static func createSearchParameters(lat: Double, lon: Double, currentWeather:String) -> Observable<[String:String]> {
-        return Observable.create { observer -> Disposable in
-            if let urlEncodedcurrentWeather = currentWeather.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) {
-                let parameters = [
-                    "method": FlickrAPI.searchMethod,
-                    "api_key": FlickrAPI.apiKey,
-                    "format": "json",
-                    "nojsoncallback": "1",
-                    "per_page": "25",
-                    "lat": "\(lat)",
-                    "lon": "\(lon)",
-                    "text": urlEncodedcurrentWeather,
-                    "group_id": "92767609@N00",
-                    "tagmode": "all"
-                ]
-                observer.onNext(parameters)
-                observer.onCompleted()
-               } else {
-                observer.onError(flickrRequestError.URLCannotBeEncoded)
-            }
-            return Disposables.create()
-         }
-    }
-    
+ 
     static func searchImageURL(lat: Double, lon: Double, currentWeather:String) -> Observable<NSURL> {
-          return createSearchParameters(lat: lat, lon: lon, currentWeather:currentWeather).flatMap ({ parameters -> Observable<NSURL> in
-            let flickrURL = FlickrService.composeURL(from: FlickrAPI.baseURLString, parameters: parameters)
+          return InternetAPI.createFlickrSearchParameters(lat: lat, lon: lon, currentWeather:currentWeather).flatMap ({ parameters -> Observable<NSURL> in
+            let flickrURL = InternetAPI.composeURL(from: FlickrAPI.baseURLString, parameters: parameters)
             print("flickrURL: " + "\(flickrURL)")
             return RxAlamofire.requestJSON(.get, flickrURL)
                 .map ({ (response, json) in
                     guard let dict = json as? JSONObject else {
                         throw flickrRequestError.invalidJSONData
                     }
+                    print("flickrResponse: " + "\(response)")
+                    print("dict: " + "\(dict)")
                     let flickrPhotoResult: FlickrPhotoResult = try unbox(dictionary: dict)
                     let flickrPhotos = flickrPhotoResult.flickrPhotoResult!.flickrPhotos
                     guard flickrPhotos.count > 0 else {
@@ -92,26 +64,28 @@ struct FlickrService: FlickrAPIProtocol, InternetAPIProtocol {
            })
      }
   
-   static func sendRequest(to imageURL: NSURL) -> Observable<NSData> {
+  static func sendRequest(to imageURL: NSURL) -> Observable<NSData> {
         let request = URLRequest(url: imageURL as URL)
         return RxAlamofire
             .requestData(request)
             .catchError { error in
+                print(error)
                 return Observable.never()
             }
             .map{ (response, data) in
+                print("response: " + "\(response)")
+                print("dataYYY: " + "\(data)")
                if data.count < 5000 {
-                 let banffData = UIImagePNGRepresentation(UIImage(named: "banff")!)
-                 print("banffdata: " + "\(String(describing: banffData))")
-                 return banffData! as NSData
+               let banffData = UIImagePNGRepresentation(UIImage(named: "banff")!)
+                return banffData! as NSData
                 } else {
-                 print("data: " + "\(data)")
+                 //print("data: " + "\(data)")
                  return data as NSData
                 }
           }
     }
    
-    static func getImage(imageURL: NSURL, cache: ImageDataCachingProtocol.Type) -> Observable<UIImage?> {
+  static func getImage(imageURL: NSURL, cache: ImageDataCachingProtocol.Type) -> Observable<UIImage?> {
         if let imageDataFromCache = cache.imageDataFromURLFromChache(url: imageURL) {
             let imageFromCache = UIImage(data: imageDataFromCache as Data)
             return Observable.just(imageFromCache)
@@ -123,6 +97,7 @@ struct FlickrService: FlickrAPIProtocol, InternetAPIProtocol {
                     print("errorViewModel: " + "\(e)")
                 })
                 .map ({ imageDataFromRequest in
+                    print("stubFlickrImageData: " + "\(String(describing: TestData.stubFlickrImageData))")
                     let imageFromRequest = UIImage(data: imageDataFromRequest as Data)
                     return imageFromRequest
                 })
