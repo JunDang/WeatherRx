@@ -19,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let viewController = WeatherViewController()
         
         let mainWindow = UIWindow(frame: UIScreen.main.bounds)
-        mainWindow.backgroundColor = UIColor.white
+        mainWindow.backgroundColor = UIColor.black
         mainWindow.rootViewController = viewController
         mainWindow.makeKeyAndVisible()
         window = mainWindow

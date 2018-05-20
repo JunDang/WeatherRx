@@ -34,8 +34,6 @@ class FlickrViewModelTests: XCTestCase {
     }
     
      func test_whenInit_callsBindToBackgroundImage_FetchImage() {
-       
-        
         let lat = 43.6532
         let lon = -79.3832
         let currentWeather = "sunny"

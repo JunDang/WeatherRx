@@ -14,7 +14,7 @@ class TestData {
     
 
     
-    static let flickrResultOnePhotoJSON: [String: Any] = [
+    static let flickrResponseOnePhotoJSON: [String: Any] = [
         
         "photos":[
             "page": 1,

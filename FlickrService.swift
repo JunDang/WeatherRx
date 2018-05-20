@@ -39,8 +39,9 @@ struct FlickrService: FlickrAPIProtocol {
         case imageNotExist
     }
  
-    static func searchImageURL(lat: Double, lon: Double, currentWeather:String) -> Observable<NSURL> {
-          return InternetAPI.createFlickrSearchParameters(lat: lat, lon: lon, currentWeather:currentWeather).flatMap ({ parameters -> Observable<NSURL> in
+  /* static func searchImageURL(lat: Double, lon: Double, currentWeather:String) -> Observable<NSURL> {
+          return InternetAPI.createFlickrSearchParameters(lat: lat, lon: lon, currentWeather:currentWeather)
+            .flatMap ({ parameters -> Observable<NSURL> in
             let flickrURL = InternetAPI.composeURL(from: FlickrAPI.baseURLString, parameters: parameters)
             print("flickrURL: " + "\(flickrURL)")
             return RxAlamofire.requestJSON(.get, flickrURL)
@@ -62,7 +63,32 @@ struct FlickrService: FlickrAPIProtocol {
                     return imageURL
                 })
            })
-     }
+     }*/
+    static func searchImageURL(lat: Double, lon: Double, currentWeather:String) -> Observable<NSURL> {
+        return InternetAPI.createFlickrSearchParameters(lat: lat, lon: lon, currentWeather:currentWeather).flatMap ({ parameters -> Observable<NSURL> in
+            let flickrURL = InternetAPI.composeURL(from: FlickrAPI.baseURLString, parameters: parameters)
+            print("flickrURL: " + "\(flickrURL)")
+            return RxAlamofire.requestJSON(.get, flickrURL)
+                .map(handleFlickrURLResponse)
+            })
+    }
+    static func handleFlickrURLResponse(result: (HTTPURLResponse, Any))throws -> NSURL {
+        print("handleResponse: " + "\(result.1)")
+        guard let dict = result.1 as? JSONObject else {
+            throw flickrRequestError.invalidJSONData
+        }
+        print("dict: " + "\(dict)")
+        let flickrPhotoResult: FlickrPhotoResult = try unbox(dictionary: dict)
+        let flickrPhotos = flickrPhotoResult.flickrPhotoResult!.flickrPhotos
+        guard flickrPhotos.count > 0 else {
+            throw flickrRequestError.emptyAlbum
+        }
+        let randomIndex = Int(arc4random_uniform(UInt32(flickrPhotos.count)))
+        let photo = flickrPhotos[randomIndex]
+        let imageURL = photo.createImageURL()
+        print("imageURL: " + "\(imageURL)")
+        return imageURL
+    }
   
   static func sendRequest(to imageURL: NSURL) -> Observable<NSData> {
         let request = URLRequest(url: imageURL as URL)
@@ -91,15 +117,14 @@ struct FlickrService: FlickrAPIProtocol {
             return Observable.just(imageFromCache)
         } else {
             return self.sendRequest(to: imageURL)
-                .do(onNext: { (imageDataFromRequest) in
+                   .do(onNext: { (imageDataFromRequest) in
                     cache.saveImageDataToCache(data: imageDataFromRequest, url: imageURL)
                 }, onError: { e in
                     print("errorViewModel: " + "\(e)")
                 })
                 .map ({ imageDataFromRequest in
-                    print("stubFlickrImageData: " + "\(String(describing: TestData.stubFlickrImageData))")
-                    let imageFromRequest = UIImage(data: imageDataFromRequest as Data)
-                    return imageFromRequest
+                   let imageFromRequest = UIImage(data: imageDataFromRequest as Data)
+                   return imageFromRequest
                 })
          }
     }
