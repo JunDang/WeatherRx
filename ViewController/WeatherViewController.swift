@@ -21,24 +21,30 @@ class WeatherViewController: UIViewController {
   private let backScrollView = UIScrollView()
   private let frontScrollView = UIScrollView()
   private let currentWeatherView = CurrentWeatherView(frame: CGRect(x: 0.0, y: 0.0, width: 0.0, height: 0.0))
-    
+  private let weatherForecastTableView = WeatherForecastTableViewController().tableView
+  private let segmentedControl = UISegmentedControl(frame: CGRect.zero)
+  private let containerView = UIView(frame: CGRect.zero)
     
   private let bag = DisposeBag()
 
-    override func viewDidLoad() {
+  override func viewDidLoad() {
     super.viewDidLoad()
     setup()
     layoutView()
     style()
     bindBackground()
-        
- 
+
   }
     //Lincoln: lat: 40.8136, lon: -96.7026
   override func didReceiveMemoryWarning() {
     super.didReceiveMemoryWarning()
     // Dispose of any resources that can be recreated.
   }
+  
+  override var preferredStatusBarStyle: UIStatusBarStyle {
+    return .lightContent
+  }
+    
   func bindBackground() {
       let flickrViewModel: FlickrViewModel = FlickrViewModel(lat: 43.6532, lon: -79.3832, currentWeather: "sunny", apiType: FlickrService.self, imageDataCacheType: ImageDataCaching.self)
       flickrViewModel.backgroundImage.asDriver()
@@ -50,7 +56,8 @@ class WeatherViewController: UIViewController {
         })
        .disposed(by: bag)
     }
-    override func viewWillAppear(_ animated: Bool) {
+    
+  override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         currentWeatherView.render()
     }
@@ -73,6 +80,9 @@ private extension WeatherViewController{
         frontScrollView.delegate = self
         frontScrollView.contentSize = CGSize(width: self.view.bounds.width, height: self.view.bounds.height * 2)
         frontScrollView.addSubview(currentWeatherView)
+        frontScrollView.addSubview(weatherForecastTableView)
+        frontScrollView.addSubview(segmentedControl)
+        frontScrollView.addSubview(containerView)
         overlayView.contentMode = .scaleAspectFill
         overlayView.clipsToBounds = true
         view.addSubview(overlayView)
@@ -130,6 +140,23 @@ extension WeatherViewController{
             //view.centerY == view.superview!.centerY + self.view.frame.height/2
             view.bottom == view.superview!.top + self.view.frame.height - 120
         }
+       /* constrain(weatherForecastTableView,currentWeatherView) {
+            $0.width == $0.superview!.width
+            $0.centerY == $0.superview!.centerY
+            $0.top == $1.bottom + 5
+        }*/
+        constrain(segmentedControl,currentWeatherView) {
+            $0.width == $0.superview!.width
+            $0.centerY == $0.superview!.centerY
+            $0.top == $1.bottom
+            $0.height == 30
+        }
+        constrain(containerView,segmentedControl) {
+            $0.width == $0.superview!.width
+            $0.centerY == $0.superview!.centerY
+            $0.top == $1.bottom
+            $0.height == self.view.frame.height
+       }
     }
 }
 
@@ -150,6 +177,9 @@ private extension WeatherViewController{
         gradientView.layer.mask = gradientLayer
         
         maskLayer.backgroundColor = UIColor.black.withAlphaComponent(0.2)
+        
+        segmentedControl.backgroundColor = UIColor.black.withAlphaComponent(0.2)
+        containerView.backgroundColor = UIColor.clear
         
     }
 }
@@ -181,7 +211,6 @@ extension WeatherViewController: UIScrollViewDelegate {
         let backgroundHeight = backScrollView.contentSize.height - backScrollView.bounds.height
         
         backScrollView.contentOffset = CGPoint(x: 0, y: backgroundHeight * percentageScroll * 0.1)
-        
-        
+   
     }
 }
