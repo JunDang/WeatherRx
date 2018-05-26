@@ -27,6 +27,7 @@ class HourlyForecastTableViewCell: UITableViewCell, UICollectionViewDataSource, 
     }
 
    override func updateConstraints() {
+    print("HourlyForecastTableViewCellupdateconstraintscalled")
      if didSetupConstraints {
         super.updateConstraints()
         return

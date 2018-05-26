@@ -30,6 +30,7 @@ class HourlyForecastCell: UICollectionViewCell, UICollectionViewDelegateFlowLayo
     }
     
     override func updateConstraints() {
+        print("hourlycellupdateconstraintscalled")
         if didSetupConstraints {
             super.updateConstraints()
             return

@@ -21,7 +21,7 @@ class WeatherForecastGraphViewController: UIViewController {
         setup()
         layoutView()
         setStyle()
-        
+        render()
     }
 }
 
@@ -74,5 +74,13 @@ extension WeatherForecastGraphViewController {
         dailyLbl.sizeToFit()
         
     }
-    
+}
+
+extension WeatherForecastGraphViewController {
+    func render() {
+       hourlyLbl.text = "Hourly Forecast Trend"
+       dailyLbl.text = "Daily Forecast Trend"
+    }
+
+
 }

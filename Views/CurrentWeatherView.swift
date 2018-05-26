@@ -70,7 +70,31 @@ private extension CurrentWeatherView{
             $0.left == $1.right + 10
             $0.height == $1.height
         }
-        constrain(currentTempLbl, iconImage) {
+        constrain(lowTempLbl, iconImage) {
+            $0.top == $1.bottom
+            $0.left == $1.left
+        }
+        constrain(highTempLbl, lowTempLbl) {
+            $0.top == $1.top
+            $0.bottom == $1.bottom
+            $0.left == $1.right + 10
+        }
+        constrain(feelsLikeTempLbl, highTempLbl) {
+            $0.top == $1.top
+            $0.bottom == $1.bottom
+            $0.left == $1.right + 10
+        }
+        constrain(currentTempLbl, lowTempLbl) {
+            $0.top == $1.bottom
+            $0.left == $1.left
+            $0.bottom == $0.superview!.bottom
+        }
+        constrain(minutelySummaryLbl, currentTempLbl) {
+            $0.bottom == $1.bottom
+            $0.left == $1.right + 8
+            $0.bottom == $0.superview!.bottom
+        }
+       /* constrain(currentTempLbl, iconImage) {
             $0.top == $1.bottom
             $0.left == $1.left
         }
@@ -78,20 +102,21 @@ private extension CurrentWeatherView{
             $0.top == $1.bottom
             $0.left == $1.left
         }
-        constrain(minutelySummaryLbl, feelsLikeTempLbl) {
-            $0.top == $1.bottom
-            $0.left == $1.left
-            
-        }
-        constrain(lowTempLbl, minutelySummaryLbl) {
-            $0.top == $1.bottom
-            $0.left == $1.left
+        constrain(lowTempLbl, feelsLikeTempLbl) {
+            $0.top == $1.top
+            $0.bottom == $1.bottom
+            $0.left == $1.right + 10
         }
         constrain(highTempLbl, lowTempLbl) {
             $0.top == $1.top
+            $0.bottom == $1.bottom
             $0.left == $1.right + 10
-            $0.height == $1.height
         }
+        constrain(minutelySummaryLbl, feelsLikeTempLbl) {
+            $0.top == $1.bottom
+            $0.left == $1.left
+            $0.bottom == $0.superview!.bottom
+        }*/
    }
 }
 

@@ -53,6 +53,7 @@
 		A5EE3C8F201FA89500B65EA2 /* FlickrPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EE3C8E201FA89500B65EA2 /* FlickrPhoto.swift */; };
 		A5EE3C90201FA89500B65EA2 /* FlickrPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EE3C8E201FA89500B65EA2 /* FlickrPhoto.swift */; };
 		A5F4177520B3645200FE45D8 /* WeatherForecastSummaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5F4177420B3645200FE45D8 /* WeatherForecastSummaryViewController.swift */; };
+		A5F4177A20B6068800FE45D8 /* WeatherForecastSummaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5F4177420B3645200FE45D8 /* WeatherForecastSummaryViewController.swift */; };
 		CFD23BA9ABACC4D2B4286CAC /* Pods_WeatherRxAbstract_WeatherRx.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A68D25BA2AB8DB2DD394F1E /* Pods_WeatherRxAbstract_WeatherRx.framework */; };
 /* End PBXBuildFile section */
 
@@ -611,6 +612,7 @@
 				A50D28FE2052220900351630 /* FlickrAPIProtocol.swift in Sources */,
 				A5192BEB20A5222C00C8D483 /* WeatherForecastTableViewController.swift in Sources */,
 				A51F45372093607700ACCAB7 /* FlickrViewModelTests.swift in Sources */,
+				A5F4177A20B6068800FE45D8 /* WeatherForecastSummaryViewController.swift in Sources */,
 				A5146B7B1F799A2600EE1DF7 /* WeatherRxTests.swift in Sources */,
 				A59D0F2820B20C9800111552 /* DailyForecastTableViewCell.swift in Sources */,
 				A57F6DB92072D00400509E7E /* ImageDataCachingProtocol.swift in Sources */,

@@ -8,62 +8,79 @@
 
 import UIKit
 import Cartography
-import FXBlurView
 import RxSwift
 import RxCocoa
 
 
 class WeatherViewController: UIViewController {
-  private let gradientView = UIView()
-  private let overlayView = UIImageView()
-  private let maskLayer = UIView()
-  private let backgroundView = UIImageView()
-  private let backScrollView = UIScrollView()
-  private let frontScrollView = UIScrollView()
-  private let currentWeatherView = CurrentWeatherView(frame: CGRect(x: 0.0, y: 0.0, width: 0.0, height: 0.0))
-  private let weatherForecastTableView = WeatherForecastTableViewController().tableView
-  private let segmentedControl = UISegmentedControl(frame: CGRect.zero)
-  private let containerView = UIView(frame: CGRect.zero)
+    private let gradientView = UIView()
+    private let maskLayer = UIView()
+    private let backgroundView = UIImageView()
+    private let backScrollView = UIScrollView()
+    private let frontScrollView = UIScrollView()
+    private let currentWeatherView = CurrentWeatherView(frame: CGRect.zero)
+    private let segmentedControl = UISegmentedControl(frame: CGRect.zero)
+    private let containerView = UIView(frame: CGRect.zero)
     
-  private let bag = DisposeBag()
+    private let bag = DisposeBag()
 
-  override func viewDidLoad() {
-    super.viewDidLoad()
-    setup()
-    layoutView()
-    style()
-    bindBackground()
-
-  }
+    override func viewDidLoad() {
+      super.viewDidLoad()
+      setup()
+      layoutView()
+      style()
+      bindBackground()
+      setupSegmentedView()
+    }
     //Lincoln: lat: 40.8136, lon: -96.7026
-  override func didReceiveMemoryWarning() {
-    super.didReceiveMemoryWarning()
+    override func didReceiveMemoryWarning() {
+      super.didReceiveMemoryWarning()
     // Dispose of any resources that can be recreated.
-  }
+    }
   
-  override var preferredStatusBarStyle: UIStatusBarStyle {
-    return .lightContent
-  }
-    
-  func bindBackground() {
-      let flickrViewModel: FlickrViewModel = FlickrViewModel(lat: 43.6532, lon: -79.3832, currentWeather: "sunny", apiType: FlickrService.self, imageDataCacheType: ImageDataCaching.self)
-      flickrViewModel.backgroundImage.asDriver()
-         .drive(onNext: { [weak self] backgroundImage in
-          let resizedImage = backgroundImage?.scaled(CGSize(width: (self?.view.frame.width)!, height: (self?.view.frame.height)! * 1.5))
-          self?.backgroundView.image = resizedImage
-          self?.overlayView.image = resizedImage?.blurredImage(withRadius: 10, iterations: 20, tintColor: UIColor.clear)
-          self?.overlayView.alpha = 0
-        })
-       .disposed(by: bag)
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+      return .lightContent
     }
     
-  override func viewWillAppear(_ animated: Bool) {
+    func bindBackground() {
+        let flickrViewModel: FlickrViewModel = FlickrViewModel(lat: 43.6532, lon: -79.3832, currentWeather: "sunny", apiType: FlickrService.self, imageDataCacheType: ImageDataCaching.self)
+        flickrViewModel.backgroundImage.asDriver()
+           .drive(onNext: { [weak self] backgroundImage in
+            let resizedImage = backgroundImage?.scaled(CGSize(width: (self?.view.frame.width)!, height: (self?.view.frame.height)! * 1.5))
+            self?.backgroundView.image = resizedImage
+            let blurEffect = UIBlurEffect(style: .dark)
+            let blurredEffectView = UIVisualEffectView(effect: blurEffect)
+            blurredEffectView.frame = (self?.backgroundView.bounds)!
+            blurredEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            self?.backgroundView.addSubview(blurredEffectView)
+        })
+        .disposed(by: bag)
+      }
+    
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         currentWeatherView.render()
     }
+    
+    private lazy var tableViewController: WeatherForecastTableViewController = {
+        let viewController = WeatherForecastTableViewController()
+        self.add(asChildViewController: viewController)
+        return viewController
+    }()
+    
+    private lazy var graphViewController: WeatherForecastGraphViewController = {
+        let viewController = WeatherForecastGraphViewController()
+        self.add(asChildViewController: viewController)
+        return viewController
+    }()
+    
+    private lazy var summaryViewController: WeatherForecastSummaryViewController = {
+        let viewController = WeatherForecastSummaryViewController()
+        self.add(asChildViewController: viewController)
+        return viewController
+    }()
+    
  }
-
-
 
 private extension WeatherViewController{
     func setup(){
@@ -73,6 +90,7 @@ private extension WeatherViewController{
         maskLayer.clipsToBounds = true
         backgroundView.addSubview(maskLayer)
         backScrollView.addSubview(backgroundView)
+        backScrollView.addSubview(gradientView)
         backScrollView.contentSize = backgroundView.bounds.size
         backScrollView.delegate = self
         frontScrollView.contentMode = .scaleAspectFill
@@ -80,13 +98,11 @@ private extension WeatherViewController{
         frontScrollView.delegate = self
         frontScrollView.contentSize = CGSize(width: self.view.bounds.width, height: self.view.bounds.height * 2)
         frontScrollView.addSubview(currentWeatherView)
-        frontScrollView.addSubview(weatherForecastTableView)
         frontScrollView.addSubview(segmentedControl)
         frontScrollView.addSubview(containerView)
-        overlayView.contentMode = .scaleAspectFill
+        /*overlayView.contentMode = .scaleAspectFill
         overlayView.clipsToBounds = true
-        view.addSubview(overlayView)
-        view.addSubview(gradientView)
+        view.addSubview(overlayView)*/
         backScrollView.showsVerticalScrollIndicator = false
         backScrollView.isDirectionalLockEnabled = true
         frontScrollView.showsVerticalScrollIndicator = false
@@ -104,17 +120,13 @@ extension WeatherViewController{
             view.left == view.superview!.left
             view.right == view.superview!.right
         }
-        constrain(overlayView) { view in
-            view.top == view.superview!.top
-            view.bottom == view.superview!.bottom
-            view.left == view.superview!.left
-            view.right == view.superview!.right
-        }
         constrain(gradientView) { view in
             view.top == view.superview!.top
-            view.bottom == view.superview!.bottom
-            view.left == view.superview!.left
-            view.right == view.superview!.right
+            //view.bottom == view.superview!.bottom
+            //view.left == view.superview!.left
+            //view.right == view.superview!.right
+            view.width == view.superview!.width
+            view.height == self.view.frame.height
         }
         constrain(maskLayer) { view in
             view.top == view.superview!.top
@@ -147,13 +159,13 @@ extension WeatherViewController{
         }*/
         constrain(segmentedControl,currentWeatherView) {
             $0.width == $0.superview!.width
-            $0.centerY == $0.superview!.centerY
-            $0.top == $1.bottom
-            $0.height == 30
+            $0.centerX == $0.superview!.centerX
+            $0.top == $1.bottom + 10
+            $0.height == 40
         }
         constrain(containerView,segmentedControl) {
             $0.width == $0.superview!.width
-            $0.centerY == $0.superview!.centerY
+            $0.centerX == $0.superview!.centerX
             $0.top == $1.bottom
             $0.height == self.view.frame.height
        }
@@ -179,24 +191,14 @@ private extension WeatherViewController{
         maskLayer.backgroundColor = UIColor.black.withAlphaComponent(0.2)
         
         segmentedControl.backgroundColor = UIColor.black.withAlphaComponent(0.2)
+        segmentedControl.layer.cornerRadius = 5.0
+        segmentedControl.tintColor = UIColor.white
+        segmentedControl.sizeToFit()
         containerView.backgroundColor = UIColor.clear
         
     }
 }
 // MARK: UIScrollViewDelegate
-/*extension WeatherViewController: UIScrollViewDelegate{
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let offset = scrollView.contentOffset.y
-        let treshold: CGFloat = CGFloat(view.frame.height)/2
-        overlayView.alpha = min (1.0, offset/treshold)
-        // MARK: ScrollView only scroll vertically
-        if(scrollView.contentOffset.x != 0){
-            scrollView.setContentOffset(CGPoint(x: 0, y: scrollView.contentOffset.y), animated: false)
-        }
-        
-    }
-}*/
-
 extension WeatherViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         scrollView.delegate = self
@@ -212,5 +214,72 @@ extension WeatherViewController: UIScrollViewDelegate {
         
         backScrollView.contentOffset = CGPoint(x: 0, y: backgroundHeight * percentageScroll * 0.1)
    
+    }
+}
+//MARK: -set up segmented controll
+extension WeatherViewController {
+    func setupSegmentedView() {
+        setupSegmentedControl()
+        updateView()
+    }
+    
+    func setupSegmentedControl() {
+        // Configure Segmented Control
+        segmentedControl.removeAllSegments()
+        segmentedControl.insertSegment(withTitle: "Table", at: 0, animated: false)
+        segmentedControl.insertSegment(withTitle: "Graph", at: 1, animated: false)
+        segmentedControl.insertSegment(withTitle: "Summary", at: 2, animated: false)
+        segmentedControl.addTarget(self, action: #selector(contentChange(_:)), for: .valueChanged)
+        
+        segmentedControl.selectedSegmentIndex = 0
+    }
+    
+    @objc func contentChange(_ sender: UISegmentedControl) {
+        updateView()
+    }
+
+    private func add(asChildViewController viewController: UIViewController) {
+        // Add Child View Controller
+        addChildViewController(viewController)
+        
+        // Add Child View as Subview
+        containerView.addSubview(viewController.view)
+        
+        // Configure Child View
+        viewController.view.frame = containerView.bounds
+        viewController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        
+        // Notify Child View Controller
+        viewController.didMove(toParentViewController: self)
+    }
+    
+    private func remove(asChildViewController viewController: UIViewController) {
+        // Notify Child View Controller
+        viewController.willMove(toParentViewController: nil)
+        
+        // Remove Child View From Superview
+        viewController.view.removeFromSuperview()
+        
+        // Notify Child View Controller
+        viewController.removeFromParentViewController()
+    }
+    
+    private func updateView() {
+       switch segmentedControl.selectedSegmentIndex {
+          case 0:
+             remove(asChildViewController: summaryViewController)
+             remove(asChildViewController: graphViewController)
+             add(asChildViewController: tableViewController)
+          case 1:
+             remove(asChildViewController: tableViewController)
+             remove(asChildViewController: summaryViewController)
+             add(asChildViewController: graphViewController)
+          case 2:
+             remove(asChildViewController: graphViewController)
+             remove(asChildViewController: tableViewController)
+             add(asChildViewController: summaryViewController)
+          default:
+          break
+        }
     }
 }

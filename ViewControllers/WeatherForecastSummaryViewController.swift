@@ -87,7 +87,7 @@ extension WeatherForecastSummaryViewController {
         }
         constrain(precipitationChanceLbl, toplineView ) {
             $0.top == $1.bottom + 2
-            $0.right == $0.superview!.centerX - 2
+            $0.right == $0.superview!.centerX
         }
         constrain(precipitationChanceDataLbl, precipitationChanceLbl) {
             $0.top == $1.top
@@ -180,94 +180,94 @@ extension WeatherForecastSummaryViewController {
         
         todayWeatherSummaryLbl.backgroundColor = UIColor.clear
         todayWeatherSummaryLbl.textColor = UIColor.white
-        todayWeatherSummaryLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 20)
+        todayWeatherSummaryLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 15)
         todayWeatherSummaryLbl.textAlignment = .right
         todayWeatherSummaryLbl.sizeToFit()
         todayWeatherSummaryDataLbl.backgroundColor = UIColor.clear
         todayWeatherSummaryDataLbl.textColor = UIColor.white
-        todayWeatherSummaryDataLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 20)
+        todayWeatherSummaryDataLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 15)
         todayWeatherSummaryDataLbl.textAlignment = .left
         todayWeatherSummaryDataLbl.sizeToFit()
         
         precipitationChanceLbl.backgroundColor = UIColor.clear
         precipitationChanceLbl.textColor = UIColor.white
-        precipitationChanceLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 20)
+        precipitationChanceLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 15)
         precipitationChanceLbl.textAlignment = .right
         precipitationChanceLbl.sizeToFit()
         precipitationChanceDataLbl.backgroundColor = UIColor.clear
         precipitationChanceDataLbl.textColor = UIColor.white
-        precipitationChanceDataLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 20)
+        precipitationChanceDataLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 15)
         precipitationChanceDataLbl.textAlignment = .left
         precipitationChanceDataLbl.sizeToFit()
         
         dewPointLbl.backgroundColor = UIColor.clear
         dewPointLbl.textColor = UIColor.white
-        dewPointLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 20)
+        dewPointLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 15)
         dewPointLbl.textAlignment = .right
         dewPointLbl.sizeToFit()
         dewPointDataLbl.backgroundColor = UIColor.clear
         dewPointDataLbl.textColor = UIColor.white
-        dewPointDataLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 20)
+        dewPointDataLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 15)
         dewPointDataLbl.textAlignment = .left
         dewPointDataLbl.sizeToFit()
         
         humidityLbl.backgroundColor = UIColor.clear
         humidityLbl.textColor = UIColor.white
-        humidityLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 20)
+        humidityLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 15)
         humidityLbl.textAlignment = .right
         humidityLbl.sizeToFit()
         humidityDataLbl.backgroundColor = UIColor.clear
         humidityDataLbl.textColor = UIColor.white
-        humidityDataLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 20)
+        humidityDataLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 15)
         humidityDataLbl.textAlignment = .left
         humidityDataLbl.sizeToFit()
         
         windLbl.backgroundColor = UIColor.clear
         windLbl.textColor = UIColor.white
-        windLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 20)
+        windLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 15)
         windLbl.textAlignment = .right
         windLbl.sizeToFit()
         winddirectionLbl.backgroundColor = UIColor.clear
         winddirectionLbl.textColor = UIColor.white
-        winddirectionLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 20)
+        winddirectionLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 15)
         winddirectionLbl.textAlignment = .right
         winddirectionLbl.sizeToFit()
         windDataLbl.backgroundColor = UIColor.clear
         windDataLbl.textColor = UIColor.white
-        windDataLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 20)
+        windDataLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 15)
         windDataLbl.textAlignment = .left
         windDataLbl.sizeToFit()
         
         sunriseLbl.backgroundColor = UIColor.clear
         sunriseLbl.textColor = UIColor.white
-        sunriseLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 20)
+        sunriseLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 15)
         sunriseLbl.textAlignment = .right
         sunriseLbl.sizeToFit()
         sunriseDataLbl.backgroundColor = UIColor.clear
         sunriseDataLbl.textColor = UIColor.white
-        sunriseDataLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 20)
+        sunriseDataLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 15)
         sunriseDataLbl.textAlignment = .left
         sunriseDataLbl.sizeToFit()
         
         sunSetLbl.backgroundColor = UIColor.clear
         sunSetLbl.textColor = UIColor.white
-        sunSetLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 20)
+        sunSetLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 15)
         sunSetLbl.textAlignment = .right
         sunSetLbl.sizeToFit()
         sunSetDataLbl.backgroundColor = UIColor.clear
         sunSetDataLbl.textColor = UIColor.white
-        sunSetDataLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 20)
+        sunSetDataLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 15)
         sunSetDataLbl.textAlignment = .left
         sunSetDataLbl.sizeToFit()
         
         cloudCoverLbl.backgroundColor = UIColor.clear
         cloudCoverLbl.textColor = UIColor.white
-        cloudCoverLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 20)
+        cloudCoverLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 15)
         cloudCoverLbl.textAlignment = .right
         cloudCoverLbl.sizeToFit()
         cloudCoverDataLbl.backgroundColor = UIColor.clear
         cloudCoverDataLbl.textColor = UIColor.white
-        cloudCoverDataLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 20)
+        cloudCoverDataLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 15)
         cloudCoverDataLbl.textAlignment = .left
         cloudCoverDataLbl.sizeToFit()
      }
@@ -285,7 +285,7 @@ extension WeatherForecastSummaryViewController {
         humidityDataLbl.text = "85%"
         windLbl.text = "Wind: "
         winddirectionLbl.text = "NW"
-        windDataLbl.text = "8 mph"
+        windDataLbl.text = " 8 mph"
         sunriseLbl.text = "Sunrise: "
         sunriseDataLbl.text = "06:00"
         sunSetLbl.text = "Sunset: "
