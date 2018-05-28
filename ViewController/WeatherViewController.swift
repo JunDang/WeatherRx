@@ -10,6 +10,7 @@ import UIKit
 import Cartography
 import RxSwift
 import RxCocoa
+import DynamicBlurView
 
 
 class WeatherViewController: UIViewController {
@@ -21,6 +22,7 @@ class WeatherViewController: UIViewController {
     private let currentWeatherView = CurrentWeatherView(frame: CGRect.zero)
     private let segmentedControl = UISegmentedControl(frame: CGRect.zero)
     private let containerView = UIView(frame: CGRect.zero)
+    private var blurredImageView = DynamicBlurView(frame: CGRect.zero)
     
     private let bag = DisposeBag()
 
@@ -48,11 +50,10 @@ class WeatherViewController: UIViewController {
            .drive(onNext: { [weak self] backgroundImage in
             let resizedImage = backgroundImage?.scaled(CGSize(width: (self?.view.frame.width)!, height: (self?.view.frame.height)! * 1.5))
             self?.backgroundView.image = resizedImage
-            let blurEffect = UIBlurEffect(style: .dark)
-            let blurredEffectView = UIVisualEffectView(effect: blurEffect)
-            blurredEffectView.frame = (self?.backgroundView.bounds)!
-            blurredEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-            self?.backgroundView.addSubview(blurredEffectView)
+            self?.blurredImageView = DynamicBlurView(frame: (self?.view.bounds)!)
+            self?.blurredImageView.blurRadius = 10
+            self?.blurredImageView.alpha = 0
+            self?.backgroundView.addSubview((self?.blurredImageView)!)
         })
         .disposed(by: bag)
       }
@@ -91,6 +92,7 @@ private extension WeatherViewController{
         backgroundView.addSubview(maskLayer)
         backScrollView.addSubview(backgroundView)
         backScrollView.addSubview(gradientView)
+        backScrollView.addSubview(blurredImageView)
         backScrollView.contentSize = backgroundView.bounds.size
         backScrollView.delegate = self
         frontScrollView.contentMode = .scaleAspectFill
@@ -135,6 +137,12 @@ extension WeatherViewController{
             view.right == view.superview!.right
         }
         constrain(backScrollView) { view in
+            view.top == view.superview!.top
+            view.bottom == view.superview!.bottom
+            view.left == view.superview!.left
+            view.right == view.superview!.right
+        }
+        constrain(blurredImageView) { view in
             view.top == view.superview!.top
             view.bottom == view.superview!.bottom
             view.left == view.superview!.left
@@ -189,6 +197,8 @@ private extension WeatherViewController{
         gradientView.layer.mask = gradientLayer
         
         maskLayer.backgroundColor = UIColor.black.withAlphaComponent(0.2)
+        blurredImageView.blurRadius = 10
+        blurredImageView.alpha = 0
         
         segmentedControl.backgroundColor = UIColor.black.withAlphaComponent(0.2)
         segmentedControl.layer.cornerRadius = 5.0
@@ -205,9 +215,10 @@ extension WeatherViewController: UIScrollViewDelegate {
         if(scrollView.contentOffset.x != 0){
             scrollView.setContentOffset(CGPoint(x: 0, y: scrollView.contentOffset.y), animated: false)
         }
-        /*let height = scrollView.bounds.size.height
+        let height = scrollView.bounds.size.height
         let position =  max(scrollView.contentOffset.y, 0.0)
-        let percent = min(position / height, 0.8)*/
+        let percent = min(position / height * 1.1, 0.9)
+        self.blurredImageView.alpha = percent
         let foregroundHeight = frontScrollView.contentSize.height - frontScrollView.bounds.height
         let percentageScroll = frontScrollView.contentOffset.y / foregroundHeight
         let backgroundHeight = backScrollView.contentSize.height - backScrollView.bounds.height

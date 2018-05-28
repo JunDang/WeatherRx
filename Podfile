@@ -3,26 +3,25 @@ use_frameworks!
 
 abstract_target 'WeatherRxAbstract' do
 
-    pod 'Reachability'
-    pod ‘RxAlamofire'
-    pod 'Unbox'
-    pod 'Cartography'
-    pod 'FXBlurView'
-    pod 'RxSwift'
-    pod 'RxCocoa'
-    pod 'RealmSwift'
-    pod 'RxRealm'
-    pod 'RxRealmDataSources'
-    pod 'RxGesture'
-    pod 'UnboxedAlamofire'
-
+    pod "Reachability"
+    pod "RxAlamofire"
+    pod "Unbox"
+    pod "Cartography"
+    pod "DynamicBlurView"
+    pod "RxSwift"
+    pod "RxCocoa"
+    pod "RealmSwift"
+    pod "RxRealm"
+    pod "RxRealmDataSources"
+    pod "RxGesture"
+ 
     target ‘WeatherRx’ do
-      pod 'RxDataSources'
+      pod "RxDataSources"
     end
 
    target ‘WeatherRxTests’ do
-      pod 'RxTest'
-      pod 'RxBlocking'
+      pod "RxTest"
+      pod "RxBlocking"
    end
 end
 

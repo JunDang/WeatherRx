@@ -1,19 +1,19 @@
 PODS:
-  - Alamofire (4.7.1)
-  - Cartography (3.0.1)
+  - Alamofire (4.7.2)
+  - Cartography (3.0.2)
   - Differentiator (3.0.2)
-  - FXBlurView (1.6.4)
+  - DynamicBlurView (2.0.2)
   - Reachability (3.2)
-  - Realm (3.3.1):
-    - Realm/Headers (= 3.3.1)
-  - Realm/Headers (3.3.1)
-  - RealmSwift (3.3.1):
-    - Realm (= 3.3.1)
-  - RxAlamofire (4.1.0):
-    - RxAlamofire/Core (= 4.1.0)
-  - RxAlamofire/Core (4.1.0):
+  - Realm (3.5.0):
+    - Realm/Headers (= 3.5.0)
+  - Realm/Headers (3.5.0)
+  - RealmSwift (3.5.0):
+    - Realm (= 3.5.0)
+  - RxAlamofire (4.2.0):
+    - RxAlamofire/Core (= 4.2.0)
+  - RxAlamofire/Core (4.2.0):
     - Alamofire (~> 4.5)
-    - RxSwift (~> 4.0)
+    - RxSwift (~> 4)
   - RxBlocking (4.1.2):
     - RxSwift (~> 4.0)
   - RxCocoa (4.1.2):
@@ -36,14 +36,11 @@ PODS:
   - RxSwift (4.1.2)
   - RxTest (4.1.2):
     - RxSwift (~> 4.0)
-  - Unbox (2.5.0)
-  - UnboxedAlamofire (2.0.4):
-    - Alamofire (~> 4.1)
-    - Unbox (~> 2.0)
+  - Unbox (3.0.0)
 
 DEPENDENCIES:
   - Cartography
-  - FXBlurView
+  - DynamicBlurView
   - Reachability
   - RealmSwift
   - RxAlamofire
@@ -56,17 +53,16 @@ DEPENDENCIES:
   - RxSwift
   - RxTest
   - Unbox
-  - UnboxedAlamofire
 
 SPEC CHECKSUMS:
-  Alamofire: 68d7d521118d49c615a8d2214d87cdf525599d30
-  Cartography: f8c899bb0f5cf20758644a8eea59a75e98a03a5d
+  Alamofire: e4fa87002c137ba2d8d634d2c51fabcda0d5c223
+  Cartography: 231190d7d0b3107ce8d67c54189f059a509b3760
   Differentiator: a87be69eba49ec4ab460c7671143ee3a9eececfd
-  FXBlurView: db786c2561cb49a09ae98407f52460096ab8a44f
+  DynamicBlurView: aa6db4defc6e537eb86fc5e58dd3991666178399
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
-  Realm: 63ebf4903b446b0bdf2131244eb1e1549925c724
-  RealmSwift: f28fe8507bdfb8f1c924962401b83e7b9d7abb5c
-  RxAlamofire: 96a2bff4694a1609bb59c57b53d99ea7a0ddc64a
+  Realm: 0378021c424e4e2bd6a0e63b27881e929d9b9ad1
+  RealmSwift: 3322562622fda2ad596985ead4d8d8be30cf838c
+  RxAlamofire: 87a9c588541210cc3e4a1f843ccc3ecf3eb98b31
   RxBlocking: f6054985901412fc8c02daa84e92d4ba68c61389
   RxCocoa: d88ba0f1f6abf040011a9eb4b539324fc426843a
   RxDataSources: cb7c31e652a87ebb919da45f716bbb87b3765f6b
@@ -75,9 +71,8 @@ SPEC CHECKSUMS:
   RxRealmDataSources: 798303f1d7db18d80da9e95bab9605010378040e
   RxSwift: e49536837d9901277638493ea537394d4b55f570
   RxTest: e634f15fd2c2cd0e0120132ef7a4f7be69ad0393
-  Unbox: 30e437e6151a6de16139375fd4e8dd9a664cfbf7
-  UnboxedAlamofire: e803f471553e3aecec711f5d50f80cda6c65feaa
+  Unbox: 9ed33b2a31f7a8a049f54b94d40c4a52a28c4d9d
 
-PODFILE CHECKSUM: 75b8f63876273e1946dc3db88c99f428100acff1
+PODFILE CHECKSUM: 07033c47443e516a8a88bcc6d553505a395d62e5
 
 COCOAPODS: 1.4.0
