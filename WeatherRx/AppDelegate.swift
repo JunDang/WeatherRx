@@ -16,7 +16,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        let viewController = WeatherViewController()
+        //let viewController = WeatherViewController()
+        let viewController = UINavigationController(rootViewController: WeatherViewController())
         let mainWindow = UIWindow(frame: UIScreen.main.bounds)
         mainWindow.backgroundColor = UIColor.black
         mainWindow.rootViewController = viewController

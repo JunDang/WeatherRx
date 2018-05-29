@@ -23,6 +23,8 @@ class WeatherViewController: UIViewController {
     private let segmentedControl = UISegmentedControl(frame: CGRect.zero)
     private let containerView = UIView(frame: CGRect.zero)
     private var blurredImageView = DynamicBlurView(frame: CGRect.zero)
+    private var menuButton:UIButton = UIButton()
+    private var searchController = UISearchController()
     
     private let bag = DisposeBag()
 
@@ -33,6 +35,7 @@ class WeatherViewController: UIViewController {
       style()
       bindBackground()
       setupSegmentedView()
+      setupNavigationbar()
     }
     //Lincoln: lat: 40.8136, lon: -96.7026
     override func didReceiveMemoryWarning() {
@@ -293,4 +296,41 @@ extension WeatherViewController {
           break
         }
     }
+}
+
+extension WeatherViewController: UINavigationControllerDelegate, UINavigationBarDelegate {
+    func setupNavigationbar() {
+        self.navigationItem.title = "Toronto"
+        self.navigationController!.navigationBar.titleTextAttributes =
+            [NSAttributedStringKey.foregroundColor: UIColor.white, NSAttributedStringKey.font: UIFont(name: "HelveticaNeue-Bold", size: 19)!]
+        self.navigationController!.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
+        self.navigationController!.navigationBar.shadowImage = UIImage()
+        self.navigationController!.navigationBar.isTranslucent = true
+        menuButton = UIButton(frame: CGRect(0, 0, 30, 30))
+        menuButton.setImage(UIImage(named: "menu"), for: .normal)
+        
+       // menuButton.addTarget(self, action: #selector(WeatherViewController.menuButtonPressed(_:)), for: .TouchUpInside)
+        //assign button to navigationbar
+        let menuButtonItem = UIBarButtonItem(customView: menuButton)
+        navigationItem.leftBarButtonItem = menuButtonItem
+        
+        let searchButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.search, target: self, action: #selector(WeatherViewController.searchCity))
+        searchButton.tintColor = UIColor.white
+        navigationItem.rightBarButtonItem = searchButton
+
+    }
+}
+    
+extension WeatherViewController: UISearchBarDelegate {
+    @objc func searchCity(sender: AnyObject) {
+        searchController = UISearchController(searchResultsController: nil)
+        searchController.hidesNavigationBarDuringPresentation = false
+        //searchController.searchBar.keyboardType = UIKeyboardType.asciiCapable
+        
+        // Make this class the delegate and present the search
+        self.searchController.searchBar.delegate = self
+        present(searchController, animated: true, completion: nil)
+        
+    }
+
 }
