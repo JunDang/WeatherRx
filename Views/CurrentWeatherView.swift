@@ -23,6 +23,7 @@ class CurrentWeatherView: UIView {
         super.init(frame: frame)
         setupView()
         setStyle()
+        layoutView()
     }
     
     required init(coder aDecoder: NSCoder) {

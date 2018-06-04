@@ -62,8 +62,8 @@ extension WeatherForecastGraphViewController {
 extension WeatherForecastGraphViewController {
     func setStyle() {
         view.backgroundColor = UIColor.clear
-        hourlyGraphView.backgroundColor = UIColor.black.withAlphaComponent(0.2)
-        dailyGraphView.backgroundColor = UIColor.black.withAlphaComponent(0.2)
+        hourlyGraphView.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+        dailyGraphView.backgroundColor = UIColor.black.withAlphaComponent(0.4)
         hourlyLbl.backgroundColor = UIColor.clear
         hourlyLbl.textColor = UIColor.white
         hourlyLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 20)

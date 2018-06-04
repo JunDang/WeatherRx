@@ -9,14 +9,14 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ViewController/WeatherViewController.swift"
-            timestampString = "549253493.9351569"
+            filePath = "Views/HourlyForecastTableViewCell.swift"
+            timestampString = "549749031.035111"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "48"
-            endingLineNumber = "48"
-            landmarkName = "preferredStatusBarStyle"
-            landmarkType = "24">
+            startingLineNumber = "19"
+            endingLineNumber = "19"
+            landmarkName = "init(style:reuseIdentifier:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -25,13 +25,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Views/HourlyForecastTableViewCell.swift"
-            timestampString = "548995630.768267"
+            filePath = "ViewController/WeatherViewController.swift"
+            timestampString = "549827719.498848"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "19"
-            endingLineNumber = "19"
-            landmarkName = "init(style:reuseIdentifier:)"
+            startingLineNumber = "183"
+            endingLineNumber = "183"
+            landmarkName = "style()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

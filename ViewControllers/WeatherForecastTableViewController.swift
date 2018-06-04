@@ -23,8 +23,8 @@ class WeatherForecastTableViewController: UIViewController, UITableViewDelegate,
         
         tableView.register(HourlyForecastTableViewCell.self, forCellReuseIdentifier: "HourlyCell")
         tableView.register(DailyForecastTableViewCell.self, forCellReuseIdentifier: "DailyCell")
-        tableView.separatorColor = UIColor.white.withAlphaComponent(0.2)
-        tableView.backgroundColor = UIColor.black.withAlphaComponent(0.2)
+        tableView.separatorColor = UIColor.white.withAlphaComponent(0.3)
+        tableView.backgroundColor = UIColor.black.withAlphaComponent(0.4)
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 44
         

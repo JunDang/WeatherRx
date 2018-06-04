@@ -25,8 +25,11 @@ class WeatherViewController: UIViewController {
     private var blurredImageView = DynamicBlurView(frame: CGRect.zero)
     private var menuButton:UIButton = UIButton()
     private var searchController = UISearchController()
-    
+    private var sideMenuBarContainerView = UIView(frame: CGRect.zero)
+    private var isMenuButtonPressed: Bool = true
     private let bag = DisposeBag()
+    private let temperatureUnitControl = UISegmentedControl()
+    private let windSpeedUnitControl = UISegmentedControl()
 
     override func viewDidLoad() {
       super.viewDidLoad()
@@ -42,11 +45,9 @@ class WeatherViewController: UIViewController {
       super.didReceiveMemoryWarning()
     // Dispose of any resources that can be recreated.
     }
-  
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-      return .lightContent
+    override var prefersStatusBarHidden: Bool {
+        return true
     }
-    
     func bindBackground() {
         let flickrViewModel: FlickrViewModel = FlickrViewModel(lat: 43.6532, lon: -79.3832, currentWeather: "sunny", apiType: FlickrService.self, imageDataCacheType: ImageDataCaching.self)
         flickrViewModel.backgroundImage.asDriver()
@@ -105,9 +106,6 @@ private extension WeatherViewController{
         frontScrollView.addSubview(currentWeatherView)
         frontScrollView.addSubview(segmentedControl)
         frontScrollView.addSubview(containerView)
-        /*overlayView.contentMode = .scaleAspectFill
-        overlayView.clipsToBounds = true
-        view.addSubview(overlayView)*/
         backScrollView.showsVerticalScrollIndicator = false
         backScrollView.isDirectionalLockEnabled = true
         frontScrollView.showsVerticalScrollIndicator = false
@@ -125,15 +123,7 @@ extension WeatherViewController{
             view.left == view.superview!.left
             view.right == view.superview!.right
         }
-        constrain(gradientView) { view in
-            view.top == view.superview!.top
-            //view.bottom == view.superview!.bottom
-            //view.left == view.superview!.left
-            //view.right == view.superview!.right
-            view.width == view.superview!.width
-            view.height == self.view.frame.height
-        }
-        constrain(maskLayer) { view in
+       constrain(maskLayer) { view in
             view.top == view.superview!.top
             view.bottom == view.superview!.bottom
             view.left == view.superview!.left
@@ -152,7 +142,7 @@ extension WeatherViewController{
             view.right == view.superview!.right
         }
         constrain(frontScrollView) { view in
-            view.top == view.superview!.top
+            view.top == view.superview!.top + 40
             view.bottom == view.superview!.bottom
             view.left == view.superview!.left
             view.right == view.superview!.right
@@ -163,11 +153,6 @@ extension WeatherViewController{
             //view.centerY == view.superview!.centerY + self.view.frame.height/2
             view.bottom == view.superview!.top + self.view.frame.height - 120
         }
-       /* constrain(weatherForecastTableView,currentWeatherView) {
-            $0.width == $0.superview!.width
-            $0.centerY == $0.superview!.centerY
-            $0.top == $1.bottom + 5
-        }*/
         constrain(segmentedControl,currentWeatherView) {
             $0.width == $0.superview!.width
             $0.centerX == $0.superview!.centerX
@@ -180,35 +165,23 @@ extension WeatherViewController{
             $0.top == $1.bottom
             $0.height == self.view.frame.height
        }
-    }
+   }
 }
 
 // MARK: Style
 private extension WeatherViewController{
     func style(){
-        gradientView.backgroundColor = UIColor(white: 0, alpha: 0.7)
-        let gradientLayer = CAGradientLayer()
-        gradientLayer.frame = gradientView.bounds
-        
-        let blackColor = UIColor(white: 0, alpha: 0.0)
-        let clearColor = UIColor(white: 0, alpha: 1.0)
-        
-        gradientLayer.colors = [blackColor.cgColor, clearColor.cgColor]
-        
-        gradientLayer.startPoint = CGPoint(x:1.0, y:0.5)
-        gradientLayer.endPoint = CGPoint(x:1.0, y:1.0)
-        gradientView.layer.mask = gradientLayer
-        
         maskLayer.backgroundColor = UIColor.black.withAlphaComponent(0.2)
         blurredImageView.blurRadius = 10
         blurredImageView.alpha = 0
         
-        segmentedControl.backgroundColor = UIColor.black.withAlphaComponent(0.2)
+        segmentedControl.backgroundColor = UIColor.black.withAlphaComponent(0.4)
         segmentedControl.layer.cornerRadius = 5.0
         segmentedControl.tintColor = UIColor.white
+        segmentedControl.setTitleTextAttributes([NSAttributedStringKey.font: UIFont(name: "HelveticaNeue-Bold", size: 15)!], for: .normal)
         segmentedControl.sizeToFit()
         containerView.backgroundColor = UIColor.clear
-        
+        sideMenuBarContainerView.backgroundColor = UIColor.black.withAlphaComponent(0.2)
     }
 }
 // MARK: UIScrollViewDelegate
@@ -220,15 +193,19 @@ extension WeatherViewController: UIScrollViewDelegate {
         }
         let height = scrollView.bounds.size.height
         let position =  max(scrollView.contentOffset.y, 0.0)
-        let percent = min(position / height * 1.1, 0.9)
+        let percent = min(position / height * 1.2, 1.0)
         self.blurredImageView.alpha = percent
         let foregroundHeight = frontScrollView.contentSize.height - frontScrollView.bounds.height
         let percentageScroll = frontScrollView.contentOffset.y / foregroundHeight
         let backgroundHeight = backScrollView.contentSize.height - backScrollView.bounds.height
         
         backScrollView.contentOffset = CGPoint(x: 0, y: backgroundHeight * percentageScroll * 0.1)
-   
-    }
+        if #available(iOS 11.0, *) {
+            frontScrollView.contentInsetAdjustmentBehavior = .automatic
+        } else {
+            // Fallback on earlier versions
+        }
+     }
 }
 //MARK: -set up segmented controll
 extension WeatherViewController {
@@ -253,28 +230,16 @@ extension WeatherViewController {
     }
 
     private func add(asChildViewController viewController: UIViewController) {
-        // Add Child View Controller
         addChildViewController(viewController)
-        
-        // Add Child View as Subview
         containerView.addSubview(viewController.view)
-        
-        // Configure Child View
         viewController.view.frame = containerView.bounds
         viewController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        
-        // Notify Child View Controller
         viewController.didMove(toParentViewController: self)
     }
     
     private func remove(asChildViewController viewController: UIViewController) {
-        // Notify Child View Controller
         viewController.willMove(toParentViewController: nil)
-        
-        // Remove Child View From Superview
         viewController.view.removeFromSuperview()
-        
-        // Notify Child View Controller
         viewController.removeFromParentViewController()
     }
     
@@ -301,15 +266,22 @@ extension WeatherViewController {
 extension WeatherViewController: UINavigationControllerDelegate, UINavigationBarDelegate {
     func setupNavigationbar() {
         self.navigationItem.title = "Toronto"
-        self.navigationController!.navigationBar.titleTextAttributes =
+        let navigationBar = navigationController!.navigationBar
+        navigationBar.titleTextAttributes =
             [NSAttributedStringKey.foregroundColor: UIColor.white, NSAttributedStringKey.font: UIFont(name: "HelveticaNeue-Bold", size: 19)!]
-        self.navigationController!.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
-        self.navigationController!.navigationBar.shadowImage = UIImage()
-        self.navigationController!.navigationBar.isTranslucent = true
+       //MARK: - set navigation bar transparent
+        navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
+        navigationBar.shadowImage = UIImage()
+        navigationBar.isTranslucent = true
+        if #available(iOS 11.0, *) {
+            navigationBar.prefersLargeTitles = true
+        } else {
+            // Fallback on earlier versions
+        }
         menuButton = UIButton(frame: CGRect(0, 0, 30, 30))
         menuButton.setImage(UIImage(named: "menu"), for: .normal)
         
-       // menuButton.addTarget(self, action: #selector(WeatherViewController.menuButtonPressed(_:)), for: .TouchUpInside)
+        menuButton.addTarget(self, action: #selector(WeatherViewController.menuButtonPressed), for: .touchUpInside)
         //assign button to navigationbar
         let menuButtonItem = UIBarButtonItem(customView: menuButton)
         navigationItem.leftBarButtonItem = menuButtonItem
@@ -317,20 +289,112 @@ extension WeatherViewController: UINavigationControllerDelegate, UINavigationBar
         let searchButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.search, target: self, action: #selector(WeatherViewController.searchCity))
         searchButton.tintColor = UIColor.white
         navigationItem.rightBarButtonItem = searchButton
-
+        print("navigationBar.frame.height: " + "\(navigationBar.frame.height)")
     }
 }
     
 extension WeatherViewController: UISearchBarDelegate {
-    @objc func searchCity(sender: AnyObject) {
+    @objc func searchCity(_ sender: AnyObject) {
         searchController = UISearchController(searchResultsController: nil)
         searchController.hidesNavigationBarDuringPresentation = false
-        //searchController.searchBar.keyboardType = UIKeyboardType.asciiCapable
-        
+        searchController.searchBar.keyboardType = UIKeyboardType.asciiCapable
+        let searchBar = searchController.searchBar
+        searchBar.searchBarStyle = UISearchBarStyle.prominent
+        searchBar.tintColor = UIColor.white
+        searchBar.placeholder = "Search City"
+        searchBar.barTintColor = UIColor(red: (0/255.0), green: (76/255.0), blue: (153/255.0), alpha: 0.8)
+        let textFieldInsideUISearchBar = searchBar.value(forKey: "searchField") as? UITextField
+        textFieldInsideUISearchBar?.font = UIFont(name: "HelveticaNeue-Bold", size: 17)
         // Make this class the delegate and present the search
         self.searchController.searchBar.delegate = self
         present(searchController, animated: true, completion: nil)
         
     }
+}
 
+extension WeatherViewController {
+    @objc func menuButtonPressed(_ sender: AnyObject) {
+        if isMenuButtonPressed {
+          setupUnitSegmentedView()
+          isMenuButtonPressed = false
+          windSpeedUnitControl.addTarget(self, action: #selector(unitChange(_:)), for: .valueChanged)
+          temperatureUnitControl.addTarget(self, action: #selector(unitChange(_:)), for: .valueChanged)
+            
+        } else {
+            if temperatureUnitControl.superview != nil && windSpeedUnitControl.superview != nil {
+                temperatureUnitControl.removeFromSuperview()
+                windSpeedUnitControl.removeFromSuperview()
+                isMenuButtonPressed = true
+            }
+        }
+       
+     }
+    func setupUnitSegmentedView() {
+        frontScrollView.addSubview(temperatureUnitControl)
+        frontScrollView.addSubview(windSpeedUnitControl)
+        unitSegmentedViewLayout()
+        unitSegmentedViewStyle()
+        setupUnitSegmentedControl()
+ 
+    }
+    func unitSegmentedViewLayout() {
+        constrain(temperatureUnitControl) {
+            $0.top == $0.superview!.top
+            $0.left == $0.superview!.left + 5
+            $0.width == 120
+            $0.height == 40
+         }
+        constrain(windSpeedUnitControl, temperatureUnitControl) {
+            $0.top == $1.bottom + 2
+            $0.left == $1.left
+            $0.right == $1.right
+            $0.height == 40
+            
+        }
+    }
+func unitSegmentedViewStyle() {
+    temperatureUnitControl.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+    temperatureUnitControl.layer.cornerRadius = 5.0
+    temperatureUnitControl.tintColor = UIColor.white
+    temperatureUnitControl.setTitleTextAttributes([NSAttributedStringKey.font: UIFont(name: "HelveticaNeue-Bold", size: 15)!], for: .normal)
+    temperatureUnitControl.sizeToFit()
+    
+    windSpeedUnitControl.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+    windSpeedUnitControl.layer.cornerRadius = 5.0
+    windSpeedUnitControl.tintColor = UIColor.white
+    windSpeedUnitControl.setTitleTextAttributes([NSAttributedStringKey.font: UIFont(name: "HelveticaNeue-Bold", size: 15)!], for: .normal)
+    windSpeedUnitControl.sizeToFit()
+    
+}
+func setupUnitSegmentedControl() {
+    // Configure Segmented Control
+   temperatureUnitControl.removeAllSegments()
+   windSpeedUnitControl.removeAllSegments()
+   temperatureUnitControl.insertSegment(withTitle: "°F", at: 0, animated: false)
+   temperatureUnitControl.insertSegment(withTitle: "°C", at: 1, animated: false)
+   windSpeedUnitControl.insertSegment(withTitle: "mph", at: 0, animated: false)
+   windSpeedUnitControl.insertSegment(withTitle: "km/h", at: 1, animated: false)
+    
+   temperatureUnitControl.selectedSegmentIndex = 0
+   windSpeedUnitControl.selectedSegmentIndex = 0
+    
+}
+    @objc func unitChange(_ sender: UISegmentedControl) {
+        switch temperatureUnitControl.selectedSegmentIndex {
+        case 0:
+            print("Farenheit")
+        case 1:
+            print("Celcius")
+        default:
+            break
+        }
+        switch windSpeedUnitControl.selectedSegmentIndex {
+        case 0:
+            print("mile per hour")
+        case 1:
+            print("km/h")
+        default:
+            break
+        }
+    }
 }

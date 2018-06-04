@@ -173,7 +173,7 @@ extension WeatherForecastSummaryViewController {
 
 extension WeatherForecastSummaryViewController {
     func setStyle() {
-        view.backgroundColor = UIColor.black.withAlphaComponent(0.2)
+        view.backgroundColor = UIColor.black.withAlphaComponent(0.4)
         
         toplineView.backgroundColor = UIColor.white
         bottomlineView.backgroundColor = UIColor.white

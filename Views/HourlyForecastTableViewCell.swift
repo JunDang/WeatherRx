@@ -49,7 +49,7 @@ extension HourlyForecastTableViewCell {
        collectionView = UICollectionView(frame: self.contentView.frame, collectionViewLayout: layout)
        collectionView!.dataSource = self
        collectionView!.delegate = self
-       collectionView!.backgroundColor = UIColor.black.withAlphaComponent(0.2)
+       collectionView!.backgroundColor = UIColor.black.withAlphaComponent(0)
        collectionView!.register(HourlyForecastCell.self, forCellWithReuseIdentifier: "Cell")
        self.contentView.addSubview(collectionView!)
    }
