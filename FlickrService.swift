@@ -6,7 +6,7 @@
 //  Copyright © 2017 Jun Dang. All rights reserved.
 //
 
-import Foundation
+/*import Foundation
 import UIKit
 import CoreLocation
 import RxSwift
@@ -104,10 +104,10 @@ struct FlickrService: FlickrAPIProtocol {
                if data.count < 5000 {
                let banffData = UIImagePNGRepresentation(UIImage(named: "banff")!)
                 return banffData! as NSData
-                } else {
+               } else {
                  //print("data: " + "\(data)")
                  return data as NSData
-                }
+               }
           }
     }
    
@@ -129,7 +129,7 @@ struct FlickrService: FlickrAPIProtocol {
          }
     }
     
- }
+ }*/
 
     
                         

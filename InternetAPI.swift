@@ -9,7 +9,7 @@
 import Foundation
 import RxSwift
 
-class InternetAPI {
+/*class InternetAPI {
     //MARK: - compose url
     static func composeURL(from baseURL: String = "", parameters: [String:String] = [:]) -> URL {
         var components = URLComponents(string: baseURL)!
@@ -41,5 +41,5 @@ class InternetAPI {
             return Disposables.create()
         }
     }
-}
+}*/
 

@@ -1,5 +1,3 @@
-//
-//  UIImage.swift
 //  WeatherRx
 //
 //  Created by Jun Dang on 2018-05-02.
@@ -11,7 +9,7 @@ import UIKit
 
 extension UIImage {
     
-     func scaled(_ newSize: CGSize) -> UIImage? {
+    func scaled(_ newSize: CGSize) -> UIImage? {
         guard size != newSize else {
             return self
         }

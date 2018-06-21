@@ -12,7 +12,7 @@ import RealmSwift
 
 
 
-class FlickrPhoto: Unboxable {
+/*class FlickrPhoto: Unboxable {
     var farm: Int64 = 0
     var server: String = ""
     var photoID: String = ""
@@ -45,7 +45,7 @@ class FlickrPhotoResult: Unboxable {
         self.init()
         flickrPhotoResult = unboxer.unbox(key: "photos")
     }
-}
+}*/
 
 
 

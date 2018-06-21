@@ -49,7 +49,7 @@ class WeatherViewController: UIViewController {
         return true
     }
     func bindBackground() {
-        let flickrViewModel: FlickrViewModel = FlickrViewModel(lat: 43.6532, lon: -79.3832, currentWeather: "sunny", apiType: FlickrService.self, imageDataCacheType: ImageDataCaching.self)
+        let flickrViewModel: FlickrViewModel = FlickrViewModel(lat: 43.6532, lon: -79.3832, currentWeather: "sunny", apiType: InternetService.self/*FlickrService.self*/, imageDataCacheType: ImageDataCaching.self)
         flickrViewModel.backgroundImage.asDriver()
            .drive(onNext: { [weak self] backgroundImage in
             let resizedImage = backgroundImage?.scaled(CGSize(width: (self?.view.frame.width)!, height: (self?.view.frame.height)! * 1.5))
@@ -175,13 +175,12 @@ private extension WeatherViewController{
         blurredImageView.blurRadius = 10
         blurredImageView.alpha = 0
         
-        segmentedControl.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+        segmentedControl.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         segmentedControl.layer.cornerRadius = 5.0
         segmentedControl.tintColor = UIColor.white
         segmentedControl.setTitleTextAttributes([NSAttributedStringKey.font: UIFont(name: "HelveticaNeue-Bold", size: 15)!], for: .normal)
         segmentedControl.sizeToFit()
         containerView.backgroundColor = UIColor.clear
-        sideMenuBarContainerView.backgroundColor = UIColor.black.withAlphaComponent(0.2)
     }
 }
 // MARK: UIScrollViewDelegate
@@ -319,7 +318,6 @@ extension WeatherViewController {
           isMenuButtonPressed = false
           windSpeedUnitControl.addTarget(self, action: #selector(unitChange(_:)), for: .valueChanged)
           temperatureUnitControl.addTarget(self, action: #selector(unitChange(_:)), for: .valueChanged)
-            
         } else {
             if temperatureUnitControl.superview != nil && windSpeedUnitControl.superview != nil {
                 temperatureUnitControl.removeFromSuperview()
@@ -349,17 +347,16 @@ extension WeatherViewController {
             $0.left == $1.left
             $0.right == $1.right
             $0.height == 40
-            
         }
     }
 func unitSegmentedViewStyle() {
-    temperatureUnitControl.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+    temperatureUnitControl.backgroundColor = UIColor.black.withAlphaComponent(0.6)
     temperatureUnitControl.layer.cornerRadius = 5.0
     temperatureUnitControl.tintColor = UIColor.white
     temperatureUnitControl.setTitleTextAttributes([NSAttributedStringKey.font: UIFont(name: "HelveticaNeue-Bold", size: 15)!], for: .normal)
     temperatureUnitControl.sizeToFit()
     
-    windSpeedUnitControl.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+    windSpeedUnitControl.backgroundColor = UIColor.black.withAlphaComponent(0.6)
     windSpeedUnitControl.layer.cornerRadius = 5.0
     windSpeedUnitControl.tintColor = UIColor.white
     windSpeedUnitControl.setTitleTextAttributes([NSAttributedStringKey.font: UIFont(name: "HelveticaNeue-Bold", size: 15)!], for: .normal)
