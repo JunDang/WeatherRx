@@ -52,7 +52,9 @@ extension HourlyForecastTableViewCell {
        collectionView!.backgroundColor = UIColor.black.withAlphaComponent(0)
        collectionView!.register(HourlyForecastCell.self, forCellWithReuseIdentifier: "Cell")
        self.contentView.addSubview(collectionView!)
-   }
+       self.contentView.setNeedsDisplay()
+        
+    }
     // MARK: <UICollectionViewDataSource>
    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
       return 1
@@ -70,12 +72,14 @@ extension HourlyForecastTableViewCell {
 
 private extension HourlyForecastTableViewCell {
     func layoutView() {
-        constrain(collectionView!) {
+       constrain(collectionView!) {
+            $0.height == 90
             $0.top == $0.superview!.top
-            $0.bottom == $0.superview!.bottom
+            //$0.bottom == $0.superview!.bottom
             $0.left == $0.superview!.left
             $0.right == $0.superview!.right
-            $0.height == 90
+        
+        
        }
     }
 }

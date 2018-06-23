@@ -8,21 +8,49 @@
 
 import Foundation
 
-struct FlickrPhoto: Codable {
-    var farm: Int64 = 0
-    var server: String = ""
-    var photoID: String = ""
-    var secret: String = ""
-    
-    func createImageURL() -> NSURL {
-        return NSURL(string: "http://farm\(farm).staticflickr.com/\(server)/\(photoID)_\(secret)_b.jpg")!
-    }
+struct FlickrModel: Codable {
+    private enum CodingKeys : String, CodingKey {
+        case flickrModel = "photos" }
+    var flickrModel: FlickrPhotos?
 }
 
 struct FlickrPhotos: Codable {
+    private enum CodingKeys : String, CodingKey {
+        case flickrPhotos = "photo" }
     var flickrPhotos: [FlickrPhoto] = []
 }
+/*struct FlickrPhotos: Codable {
+    var flickrPhotos: [FlickrPhoto]
+}*/
 
-struct FlickrModel: Codable {
-    var flickrResult: FlickrPhotos?
+struct FlickrPhoto: Codable {
+    var farm: Int = 0
+    var server: String = ""
+    var id: String = ""
+    var secret: String = ""
+    
+    private enum CodingKeys: String, CodingKey {
+      case farm = "farm", server = "server", id = "id", secret = "secret"
+    }
+    init(farm: Int, id: String, server: String, secrect: String) {
+        self.farm = farm
+        self.id = id
+        self.server = server
+        self.secret = secrect
+    }
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        farm = try container.decode(Int.self, forKey: .farm)
+        server = try container.decode(String.self, forKey: .server)
+        id = try container.decode(String.self, forKey: .id)
+        secret = try container.decode(String.self, forKey: .secret)
+    }
+    func createImageURL() -> NSURL {
+        return NSURL(string: "http://farm\(String(describing: farm)).staticflickr.com/\(String(describing: server))/\(String(describing: id))_\(String(describing: secret))_b.jpg")!
+    }
 }
+
+
+
+
+

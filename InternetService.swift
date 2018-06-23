@@ -40,7 +40,6 @@ struct DarskyAPI {
 
 class InternetService: FlickrAPIProtocol {
     static let defaultSession = URLSession(configuration: .default)
-    static var dataTask: URLSessionDataTask?
     
     static func searchImageURL(lat: Double, lon: Double, currentWeather:String) -> Observable<NSURL> {
          return Observable.create {observer -> Disposable in 
@@ -65,16 +64,26 @@ class InternetService: FlickrAPIProtocol {
             let result  = request(baseURLString, parameters: parameters)
             switch result {
                 case let .Success(data):
-                   let flickrModel = try? JSONDecoder().decode(FlickrModel.self, from: data)
-                   let flickrPhotos = flickrModel!.flickrResult!.flickrPhotos
+                  //print("Flickrdata: " + "\(data)")
+                  let decodedData = NSString(data: data, encoding: String.Encoding.ascii.rawValue)
+                  print("FlickrdataDecoded: " + "\(String(describing: decodedData))")
+                  var flickrModel: FlickrModel?
+                  do {
+                    flickrModel = try JSONDecoder().decode(FlickrModel.self, from: data)
+                  } catch let parseError {
+                    print("parseError: " + "\(parseError)")
+                  }
+                   print("flickrModel: " + "\(String(describing: flickrModel))")
+                   let flickrPhotos = flickrModel!.flickrModel!.flickrPhotos
                    guard flickrPhotos.count > 0 else {
-                    observer.onError(flickrRequestError.emptyAlbum)
-                    return Disposables.create()
+                   observer.onError(flickrRequestError.emptyAlbum)
+                   return Disposables.create()
                    }
                    let randomIndex = Int(arc4random_uniform(UInt32(flickrPhotos.count)))
                    let photo = flickrPhotos[randomIndex]
-                   let imageURL = photo.createImageURL()
-                   observer.onNext(imageURL)
+                   let imageURL = NSURL(string: "http://farm\(photo.farm).staticflickr.com/\(photo.server)/\(photo.id)_\(photo.secret)_b.jpg")!
+                   //let imageURL = photo.createImageURL()
+                  observer.onNext((imageURL))
                    observer.onCompleted()
                 case let .Failure(error):
                    observer.onError(error)
@@ -122,9 +131,8 @@ class InternetService: FlickrAPIProtocol {
                 })
         }
     }
-// MARK: - URL request
+/*// MARK: - URL request
     static private func request(_ baseURL: String = "", parameters: [String: String] = [:]) -> Result<Data, Error> {
-        dataTask?.cancel()
         var components = URLComponents(string: baseURL)!
         components.queryItems = parameters.map(URLQueryItem.init)
         let url = components.url!
@@ -132,8 +140,7 @@ class InternetService: FlickrAPIProtocol {
         let urlRequest = URLRequest(url: url)
         
         var result: Result<Data, Error>?
-        dataTask = defaultSession.dataTask(with: urlRequest) { data, response, error in
-            defer { self.dataTask = nil }
+        let task = defaultSession.dataTask(with: urlRequest) { data, response, error in
             print("data: " + "\(String(describing: data))")
             print("error: " + "\(String(describing: error))")
             if let error = error {
@@ -144,9 +151,28 @@ class InternetService: FlickrAPIProtocol {
                result = Result<Data, Error>.Success(data)
                 print("result: " + "\(String(describing: result))")
             }
-          self.dataTask?.resume()
-       }
-       return result!
+         }
+        task.resume()
+        return result!
+    }*/
+    //MARK: - URL request
+    static private func request(_ baseURL: String = "", parameters: [String: String] = [:]) -> Result<Data, Error> {
+        var components = URLComponents(string: baseURL)!
+        components.queryItems = parameters.map(URLQueryItem.init)
+        let url = components.url!
+        print("url: " + "\(String(describing: url))")
+ 
+        var result: Result<Data, Error>?
+        let (data, response, error)  = defaultSession.synchronousDataTask(with: url)
+        if let error = error {
+           print("error")
+           result = Result<Data, Error>.Failure(error)
+        } else if let data = data, let response = response as? HTTPURLResponse, 200 ..< 300 ~= response.statusCode {
+           print("data")
+           result = Result<Data, Error>.Success(data)
+           print("result: " + "\(String(describing: result))")
+        }
+        return result!
     }
 
 }
