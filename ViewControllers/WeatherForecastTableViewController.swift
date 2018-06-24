@@ -48,12 +48,11 @@ class WeatherForecastTableViewController: UIViewController, UITableViewDelegate,
         }
     }
   
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+   /*func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         var height: CGFloat = 44.0
         if indexPath.row == 0 {
             height = 90.0
         }
         return height
-    }
-    
+    }*/
 }

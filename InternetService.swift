@@ -40,79 +40,68 @@ struct DarskyAPI {
 
 class InternetService: FlickrAPIProtocol {
     static let defaultSession = URLSession(configuration: .default)
+    static var dataTask: URLSessionDataTask?
     
     static func searchImageURL(lat: Double, lon: Double, currentWeather:String) -> Observable<NSURL> {
-         return Observable.create {observer -> Disposable in 
-            let baseURLString = FlickrAPI.baseURLString
-            guard let urlEncodedcurrentWeather = currentWeather.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) else {
-               observer.onError(flickrRequestError.URLCannotBeEncoded)
-               return Disposables.create()
-            }
-            let parameters = [
-                "method": FlickrAPI.searchMethod,
-                "api_key": FlickrAPI.apiKey,
-                "format": "json",
-                "nojsoncallback": "1",
-                "per_page": "25",
-                "lat": "\(lat)",
-                "lon": "\(lon)",
-                "text": urlEncodedcurrentWeather,
-                "group_id": "92767609@N00",//"92767609@N00","1463451@N25"
-                "tagmode": "all"
-            ]
+        let baseURLString = FlickrAPI.baseURLString
+        let urlEncodedcurrentWeather = currentWeather.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
+        let parameters = [
+           "method": FlickrAPI.searchMethod,
+           "api_key": FlickrAPI.apiKey,
+           "format": "json",
+           "nojsoncallback": "1",
+           "per_page": "25",
+           "lat": "\(lat)",
+           "lon": "\(lon)",
+           "text": urlEncodedcurrentWeather,
+           "group_id": "92767609@N00",//"92767609@N00","1463451@N25"
+           "tagmode": "all"
+        ]
         
-            let result  = request(baseURLString, parameters: parameters)
-            switch result {
-                case let .Success(data):
-                  //print("Flickrdata: " + "\(data)")
-                  let decodedData = NSString(data: data, encoding: String.Encoding.ascii.rawValue)
-                  print("FlickrdataDecoded: " + "\(String(describing: decodedData))")
-                  var flickrModel: FlickrModel?
-                  do {
-                    flickrModel = try JSONDecoder().decode(FlickrModel.self, from: data)
-                  } catch let parseError {
-                    print("parseError: " + "\(parseError)")
-                  }
-                   print("flickrModel: " + "\(String(describing: flickrModel))")
-                   let flickrPhotos = flickrModel!.flickrModel!.flickrPhotos
-                   guard flickrPhotos.count > 0 else {
-                   observer.onError(flickrRequestError.emptyAlbum)
-                   return Disposables.create()
-                   }
-                   let randomIndex = Int(arc4random_uniform(UInt32(flickrPhotos.count)))
-                   let photo = flickrPhotos[randomIndex]
-                   let imageURL = NSURL(string: "http://farm\(photo.farm).staticflickr.com/\(photo.server)/\(photo.id)_\(photo.secret)_b.jpg")!
-                   //let imageURL = photo.createImageURL()
-                  observer.onNext((imageURL))
-                   observer.onCompleted()
-                case let .Failure(error):
-                   observer.onError(error)
+        return request(baseURLString, parameters: parameters as! [String : String])
+            .map({ result in
+                switch result {
+                   case let .Success(data):
+                    var flickrModel: FlickrModel?
+                    do {
+                        flickrModel = try JSONDecoder().decode(FlickrModel.self, from: data)
+                    } catch let parseError {
+                        print("parseError: " + "\(parseError)")
+                    }
+                    print("flickrModel: " + "\(String(describing: flickrModel))")
+                    let flickrPhotos = flickrModel!.flickrModel!.flickrPhotos
+                    guard flickrPhotos.count > 0 else {
+                        throw flickrRequestError.emptyAlbum
+                    }
+                    let randomIndex = Int(arc4random_uniform(UInt32(flickrPhotos.count)))
+                    let photo = flickrPhotos[randomIndex]
+                    let imageURL = NSURL(string: "http://farm\(photo.farm).staticflickr.com/\(photo.server)/\(photo.id)_\(photo.secret)_b.jpg")!
+                    return imageURL
+                 case let .Failure(error):
+                    throw error
                 }
-            return Disposables.create()
-       }
-  }
-            
+            })
+    }
+    
     static func sendRequest(to imageURL: NSURL) -> Observable<NSData> {
-        return Observable.create {observer -> Disposable in
             let baseURLString = imageURL.absoluteString
             let parameters: [String: String] = [:]
             var imageData: Data?
-            let result  = request(baseURLString!, parameters: parameters)
-            switch result {
-            case let .Success(data):
-                if data.count < 5000 {
-                  imageData = UIImagePNGRepresentation(UIImage(named: "banff")!)
-                }
-                imageData = data
-                let imageNSData = imageData! as NSData
-                observer.onNext(imageNSData)
-                observer.onCompleted()
-            case let .Failure(error):
-                observer.onError(error)
-            }
-            return Disposables.create()
-        }
-    }
+            return request(baseURLString!, parameters: parameters)
+                .map({ result in
+                    switch result {
+                       case let .Success(data):
+                          if data.count < 5000 {
+                             imageData = UIImagePNGRepresentation(UIImage(named: "banff")!)
+                          }
+                          imageData = data
+                          let imageNSData = imageData! as NSData
+                          return imageNSData
+                      case let .Failure(error):
+                          throw error
+                    }
+                })
+   }
     
     static func getImage(imageURL: NSURL, cache: ImageDataCachingProtocol.Type) -> Observable<UIImage?> {
         if let imageDataFromCache = cache.imageDataFromURLFromChache(url: imageURL) {
@@ -131,48 +120,33 @@ class InternetService: FlickrAPIProtocol {
                 })
         }
     }
-/*// MARK: - URL request
-    static private func request(_ baseURL: String = "", parameters: [String: String] = [:]) -> Result<Data, Error> {
-        var components = URLComponents(string: baseURL)!
-        components.queryItems = parameters.map(URLQueryItem.init)
-        let url = components.url!
-        print("url: " + "\(String(describing: url))")
-        let urlRequest = URLRequest(url: url)
-        
-        var result: Result<Data, Error>?
-        let task = defaultSession.dataTask(with: urlRequest) { data, response, error in
-            print("data: " + "\(String(describing: data))")
-            print("error: " + "\(String(describing: error))")
-            if let error = error {
-                print("error")
-               result = Result<Data, Error>.Failure(error)
-            } else if let data = data, let response = response as? HTTPURLResponse, 200 ..< 300 ~= response.statusCode {
-                print("data")
-               result = Result<Data, Error>.Success(data)
-                print("result: " + "\(String(describing: result))")
-            }
-         }
-        task.resume()
-        return result!
-    }*/
-    //MARK: - URL request
-    static private func request(_ baseURL: String = "", parameters: [String: String] = [:]) -> Result<Data, Error> {
-        var components = URLComponents(string: baseURL)!
-        components.queryItems = parameters.map(URLQueryItem.init)
-        let url = components.url!
-        print("url: " + "\(String(describing: url))")
- 
-        var result: Result<Data, Error>?
-        let (data, response, error)  = defaultSession.synchronousDataTask(with: url)
-        if let error = error {
-           print("error")
-           result = Result<Data, Error>.Failure(error)
-        } else if let data = data, let response = response as? HTTPURLResponse, 200 ..< 300 ~= response.statusCode {
-           print("data")
-           result = Result<Data, Error>.Success(data)
-           print("result: " + "\(String(describing: result))")
-        }
-        return result!
-    }
 
+    //MARK: - URL request
+    static private func request(_ baseURL: String = "", parameters: [String: String] = [:]) -> Observable<Result<Data, Error>> {
+        dataTask?.cancel()
+        return Observable.create { observer in
+            var components = URLComponents(string: baseURL)!
+            components.queryItems = parameters.map(URLQueryItem.init)
+            let url = components.url!
+            print("url: " + "\(String(describing: url))")
+            
+            var result: Result<Data, Error>?
+            dataTask = defaultSession.dataTask(with: url) { data, response, error in
+                defer { self.dataTask = nil }
+                if let data = data, let response = response as? HTTPURLResponse, 200 ..< 300 ~= response.statusCode  {
+                    result = Result<Data, Error>.Success(data)
+                } else {
+                    if let error = error {
+                        result = Result<Data, Error>.Failure(error)
+                    }
+                }
+                observer.onNext(result!)
+                observer.onCompleted()
+            }
+            dataTask?.resume()
+            return Disposables.create {
+                dataTask?.cancel()
+            }
+        }
+    }
 }

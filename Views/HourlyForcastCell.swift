@@ -60,13 +60,13 @@ private extension HourlyForecastCell {
             $0.bottom == $1.top
             $0.top == $0.superview!.top
             $0.width == 42
-            //$0.height == 30
+            $0.height == 30
         }
         constrain(tempsLbl, iconImage) {
             $0.top == $1.bottom
             $0.bottom == $0.superview!.bottom
             $0.width == 42
-            //$0.height == 30
+            $0.height == 30
         }
     }
 }
