@@ -30,6 +30,12 @@
 		A5192BED20A6304500C8D483 /* HourlyForcastCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5192BEC20A6304500C8D483 /* HourlyForcastCell.swift */; };
 		A5192BEE20A6304500C8D483 /* HourlyForcastCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5192BEC20A6304500C8D483 /* HourlyForcastCell.swift */; };
 		A5192BF320A8ECDD00C8D483 /* CGExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5192BF220A8ECDD00C8D483 /* CGExtensions.swift */; };
+		A51E091A20DFE67300A45A39 /* Double+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51E091920DFE67300A45A39 /* Double+Extension.swift */; };
+		A51E091B20DFE67300A45A39 /* Double+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51E091920DFE67300A45A39 /* Double+Extension.swift */; };
+		A51E091D20DFE6B900A45A39 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51E091C20DFE6B900A45A39 /* UIImage+Extension.swift */; };
+		A51E091E20DFE6B900A45A39 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51E091C20DFE6B900A45A39 /* UIImage+Extension.swift */; };
+		A51E092420DFEEF300A45A39 /* WindDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51E092320DFEEF300A45A39 /* WindDirection.swift */; };
+		A51E092520DFEEF300A45A39 /* WindDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51E092320DFEEF300A45A39 /* WindDirection.swift */; };
 		A51F452B208D714B00ACCAB7 /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51F452A208D714B00ACCAB7 /* TestData.swift */; };
 		A51F45302090C7C300ACCAB7 /* InternetAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51F452F2090C7C300ACCAB7 /* InternetAPI.swift */; };
 		A51F45312090C7CE00ACCAB7 /* InternetAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51F452F2090C7C300ACCAB7 /* InternetAPI.swift */; };
@@ -38,10 +44,8 @@
 		A52DA6C020DC1CBF0079A982 /* URLSession+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52DA6BF20DC1CBF0079A982 /* URLSession+Extension.swift */; };
 		A52DA6C120DC1DB60079A982 /* URLSession+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52DA6BF20DC1CBF0079A982 /* URLSession+Extension.swift */; };
 		A52DA6C220DC25310079A982 /* CGExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5192BF220A8ECDD00C8D483 /* CGExtensions.swift */; };
-		A52DA6C320DC25340079A982 /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A571C5ED20C6247B005693B3 /* UIImageExtension.swift */; };
 		A52DA6C520DC44FF0079A982 /* PhotoModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52DA6C420DC44FF0079A982 /* PhotoModels.swift */; };
 		A52DA6C620DC44FF0079A982 /* PhotoModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52DA6C420DC44FF0079A982 /* PhotoModels.swift */; };
-		A571C5EE20C6247B005693B3 /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A571C5ED20C6247B005693B3 /* UIImageExtension.swift */; };
 		A571C5F120C71246005693B3 /* FlickrServiceCopy.swift in Sources */ = {isa = PBXBuildFile; fileRef = A571C5F020C71246005693B3 /* FlickrServiceCopy.swift */; };
 		A571C5F220C71246005693B3 /* FlickrServiceCopy.swift in Sources */ = {isa = PBXBuildFile; fileRef = A571C5F020C71246005693B3 /* FlickrServiceCopy.swift */; };
 		A571C5F420C8C548005693B3 /* InternetService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A571C5F320C8C548005693B3 /* InternetService.swift */; };
@@ -101,6 +105,9 @@
 		A5192BE920A5222C00C8D483 /* WeatherForecastTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherForecastTableViewController.swift; sourceTree = "<group>"; };
 		A5192BEC20A6304500C8D483 /* HourlyForcastCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyForcastCell.swift; sourceTree = "<group>"; };
 		A5192BF220A8ECDD00C8D483 /* CGExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGExtensions.swift; sourceTree = "<group>"; };
+		A51E091920DFE67300A45A39 /* Double+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Extension.swift"; sourceTree = "<group>"; };
+		A51E091C20DFE6B900A45A39 /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
+		A51E092320DFEEF300A45A39 /* WindDirection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindDirection.swift; sourceTree = "<group>"; };
 		A51F452A208D714B00ACCAB7 /* TestData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestData.swift; sourceTree = "<group>"; };
 		A51F452F2090C7C300ACCAB7 /* InternetAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternetAPI.swift; sourceTree = "<group>"; };
 		A51F45322090D08600ACCAB7 /* MockFlickrService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFlickrService.swift; sourceTree = "<group>"; };
@@ -108,7 +115,6 @@
 		A52DA6BF20DC1CBF0079A982 /* URLSession+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSession+Extension.swift"; sourceTree = "<group>"; };
 		A52DA6C420DC44FF0079A982 /* PhotoModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModels.swift; sourceTree = "<group>"; };
 		A54FC92786D45EEF4C724417 /* Pods_WeatherRxAbstract_WeatherRxTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WeatherRxAbstract_WeatherRxTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		A571C5ED20C6247B005693B3 /* UIImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
 		A571C5F020C71246005693B3 /* FlickrServiceCopy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrServiceCopy.swift; sourceTree = "<group>"; };
 		A571C5F320C8C548005693B3 /* InternetService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternetService.swift; sourceTree = "<group>"; };
 		A571C5FA20D82F0A005693B3 /* FlickrPhotos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrPhotos.swift; sourceTree = "<group>"; };
@@ -189,7 +195,6 @@
 				A5192BE820A521EB00C8D483 /* ViewControllers */,
 				A5971239209F5166006C3566 /* Views */,
 				A50D28E920503D0A00351630 /* ViewController */,
-				A51E90E2209A12ED00D41EB6 /* Utils */,
 				A50D28ED2051AD6C00351630 /* Protocols */,
 				A50D28E420470FB600351630 /* View Models */,
 				A54D8B9B203B2109005B7FE8 /* Helpers */,
@@ -270,13 +275,6 @@
 			path = ViewControllers;
 			sourceTree = "<group>";
 		};
-		A51E90E2209A12ED00D41EB6 /* Utils */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Utils;
-			sourceTree = "<group>";
-		};
 		A51F4529208D712D00ACCAB7 /* Mocks */ = {
 			isa = PBXGroup;
 			children = (
@@ -291,7 +289,9 @@
 			children = (
 				A52DA6BF20DC1CBF0079A982 /* URLSession+Extension.swift */,
 				A5192BF220A8ECDD00C8D483 /* CGExtensions.swift */,
-				A571C5ED20C6247B005693B3 /* UIImageExtension.swift */,
+				A51E091920DFE67300A45A39 /* Double+Extension.swift */,
+				A51E091C20DFE6B900A45A39 /* UIImage+Extension.swift */,
+				A51E092320DFEEF300A45A39 /* WindDirection.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -609,13 +609,15 @@
 				A51F45302090C7C300ACCAB7 /* InternetAPI.swift in Sources */,
 				A597123B209F5190006C3566 /* CurrentWeatherView.swift in Sources */,
 				A50D28FD2052220900351630 /* FlickrAPIProtocol.swift in Sources */,
+				A51E092420DFEEF300A45A39 /* WindDirection.swift in Sources */,
 				A5146B661F799A2600EE1DF7 /* AppDelegate.swift in Sources */,
 				A571C5F120C71246005693B3 /* FlickrServiceCopy.swift in Sources */,
+				A51E091D20DFE6B900A45A39 /* UIImage+Extension.swift in Sources */,
 				A57F6DB52072B5AE00509E7E /* ImageDataCaching.swift in Sources */,
 				A52DA6C020DC1CBF0079A982 /* URLSession+Extension.swift in Sources */,
-				A571C5EE20C6247B005693B3 /* UIImageExtension.swift in Sources */,
 				A52DA6C520DC44FF0079A982 /* PhotoModels.swift in Sources */,
 				A571C5F420C8C548005693B3 /* InternetService.swift in Sources */,
+				A51E091A20DFE67300A45A39 /* Double+Extension.swift in Sources */,
 				A5192BF320A8ECDD00C8D483 /* CGExtensions.swift in Sources */,
 				A582C70B20C043E70036C7D9 /* SideMenuBarView.swift in Sources */,
 				A5F4177520B3645200FE45D8 /* WeatherForecastSummaryViewController.swift in Sources */,
@@ -633,10 +635,13 @@
 				A57F6DB62072B5AE00509E7E /* ImageDataCaching.swift in Sources */,
 				A59D0F2E20B30B3000111552 /* WeatherForecastGraphViewController.swift in Sources */,
 				A597123C20A353F3006C3566 /* CurrentWeatherView.swift in Sources */,
+				A51E091E20DFE6B900A45A39 /* UIImage+Extension.swift in Sources */,
+				A51E092520DFEEF300A45A39 /* WindDirection.swift in Sources */,
 				A5146B8C1F799D7E00EE1DF7 /* Weather.swift in Sources */,
 				A51F45332090D08600ACCAB7 /* MockFlickrService.swift in Sources */,
 				A59D0F2720B20C9100111552 /* HourlyForecastTableViewCell.swift in Sources */,
 				A50D28EC20503D5E00351630 /* WeatherViewController.swift in Sources */,
+				A51E091B20DFE67300A45A39 /* Double+Extension.swift in Sources */,
 				A5192BEE20A6304500C8D483 /* HourlyForcastCell.swift in Sources */,
 				A52DA6C220DC25310079A982 /* CGExtensions.swift in Sources */,
 				A5EE3C90201FA89500B65EA2 /* FlickrPhoto.swift in Sources */,
@@ -652,7 +657,6 @@
 				A51F45372093607700ACCAB7 /* FlickrViewModelTests.swift in Sources */,
 				A5F4177A20B6068800FE45D8 /* WeatherForecastSummaryViewController.swift in Sources */,
 				A5146B7B1F799A2600EE1DF7 /* WeatherRxTests.swift in Sources */,
-				A52DA6C320DC25340079A982 /* UIImageExtension.swift in Sources */,
 				A59D0F2820B20C9800111552 /* DailyForecastTableViewCell.swift in Sources */,
 				A571C5FC20D82F0A005693B3 /* FlickrPhotos.swift in Sources */,
 				A52DA6C620DC44FF0079A982 /* PhotoModels.swift in Sources */,

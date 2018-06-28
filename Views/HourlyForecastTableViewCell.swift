@@ -27,7 +27,7 @@ class HourlyForecastTableViewCell: UITableViewCell, UICollectionViewDataSource, 
     }
 
    override func updateConstraints() {
-    print("HourlyForecastTableViewCellupdateconstraintscalled")
+    //print("HourlyForecastTableViewCellupdateconstraintscalled")
      if didSetupConstraints {
         super.updateConstraints()
         return
@@ -75,7 +75,7 @@ private extension HourlyForecastTableViewCell {
        constrain(collectionView!) {
             $0.height == 90
             $0.top == $0.superview!.top
-            $0.bottom == $0.superview!.bottom
+            //$0.bottom == $0.superview!.bottom
             $0.left == $0.superview!.left
             $0.right == $0.superview!.right
         

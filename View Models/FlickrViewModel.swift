@@ -11,7 +11,7 @@ import RxSwift
 import RxCocoa
 
 
-class FlickrViewModel {
+/*class FlickrViewModel {
     
     private let bag = DisposeBag()
     
@@ -51,5 +51,5 @@ class FlickrViewModel {
              .disposed(by:bag)
       }
     
-}
+}*/
 

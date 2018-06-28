@@ -10,9 +10,6 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-
-
-
 enum Result<T, Error> {
     case Success(T)
     case Failure(Error)
@@ -37,12 +34,39 @@ struct DarskyAPI {
     static let apiKey = "03d4359e5f3bcc9a216e2900ebea8130"
 }
 
+/*class InternetService {
+    
+    static func getWeatherObservable(lat: Double, lon: Double) -> Observable<WeatherForecastModel> {
+        print("weatherfunctioncalled")
+        var baseURL = URL(string: DarskyAPI.baseURLString)!
+        baseURL.appendPathComponent(DarskyAPI.apiKey)
+        baseURL.appendPathComponent("\(lat),\(lon)")
+        print("baseURL: " + "\(baseURL)")
+        let parameters: [String: String] = [:]
+        return request(baseURL.absoluteString, parameters: parameters)
+            .map({result in
+                switch result {
+                case let .Success(data):
+                    var weatherForecastModel: WeatherForecastModel?
+                    do {
+                        weatherForecastModel = try JSONDecoder().decode(WeatherForecastModel.self, from: data)
+                    } catch let parseError {
+                        print("parseError: " + "\(parseError)")
+                    }
+                    print("weatherForecastModel: " + "\(String(describing: weatherForecastModel))")
+                    return weatherForecastModel!
+                case let .Failure(error):
+                    throw error
+                }
+           })
+    }
+}*/
 
-class InternetService: FlickrAPIProtocol {
-    static let defaultSession = URLSession(configuration: .default)
+class InternetService/*: FlickrAPIProtocol */{
+    static var defaultSession = URLSession(configuration: .default)
     static var dataTask: URLSessionDataTask?
     
-    static func searchImageURL(lat: Double, lon: Double, currentWeather:String) -> Observable<NSURL> {
+   /* static func searchImageURL(lat: Double, lon: Double, currentWeather:String) -> Observable<NSURL> {
         let baseURLString = FlickrAPI.baseURLString
         let urlEncodedcurrentWeather = currentWeather.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
         let parameters = [
@@ -68,14 +92,14 @@ class InternetService: FlickrAPIProtocol {
                     } catch let parseError {
                         print("parseError: " + "\(parseError)")
                     }
-                    print("flickrModel: " + "\(String(describing: flickrModel))")
+                    //print("flickrModel: " + "\(String(describing: flickrModel))")
                     let flickrPhotos = flickrModel!.flickrModel!.flickrPhotos
                     guard flickrPhotos.count > 0 else {
                         throw flickrRequestError.emptyAlbum
                     }
                     let randomIndex = Int(arc4random_uniform(UInt32(flickrPhotos.count)))
                     let photo = flickrPhotos[randomIndex]
-                    let imageURL = NSURL(string: "http://farm\(photo.farm).staticflickr.com/\(photo.server)/\(photo.id)_\(photo.secret)_b.jpg")!
+                    let imageURL = photo.createImageURL()
                     return imageURL
                  case let .Failure(error):
                     throw error
@@ -119,12 +143,52 @@ class InternetService: FlickrAPIProtocol {
                     return imageFromRequest
                 })
         }
-    }
+    }*/
 
+    static func getWeatherObservable(lat: Double, lon: Double) -> Observable<WeatherForecastModel> {
+        print("weatherfunctioncalled")
+        var baseURL = URL(string: DarskyAPI.baseURLString)!
+        baseURL.appendPathComponent(DarskyAPI.apiKey)
+        baseURL.appendPathComponent("\(lat),\(lon)")
+        print("baseURL: " + "\(baseURL)")
+        let parameters: [String: String] = [:]
+        return request(baseURL.absoluteString, parameters: parameters)
+            .map({result in
+                switch result {
+                case let .Success(data):
+                    var weatherForecastModel: WeatherForecastModel?
+                    do {
+                        weatherForecastModel = try JSONDecoder().decode(WeatherForecastModel.self, from: data)
+                    } catch let parseError {
+                        print("parseError: " + "\(parseError)")
+                    }
+                    print("weatherForecastModel: " + "\(String(describing: weatherForecastModel))")
+                    return weatherForecastModel!
+                case let .Failure(error):
+                    throw error
+                }
+            })
+      }
+    static func getgoogle() -> Observable<Data> {
+        let baseURLString = "https://google.com/"
+        let parameters: [String: String] = [:]
+        return request(baseURLString, parameters: parameters)
+            .map({result in
+                switch result {
+                case let .Success(data):
+                   return data
+                case let .Failure(error):
+                    throw error
+                }
+            })
+    }
     //MARK: - URL request
     static private func request(_ baseURL: String = "", parameters: [String: String] = [:]) -> Observable<Result<Data, Error>> {
+        print("requestfunctioncalled")
+        print("baseURLinrequest " + "\(baseURL)")
         dataTask?.cancel()
         return Observable.create { observer in
+            print("observableblockcalled")
             var components = URLComponents(string: baseURL)!
             components.queryItems = parameters.map(URLQueryItem.init)
             let url = components.url!
@@ -133,8 +197,9 @@ class InternetService: FlickrAPIProtocol {
             var result: Result<Data, Error>?
             dataTask = defaultSession.dataTask(with: url) { data, response, error in
                 defer { self.dataTask = nil }
-                if let data = data, let response = response as? HTTPURLResponse, 200 ..< 300 ~= response.statusCode  {
+                if let data = data, let response = response as? HTTPURLResponse, response.statusCode == 200 {
                     result = Result<Data, Error>.Success(data)
+                    print("Result: " + "\(String(describing: result))")
                 } else {
                     if let error = error {
                         result = Result<Data, Error>.Failure(error)
@@ -144,6 +209,7 @@ class InternetService: FlickrAPIProtocol {
                 observer.onCompleted()
             }
             dataTask?.resume()
+            print("taskresume")
             return Disposables.create {
                 dataTask?.cancel()
             }

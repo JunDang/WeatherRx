@@ -36,10 +36,21 @@ class WeatherViewController: UIViewController {
       setup()
       layoutView()
       style()
-      bindBackground()
+      //bindBackground()
       setupSegmentedView()
       setupNavigationbar()
-    }
+      InternetService.getWeatherObservable(lat:43.6532, lon: -79.3832)
+        .subscribe(onNext: { (element) in
+            print(element)
+        })
+            .disposed(by: bag)
+       /* InternetService.getgoogle()
+            .subscribe(onNext: { (element) in
+                print(element)
+            })
+            .disposed(by: bag)*/
+       }
+        
     //Lincoln: lat: 40.8136, lon: -96.7026
     override func didReceiveMemoryWarning() {
       super.didReceiveMemoryWarning()
@@ -48,7 +59,7 @@ class WeatherViewController: UIViewController {
     override var prefersStatusBarHidden: Bool {
         return true
     }
-    func bindBackground() {
+   /* func bindBackground() {
         let flickrViewModel: FlickrViewModel = FlickrViewModel(lat: 43.6532, lon: -79.3832, currentWeather: "sunny", apiType: InternetService.self/*FlickrService.self*/, imageDataCacheType: ImageDataCaching.self)
         flickrViewModel.backgroundImage.asDriver()
            .drive(onNext: { [weak self] backgroundImage in
@@ -60,7 +71,7 @@ class WeatherViewController: UIViewController {
             self?.backgroundView.addSubview((self?.blurredImageView)!)
         })
         .disposed(by: bag)
-      }
+      }*/
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)

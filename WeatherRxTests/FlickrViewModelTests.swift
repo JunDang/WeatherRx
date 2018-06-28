@@ -6,7 +6,7 @@
 //  Copyright © 2018 Jun Dang. All rights reserved.
 //
 
-import XCTest
+/*import XCTest
 import RxSwift
 import RxCocoa
 import Unbox
@@ -55,4 +55,4 @@ class FlickrViewModelTests: XCTestCase {
     
     
     
-}
+}*/

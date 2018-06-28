@@ -19,9 +19,6 @@ struct FlickrPhotos: Codable {
         case flickrPhotos = "photo" }
     var flickrPhotos: [FlickrPhoto] = []
 }
-/*struct FlickrPhotos: Codable {
-    var flickrPhotos: [FlickrPhoto]
-}*/
 
 struct FlickrPhoto: Codable {
     var farm: Int = 0

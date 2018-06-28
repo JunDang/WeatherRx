@@ -8,7 +8,7 @@
 
 import XCTest
 
-class WeatherTest: XCTestCase {
+/*class WeatherTest: XCTestCase {
     
     private let dummyTempFarenheit1 = 14.0
     private let dummyWindSpeedMPH = 10.0
@@ -110,4 +110,4 @@ class WeatherTest: XCTestCase {
     }
     
     
-}
+}*/
