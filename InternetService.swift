@@ -62,11 +62,11 @@ struct DarskyAPI {
     }
 }*/
 
-class InternetService/*: FlickrAPIProtocol */{
+class InternetService: FlickrAPIProtocol, WeatherAPIProtocol {
     static var defaultSession = URLSession(configuration: .default)
     static var dataTask: URLSessionDataTask?
     
-   /* static func searchImageURL(lat: Double, lon: Double, currentWeather:String) -> Observable<NSURL> {
+    static func searchImageURL(lat: Double, lon: Double, currentWeather:String) -> Observable<NSURL> {
         let baseURLString = FlickrAPI.baseURLString
         let urlEncodedcurrentWeather = currentWeather.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
         let parameters = [
@@ -143,9 +143,9 @@ class InternetService/*: FlickrAPIProtocol */{
                     return imageFromRequest
                 })
         }
-    }*/
-
-    static func getWeatherObservable(lat: Double, lon: Double) -> Observable<WeatherForecastModel> {
+    }
+    // MARK: - Weather
+   /* static func getCurrentlyWeatherObservable(lat: Double, lon: Double) -> Observable<CurrentlyWeatherModel> {
         print("weatherfunctioncalled")
         var baseURL = URL(string: DarskyAPI.baseURLString)!
         baseURL.appendPathComponent(DarskyAPI.apiKey)
@@ -162,13 +162,93 @@ class InternetService/*: FlickrAPIProtocol */{
                     } catch let parseError {
                         print("parseError: " + "\(parseError)")
                     }
+                    let currentlyWeather = weatherForecastModel?.currently
+                    print("currentlyWeather: " + "\(String(describing: currentlyWeather))")
+                    //print("weatherForecastModel: " + "\(String(describing: weatherForecastModel))")
+                    return currentlyWeather!
+                case let .Failure(error):
+                    throw error
+                }
+            })
+    }*/
+    static func getCurrentlyWeatherObservable(lat: Double, lon: Double) -> Observable<Result<CurrentlyWeatherModel, Error>> {
+      return getWeatherObservable(lat: lat, lon: lon)
+             .map({ result in
+                switch result {
+                   case .Success(let WeatherForecastModel):
+                      let currentlyWeatherModel = WeatherForecastModel.currently
+                      return Result<CurrentlyWeatherModel, Error>.Success(currentlyWeatherModel!)
+                   case .Failure(let error):
+                      return Result<CurrentlyWeatherModel, Error>.Failure(error)
+                   }
+             })
+     }
+   /* static func getHourlyWeatherObservable(lat: Double, lon: Double) -> Observable<HourlyWeatherModel> {
+        let hourlyWeatherModel = getWeatherObservable(lat: lat, lon: lon)
+            .map({$0.hourly!})
+        print("hourlyWeatherModel: " + "\(String(describing: hourlyWeatherModel))")
+        return hourlyWeatherModel
+    }
+    static func getDailyWeatherObservable(lat: Double, lon: Double) -> Observable<DailyWeatherModel> {
+        let dailyWeatherModel = getWeatherObservable(lat: lat, lon: lon)
+            .map({$0.daily!})
+        print("dailyWeatherModel: " + "\(String(describing: dailyWeatherModel))")
+        return dailyWeatherModel
+    }*/
+    /*static func getWeatherObservable(lat: Double, lon: Double) -> Observable<WeatherForecastModel> {
+        print("weatherfunctioncalled")
+        var baseURL = URL(string: DarskyAPI.baseURLString)!
+        baseURL.appendPathComponent(DarskyAPI.apiKey)
+        baseURL.appendPathComponent("\(lat),\(lon)")
+        print("baseURL: " + "\(baseURL)")
+        let parameters: [String: String] = [:]
+        return request(baseURL.absoluteString, parameters: parameters)
+            .map({result in
+                switch result {
+                case let .Success(data):
+                    var weatherForecastModel: WeatherForecastModel?
+                    do {
+                        weatherForecastModel = try JSONDecoder().decode(WeatherForecastModel.self, from: data)
+                    } catch let parseError {
+                        print("parseError: " + "\(parseError)")
+                    }
+                    //let currentlyWeather = weatherForecastModel?.currently
+                    //print("currentlyWeather: " + "\(String(describing: currentlyWeather))")
                     print("weatherForecastModel: " + "\(String(describing: weatherForecastModel))")
                     return weatherForecastModel!
                 case let .Failure(error):
                     throw error
                 }
             })
-      }
+    }*/
+    static func getWeatherObservable(lat: Double, lon: Double) -> Observable<Result<WeatherForecastModel, Error>> {
+        print("weatherfunctioncalled")
+        var baseURL = URL(string: DarskyAPI.baseURLString)!
+        baseURL.appendPathComponent(DarskyAPI.apiKey)
+        baseURL.appendPathComponent("\(lat),\(lon)")
+        print("baseURL: " + "\(baseURL)")
+        let parameters: [String: String] = [:]
+        return request(baseURL.absoluteString, parameters: parameters)
+            .map({result in
+                switch result {
+                case let .Success(data):
+                    var weatherForecastModel: WeatherForecastModel?
+                    do {
+                        weatherForecastModel = try JSONDecoder().decode(WeatherForecastModel.self, from: data)
+                    } catch let parseError {
+                        print("parseError: " + "\(parseError)")
+                    }
+                    //let currentlyWeather = weatherForecastModel?.currently
+                    //print("currentlyWeather: " + "\(String(describing: currentlyWeather))")
+                    print("weatherForecastModel: " + "\(String(describing: weatherForecastModel))")
+                    return Result<WeatherForecastModel, Error>.Success(weatherForecastModel!)
+                case let .Failure(error):
+                    //print("error: " + "\(String(describing: error))")
+                    //throw error
+                    return Result<WeatherForecastModel, Error>.Failure(error)
+                }
+            })
+    }
     static func getgoogle() -> Observable<Data> {
         let baseURLString = "https://google.com/"
         let parameters: [String: String] = [:]
@@ -196,6 +276,7 @@ class InternetService/*: FlickrAPIProtocol */{
             
             var result: Result<Data, Error>?
             dataTask = defaultSession.dataTask(with: url) { data, response, error in
+                print("urlsessioncallbackimplemented")
                 defer { self.dataTask = nil }
                 if let data = data, let response = response as? HTTPURLResponse, response.statusCode == 200 {
                     result = Result<Data, Error>.Success(data)

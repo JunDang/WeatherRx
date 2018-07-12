@@ -11,7 +11,7 @@ import RxSwift
 import RxCocoa
 
 
-/*class FlickrViewModel {
+class FlickrViewModel {
     
     private let bag = DisposeBag()
     
@@ -26,7 +26,7 @@ import RxCocoa
     var backgroundImage = BehaviorRelay<UIImage?>(value: nil)
     
     // MARK: - Init
-    init(lat: Double, lon: Double, currentWeather:String, apiType: FlickrAPIProtocol.Type = InternetService.self/*FlickrService.self*/, imageDataCacheType: ImageDataCachingProtocol.Type = ImageDataCaching.self) {
+    init(lat: Double, lon: Double, currentWeather:String, apiType: FlickrAPIProtocol.Type = InternetService.self, imageDataCacheType: ImageDataCachingProtocol.Type = ImageDataCaching.self) {
         self.lat = lat
         self.lon = lon
         self.currentWeather = currentWeather
@@ -51,5 +51,5 @@ import RxCocoa
              .disposed(by:bag)
       }
     
-}*/
+}
 

@@ -36,6 +36,10 @@
 		A51E091E20DFE6B900A45A39 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51E091C20DFE6B900A45A39 /* UIImage+Extension.swift */; };
 		A51E092420DFEEF300A45A39 /* WindDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51E092320DFEEF300A45A39 /* WindDirection.swift */; };
 		A51E092520DFEEF300A45A39 /* WindDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51E092320DFEEF300A45A39 /* WindDirection.swift */; };
+		A51E097D20F1376800A45A39 /* WeatherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51E097C20F1376800A45A39 /* WeatherViewModel.swift */; };
+		A51E097E20F1376800A45A39 /* WeatherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51E097C20F1376800A45A39 /* WeatherViewModel.swift */; };
+		A51E098020F1386B00A45A39 /* WeatherAPIProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51E097F20F1386B00A45A39 /* WeatherAPIProtocol.swift */; };
+		A51E098120F1386B00A45A39 /* WeatherAPIProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51E097F20F1386B00A45A39 /* WeatherAPIProtocol.swift */; };
 		A51F452B208D714B00ACCAB7 /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51F452A208D714B00ACCAB7 /* TestData.swift */; };
 		A51F45302090C7C300ACCAB7 /* InternetAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51F452F2090C7C300ACCAB7 /* InternetAPI.swift */; };
 		A51F45312090C7CE00ACCAB7 /* InternetAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51F452F2090C7C300ACCAB7 /* InternetAPI.swift */; };
@@ -108,6 +112,8 @@
 		A51E091920DFE67300A45A39 /* Double+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Extension.swift"; sourceTree = "<group>"; };
 		A51E091C20DFE6B900A45A39 /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		A51E092320DFEEF300A45A39 /* WindDirection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindDirection.swift; sourceTree = "<group>"; };
+		A51E097C20F1376800A45A39 /* WeatherViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewModel.swift; sourceTree = "<group>"; };
+		A51E097F20F1386B00A45A39 /* WeatherAPIProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherAPIProtocol.swift; sourceTree = "<group>"; };
 		A51F452A208D714B00ACCAB7 /* TestData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestData.swift; sourceTree = "<group>"; };
 		A51F452F2090C7C300ACCAB7 /* InternetAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternetAPI.swift; sourceTree = "<group>"; };
 		A51F45322090D08600ACCAB7 /* MockFlickrService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFlickrService.swift; sourceTree = "<group>"; };
@@ -167,6 +173,7 @@
 			isa = PBXGroup;
 			children = (
 				A50D28E520470FE200351630 /* FlickrViewModel.swift */,
+				A51E097C20F1376800A45A39 /* WeatherViewModel.swift */,
 			);
 			path = "View Models";
 			sourceTree = "<group>";
@@ -184,6 +191,7 @@
 			children = (
 				A50D28FC2052220900351630 /* FlickrAPIProtocol.swift */,
 				A57F6DB72072D00400509E7E /* ImageDataCachingProtocol.swift */,
+				A51E097F20F1386B00A45A39 /* WeatherAPIProtocol.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -336,7 +344,6 @@
 				A5146B5F1F799A2600EE1DF7 /* Frameworks */,
 				A5146B601F799A2600EE1DF7 /* Resources */,
 				4F75619C4A3B2F3F1BE1942E /* [CP] Embed Pods Frameworks */,
-				719A9E41923892137033B979 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -356,7 +363,6 @@
 				A5146B731F799A2600EE1DF7 /* Frameworks */,
 				A5146B741F799A2600EE1DF7 /* Resources */,
 				049504C28F06EBAA2F9D0EAF /* [CP] Embed Pods Frameworks */,
-				7FE21882BBD412AB3BECC492 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -559,36 +565,6 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-WeatherRxAbstract-WeatherRx/Pods-WeatherRxAbstract-WeatherRx-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		719A9E41923892137033B979 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-WeatherRxAbstract-WeatherRx/Pods-WeatherRxAbstract-WeatherRx-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		7FE21882BBD412AB3BECC492 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-WeatherRxAbstract-WeatherRxTests/Pods-WeatherRxAbstract-WeatherRxTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -603,6 +579,8 @@
 				A5146BCB1F7EBB6B00EE1DF7 /* FlickrService.swift in Sources */,
 				A571C5FB20D82F0A005693B3 /* FlickrPhotos.swift in Sources */,
 				A5EE3C8F201FA89500B65EA2 /* FlickrPhoto.swift in Sources */,
+				A51E098020F1386B00A45A39 /* WeatherAPIProtocol.swift in Sources */,
+				A51E097D20F1376800A45A39 /* WeatherViewModel.swift in Sources */,
 				A50D28E620470FE200351630 /* FlickrViewModel.swift in Sources */,
 				A59D0F2620B1076400111552 /* DailyForecastTableViewCell.swift in Sources */,
 				A50D28EB20503D5E00351630 /* WeatherViewController.swift in Sources */,
@@ -644,6 +622,7 @@
 				A51E091B20DFE67300A45A39 /* Double+Extension.swift in Sources */,
 				A5192BEE20A6304500C8D483 /* HourlyForcastCell.swift in Sources */,
 				A52DA6C220DC25310079A982 /* CGExtensions.swift in Sources */,
+				A51E097E20F1376800A45A39 /* WeatherViewModel.swift in Sources */,
 				A5EE3C90201FA89500B65EA2 /* FlickrPhoto.swift in Sources */,
 				A52DA6C120DC1DB60079A982 /* URLSession+Extension.swift in Sources */,
 				A51F45312090C7CE00ACCAB7 /* InternetAPI.swift in Sources */,
@@ -655,6 +634,7 @@
 				A50D28FE2052220900351630 /* FlickrAPIProtocol.swift in Sources */,
 				A5192BEB20A5222C00C8D483 /* WeatherForecastTableViewController.swift in Sources */,
 				A51F45372093607700ACCAB7 /* FlickrViewModelTests.swift in Sources */,
+				A51E098120F1386B00A45A39 /* WeatherAPIProtocol.swift in Sources */,
 				A5F4177A20B6068800FE45D8 /* WeatherForecastSummaryViewController.swift in Sources */,
 				A5146B7B1F799A2600EE1DF7 /* WeatherRxTests.swift in Sources */,
 				A59D0F2820B20C9800111552 /* DailyForecastTableViewCell.swift in Sources */,

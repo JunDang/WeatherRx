@@ -30,6 +30,7 @@ class WeatherViewController: UIViewController {
     private let bag = DisposeBag()
     private let temperatureUnitControl = UISegmentedControl()
     private let windSpeedUnitControl = UISegmentedControl()
+    //var weatherViewModel: WeatherViewModel?
 
     override func viewDidLoad() {
       super.viewDidLoad()
@@ -39,17 +40,41 @@ class WeatherViewController: UIViewController {
       //bindBackground()
       setupSegmentedView()
       setupNavigationbar()
-      InternetService.getWeatherObservable(lat:43.6532, lon: -79.3832)
+      
+     /*InternetService.getWeatherObservable(lat:43.6532, lon: -79.3832)
+         .subscribe(onNext: { (element) in
+         print(element)
+         print("getWeatherObservablecallback")
+         })
+         .disposed(by: bag)*/
+     /*InternetService.getCurrentlyWeatherObservable(lat:43.6532, lon: -79.3832)
+            .subscribe(onNext: { (element) in
+                print(element)
+                print("getWeatherObservablecallback")
+            })
+            .disposed(by: bag)*/
+       let weatherViewModel = WeatherViewModel(lat: 43.6532, lon: -79.3832, apiType: InternetService.self)
+      /*  weatherViewModel.currentlyWeatherData
+            .subscribe(onNext: { (element) in
+            print("ViewDidLoadcurrentlyWeatherData")
+            print(element)
+            })
+            .disposed(by: bag)*/
+    /*  let weatherViewModel: WeatherViewModel = WeatherViewModel(lat: 43.6532, lon: -79.3832, apiType: InternetService.self)
+       weatherViewModel.weatherForecastData
         .subscribe(onNext: { (element) in
+            print("ViewDidLoadWeatherForecastData")
             print(element)
         })
-            .disposed(by: bag)
+        .disposed(by: bag)*/
        /* InternetService.getgoogle()
             .subscribe(onNext: { (element) in
+                print("googlecallback")
                 print(element)
             })
             .disposed(by: bag)*/
-       }
+        
+    }
         
     //Lincoln: lat: 40.8136, lon: -96.7026
     override func didReceiveMemoryWarning() {
@@ -59,8 +84,8 @@ class WeatherViewController: UIViewController {
     override var prefersStatusBarHidden: Bool {
         return true
     }
-   /* func bindBackground() {
-        let flickrViewModel: FlickrViewModel = FlickrViewModel(lat: 43.6532, lon: -79.3832, currentWeather: "sunny", apiType: InternetService.self/*FlickrService.self*/, imageDataCacheType: ImageDataCaching.self)
+    /*func bindBackground() {
+        let flickrViewModel: FlickrViewModel = FlickrViewModel(lat: 43.6532, lon: -79.3832, currentWeather: "sunny", apiType: InternetService.self, imageDataCacheType: ImageDataCaching.self)
         flickrViewModel.backgroundImage.asDriver()
            .drive(onNext: { [weak self] backgroundImage in
             let resizedImage = backgroundImage?.scaled(CGSize(width: (self?.view.frame.width)!, height: (self?.view.frame.height)! * 1.5))

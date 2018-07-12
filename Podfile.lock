@@ -1,22 +1,22 @@
 PODS:
-  - Alamofire (4.7.2)
+  - Alamofire (4.7.3)
   - Cartography (3.0.2)
   - Differentiator (3.0.2)
   - DynamicBlurView (2.0.2)
   - Reachability (3.2)
-  - Realm (3.5.0):
-    - Realm/Headers (= 3.5.0)
-  - Realm/Headers (3.5.0)
-  - RealmSwift (3.5.0):
-    - Realm (= 3.5.0)
+  - Realm (3.7.4):
+    - Realm/Headers (= 3.7.4)
+  - Realm/Headers (3.7.4)
+  - RealmSwift (3.7.4):
+    - Realm (= 3.7.4)
   - RxAlamofire (4.2.0):
     - RxAlamofire/Core (= 4.2.0)
   - RxAlamofire/Core (4.2.0):
     - Alamofire (~> 4.5)
     - RxSwift (~> 4)
-  - RxBlocking (4.1.2):
+  - RxBlocking (4.2.0):
     - RxSwift (~> 4.0)
-  - RxCocoa (4.1.2):
+  - RxCocoa (4.2.0):
     - RxSwift (~> 4.0)
   - RxDataSources (3.0.2):
     - Differentiator (~> 3.0)
@@ -33,8 +33,8 @@ PODS:
     - RxCocoa (~> 4.0)
     - RxRealm (~> 0.7.3)
     - RxSwift (~> 4.0)
-  - RxSwift (4.1.2)
-  - RxTest (4.1.2):
+  - RxSwift (4.2.0)
+  - RxTest (4.2.0):
     - RxSwift (~> 4.0)
   - Unbox (3.0.0)
 
@@ -54,25 +54,45 @@ DEPENDENCIES:
   - RxTest
   - Unbox
 
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Alamofire
+    - Cartography
+    - Differentiator
+    - DynamicBlurView
+    - Reachability
+    - Realm
+    - RealmSwift
+    - RxAlamofire
+    - RxBlocking
+    - RxCocoa
+    - RxDataSources
+    - RxGesture
+    - RxRealm
+    - RxRealmDataSources
+    - RxSwift
+    - RxTest
+    - Unbox
+
 SPEC CHECKSUMS:
-  Alamofire: e4fa87002c137ba2d8d634d2c51fabcda0d5c223
+  Alamofire: c7287b6e5d7da964a70935e5db17046b7fde6568
   Cartography: 231190d7d0b3107ce8d67c54189f059a509b3760
   Differentiator: a87be69eba49ec4ab460c7671143ee3a9eececfd
   DynamicBlurView: aa6db4defc6e537eb86fc5e58dd3991666178399
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
-  Realm: 0378021c424e4e2bd6a0e63b27881e929d9b9ad1
-  RealmSwift: 3322562622fda2ad596985ead4d8d8be30cf838c
+  Realm: a469bb59e33f9926102ccaea4349822c53b9117e
+  RealmSwift: a45861b21c180f5cf0f122144b9759fa8dde3e9e
   RxAlamofire: 87a9c588541210cc3e4a1f843ccc3ecf3eb98b31
-  RxBlocking: f6054985901412fc8c02daa84e92d4ba68c61389
-  RxCocoa: d88ba0f1f6abf040011a9eb4b539324fc426843a
+  RxBlocking: e339d8a6e752e25ade95ff858466c55436668f59
+  RxCocoa: 0b54909c902e1e581212a03e690bbd94032d8baa
   RxDataSources: cb7c31e652a87ebb919da45f716bbb87b3765f6b
   RxGesture: c278eb05b187abd47e11e65464ae4de53ab71d95
   RxRealm: a6c6c0a07cb61f34209969ca6657734edfdfff30
   RxRealmDataSources: 798303f1d7db18d80da9e95bab9605010378040e
-  RxSwift: e49536837d9901277638493ea537394d4b55f570
-  RxTest: e634f15fd2c2cd0e0120132ef7a4f7be69ad0393
+  RxSwift: 99e10317ddfcc7fbe01356aafd118fde4a0be104
+  RxTest: 8da864c0ee47534f586ff18fb0c7e5b2f1fe5023
   Unbox: 9ed33b2a31f7a8a049f54b94d40c4a52a28c4d9d
 
 PODFILE CHECKSUM: 07033c47443e516a8a88bcc6d553505a395d62e5
 
-COCOAPODS: 1.4.0
+COCOAPODS: 1.5.3
