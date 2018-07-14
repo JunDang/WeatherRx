@@ -15,6 +15,33 @@ import RealmSwift
    dynamic var currently: CurrentlyWeatherModel?
    dynamic var hourly: HourlyWeatherModel?
    dynamic var daily: DailyWeatherModel?
+   dynamic var compoundKey: String?
+    
+   /*func setCompoundLatitude(latitude: Double) {
+        self.latitude = latitude
+        compoundKey = compoundKeyValue()
+    }
+    
+    func compoundKeyValue() -> String {
+        return "\(latitude)\(longitude)"
+    }
+    
+    func setCompoundLongitude(longitude: Double) {
+        self.longitude = longitude
+        compoundKey = compoundKeyValue()
+    }*/
+    
+    func configure(latitude: Double, longitude: Double){
+        print("configureCompoundKey")
+        self.latitude = latitude
+        self.longitude = longitude
+        self.compoundKey = "\(Int(self.latitude*10000))\(Int(self.longitude)*10000)"
+    }
+    
+    override static func primaryKey() -> String? {
+        return "compoundKey"
+    }
+    
    
     enum WeatherCodingKeys : String, CodingKey {
         case latitude = "latitude"
@@ -33,10 +60,10 @@ import RealmSwift
     dynamic var temperature: Double = 0.0
     dynamic var apparentTemperature: Double = 0.0
     
-    // MARK: - Primary key
+   /* // MARK: - Primary key
     override static func primaryKey() -> String? {
         return "time"
-    }
+    }*/
     
     private enum CurrentlyCodingKeys : String, CodingKey {
         case time = "time"

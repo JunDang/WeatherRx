@@ -15,115 +15,61 @@ import RxCocoa
 
 class WeatherViewModel {
     private let bag = DisposeBag()
-    //var weatherForecastObservable: Observable<WeatherForecastModel>?
+    var weatherObservable: Observable<Result<WeatherForecastModel, Error>>?
     let apiType: WeatherAPIProtocol.Type
     
     // MARK: - Input
     let lat: Double
     let lon: Double
     
-    // MARK: - Output
-    //var weatherForecastData:Observable<(AnyRealmCollection<WeatherForecastModel>, RealmChangeset?)>!
-    var currentlyWeatherData: Observable<(AnyRealmCollection<CurrentlyWeatherModel>, RealmChangeset?)>!
-    var hourlyWeatherData: Observable<(AnyRealmCollection<HourlyWeatherModel>, RealmChangeset?)>!
-    var dailyWeatherData: Observable<(AnyRealmCollection<DailyWeatherModel>, RealmChangeset?)>!
     
+    // MARK: - Output
+    var weatherForecastData:Observable<(AnyRealmCollection<WeatherForecastModel>, RealmChangeset?)>!
+   
     // MARK: - Init
-   /* init(lat: Double, lon: Double, apiType: WeatherAPIProtocol.Type = InternetService.self) {
-        self.lat = lat
-        self.lon = lon
-        self.apiType = apiType
-        
-        let weatherForecast = InternetService.getWeatherObservable(lat: lat, lon: lon)
-        guard let realm = try? Realm() else {
-            return
-        }
-        weatherForecast
-        .subscribe(onNext: {weatherData in
-            try! realm.write {
-              realm.add(weatherData, update: true)
-            }
-        })
-            .disposed(by: bag)
-        
-        weatherForecastData = Observable.changeset(from: realm.objects(WeatherForecastModel.self))
-    }*/
     
     init(lat: Double, lon: Double, apiType: WeatherAPIProtocol.Type = InternetService.self) {
         print("wwv init called")
         self.lat = lat
         self.lon = lon
         self.apiType = apiType
-        //let weatherForecastObservable = InternetService.getWeatherObservable(lat: lat, lon: lon)
         
-       // let currentlyWeatherObservable = weatherForecastObservable.map({$0.currently})
-       /* currentlyWeatherObservable
-            .subscribe(Realm.rx.add(update: true))
-            .disposed(by: bag)
-        let hourlyWeatherObservable = weatherForecastObservable.map({$0.hourly})
-        let dailyWeatherObservable = weatherForecastObservable.map({$0.daily})*/
+        weatherObservable = InternetService.getWeatherObservable(lat: lat, lon: lon)
         
-        writeCurrentlyWeatherInRealm()
-        //writeHourlyWeatherInRealm()
-       // writeDailyWeatherInRealm()
-        //bindCurrentlyWeather()
-    
+        bindWeather()
+        writeWeatherInRealm(weatherObservable: weatherObservable!)
         
     }
-    func writeCurrentlyWeatherInRealm() {
-        print("writeCurrentlyWeatherInRealm")
-        let currentlyWeatherModelObservable = InternetService.getCurrentlyWeatherObservable(lat: lat, lon: lon)
-        currentlyWeatherModelObservable
+  
+     func writeWeatherInRealm(weatherObservable: Observable<Result<WeatherForecastModel, Error>>) {
+         weatherObservable
             .subscribe(onNext: { result in
                 switch result {
-                case .Success(let currentlyWeatherModel):
-                   print("currentlyWeatherModel: " + "\(currentlyWeatherModel)")
+                case .Success(let weatherModel):
+                   print("weatherModel: " + "\(weatherModel)")
+                   print("latitude: " + "\(weatherModel.latitude)")
+                   print("longitude: " + "\(weatherModel.longitude)")
+                   weatherModel.configure(latitude: weatherModel.latitude, longitude: weatherModel.longitude)
+                     print("compoundkey: " + "\(weatherModel.compoundKey)")
                    let realm = try! Realm()
                    try! realm.write {
-                     realm.add(currentlyWeatherModel, update: true)
+                     realm.add(weatherModel, update: true)
                   }
                  case .Failure(let error):
                    print(error)
                 }
             })
             .disposed(by: bag)
-        
-       /* guard let realm = try? Realm() else {
-            return
-        }
-        currentlyWeatherData = Observable.changeset(from: realm.objects(CurrentlyWeatherModel.self))*/
-    }
-        
-    func bindCurrentlyWeather() {
-        print("bindCurrentlyWeather")
+      }
+    
+    func bindWeather() {
+        print("bindWeather")
         guard let realm = try? Realm() else {
             return
         }
-        currentlyWeatherData = Observable.changeset(from: realm.objects(CurrentlyWeatherModel.self))
-        print("currentlyWeatherData: " + "\(currentlyWeatherData)")
-        }
+        weatherForecastData = Observable.changeset(from: realm.objects(WeatherForecastModel.self))
+        print("weatherForecastData: " + "\(weatherForecastData)")
     }
-   /* func writeHourlyWeatherInRealm() {
-        let hourlyWeatherObservable = weatherForecastObservable.map({$0.hourly})
-        hourlyWeatherObservable
-            .subscribe(Realm.rx.add(update: true))
-            .disposed(by: bag)
-        
-        guard let realm = try? Realm() else {
-            return
-        }
-        hourlyWeatherData = Observable.changeset(from: realm.objects(HourlyWeatherModel.self))
-    }
-    func writeDailyWeatherInRealm() {
-        let dailyWeather = InternetService.getDailyWeatherObservable(lat: lat, lon: lon)
-        dailyWeather
-            .subscribe(Realm.rx.add(update: true))
-            .disposed(by: bag)
-        
-        guard let realm = try? Realm() else {
-            return
-        }
-        dailyWeatherData = Observable.changeset(from: realm.objects(DailyWeatherModel.self))
-    }*/
 
-
+    
+}

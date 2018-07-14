@@ -30,7 +30,7 @@ class WeatherViewController: UIViewController {
     private let bag = DisposeBag()
     private let temperatureUnitControl = UISegmentedControl()
     private let windSpeedUnitControl = UISegmentedControl()
-    //var weatherViewModel: WeatherViewModel?
+    var weatherViewModel: WeatherViewModel?
 
     override func viewDidLoad() {
       super.viewDidLoad()
@@ -47,35 +47,18 @@ class WeatherViewController: UIViewController {
          print("getWeatherObservablecallback")
          })
          .disposed(by: bag)*/
-     /*InternetService.getCurrentlyWeatherObservable(lat:43.6532, lon: -79.3832)
-            .subscribe(onNext: { (element) in
-                print(element)
-                print("getWeatherObservablecallback")
-            })
-            .disposed(by: bag)*/
-       let weatherViewModel = WeatherViewModel(lat: 43.6532, lon: -79.3832, apiType: InternetService.self)
-      /*  weatherViewModel.currentlyWeatherData
-            .subscribe(onNext: { (element) in
-            print("ViewDidLoadcurrentlyWeatherData")
-            print(element)
-            })
-            .disposed(by: bag)*/
-    /*  let weatherViewModel: WeatherViewModel = WeatherViewModel(lat: 43.6532, lon: -79.3832, apiType: InternetService.self)
-       weatherViewModel.weatherForecastData
-        .subscribe(onNext: { (element) in
-            print("ViewDidLoadWeatherForecastData")
-            print(element)
-        })
-        .disposed(by: bag)*/
-       /* InternetService.getgoogle()
-            .subscribe(onNext: { (element) in
-                print("googlecallback")
-                print(element)
-            })
-            .disposed(by: bag)*/
+    
+       weatherViewModel = WeatherViewModel(lat: 43.6532, lon: -79.3832, apiType: InternetService.self)
+        
+       weatherViewModel!.weatherForecastData
+         .subscribe(onNext: { (element) in
+         print("ViewDidLoadWeatherData")
+         print("ViewDidLoadWeatherData: " + "\(element)")
+         })
+         .disposed(by: bag)
         
     }
-        
+   
     //Lincoln: lat: 40.8136, lon: -96.7026
     override func didReceiveMemoryWarning() {
       super.didReceiveMemoryWarning()

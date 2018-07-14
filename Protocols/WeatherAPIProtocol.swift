@@ -11,9 +11,6 @@ import RxSwift
 
 
 protocol WeatherAPIProtocol {
-    //static func getWeatherObservable(lat: Double, lon: Double) -> Observable<WeatherForecastModel>
-    static func getCurrentlyWeatherObservable(lat: Double, lon: Double) -> Observable<Result<CurrentlyWeatherModel, Error>>
-    /*static func getHourlyWeatherObservable(lat: Double, lon: Double) -> Observable<HourlyWeatherModel>
-    static func getDailyWeatherObservable(lat: Double, lon: Double) -> Observable<DailyWeatherModel>*/
+    static func getWeatherObservable(lat: Double, lon: Double) -> Observable<Result<WeatherForecastModel, Error>>
 }
 
