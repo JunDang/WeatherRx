@@ -40,6 +40,8 @@
 		A51E097E20F1376800A45A39 /* WeatherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51E097C20F1376800A45A39 /* WeatherViewModel.swift */; };
 		A51E098020F1386B00A45A39 /* WeatherAPIProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51E097F20F1386B00A45A39 /* WeatherAPIProtocol.swift */; };
 		A51E098120F1386B00A45A39 /* WeatherAPIProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51E097F20F1386B00A45A39 /* WeatherAPIProtocol.swift */; };
+		A51E098820FBFBD700A45A39 /* WeatherIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51E098720FBFBD700A45A39 /* WeatherIcon.swift */; };
+		A51E098920FBFBD800A45A39 /* WeatherIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51E098720FBFBD700A45A39 /* WeatherIcon.swift */; };
 		A51F452B208D714B00ACCAB7 /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51F452A208D714B00ACCAB7 /* TestData.swift */; };
 		A51F45302090C7C300ACCAB7 /* InternetAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51F452F2090C7C300ACCAB7 /* InternetAPI.swift */; };
 		A51F45312090C7CE00ACCAB7 /* InternetAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51F452F2090C7C300ACCAB7 /* InternetAPI.swift */; };
@@ -114,6 +116,7 @@
 		A51E092320DFEEF300A45A39 /* WindDirection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindDirection.swift; sourceTree = "<group>"; };
 		A51E097C20F1376800A45A39 /* WeatherViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewModel.swift; sourceTree = "<group>"; };
 		A51E097F20F1386B00A45A39 /* WeatherAPIProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherAPIProtocol.swift; sourceTree = "<group>"; };
+		A51E098720FBFBD700A45A39 /* WeatherIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherIcon.swift; sourceTree = "<group>"; };
 		A51F452A208D714B00ACCAB7 /* TestData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestData.swift; sourceTree = "<group>"; };
 		A51F452F2090C7C300ACCAB7 /* InternetAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternetAPI.swift; sourceTree = "<group>"; };
 		A51F45322090D08600ACCAB7 /* MockFlickrService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFlickrService.swift; sourceTree = "<group>"; };
@@ -257,6 +260,7 @@
 				A5EE3C8E201FA89500B65EA2 /* FlickrPhoto.swift */,
 				A571C5FA20D82F0A005693B3 /* FlickrPhotos.swift */,
 				A52DA6C420DC44FF0079A982 /* PhotoModels.swift */,
+				A51E098720FBFBD700A45A39 /* WeatherIcon.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -588,6 +592,7 @@
 				A597123B209F5190006C3566 /* CurrentWeatherView.swift in Sources */,
 				A50D28FD2052220900351630 /* FlickrAPIProtocol.swift in Sources */,
 				A51E092420DFEEF300A45A39 /* WindDirection.swift in Sources */,
+				A51E098820FBFBD700A45A39 /* WeatherIcon.swift in Sources */,
 				A5146B661F799A2600EE1DF7 /* AppDelegate.swift in Sources */,
 				A571C5F120C71246005693B3 /* FlickrServiceCopy.swift in Sources */,
 				A51E091D20DFE6B900A45A39 /* UIImage+Extension.swift in Sources */,
@@ -628,6 +633,7 @@
 				A51F45312090C7CE00ACCAB7 /* InternetAPI.swift in Sources */,
 				A582C70C20C043E70036C7D9 /* SideMenuBarView.swift in Sources */,
 				A51F452B208D714B00ACCAB7 /* TestData.swift in Sources */,
+				A51E098920FBFBD800A45A39 /* WeatherIcon.swift in Sources */,
 				A5146B941F7C731F00EE1DF7 /* WeatherTest.swift in Sources */,
 				A5146BCC1F7EBB6B00EE1DF7 /* FlickrService.swift in Sources */,
 				A571C5F220C71246005693B3 /* FlickrServiceCopy.swift in Sources */,

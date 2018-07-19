@@ -137,7 +137,7 @@ class InternetService: FlickrAPIProtocol, WeatherAPIProtocol {
                     }
                     //let currentlyWeather = weatherForecastModel?.currently
                     //print("currentlyWeather: " + "\(String(describing: currentlyWeather))")
-                    print("weatherForecastModel: " + "\(String(describing: weatherForecastModel))")
+                    //print("weatherForecastModel: " + "\(String(describing: weatherForecastModel))")
                     return Result<WeatherForecastModel, Error>.Success(weatherForecastModel!)
                 case let .Failure(error):
                     //print("error: " + "\(String(describing: error))")
@@ -150,8 +150,8 @@ class InternetService: FlickrAPIProtocol, WeatherAPIProtocol {
 
     //MARK: - URL request
     static private func request(_ baseURL: String = "", parameters: [String: String] = [:]) -> Observable<Result<Data, Error>> {
-        print("requestfunctioncalled")
-        print("baseURLinrequest " + "\(baseURL)")
+        //print("requestfunctioncalled")
+       // print("baseURLinrequest " + "\(baseURL)")
         dataTask?.cancel()
         return Observable.create { observer in
             print("observableblockcalled")
@@ -162,11 +162,11 @@ class InternetService: FlickrAPIProtocol, WeatherAPIProtocol {
             
             var result: Result<Data, Error>?
             dataTask = defaultSession.dataTask(with: url) { data, response, error in
-                print("urlsessioncallbackimplemented")
+                //print("urlsessioncallbackimplemented")
                 defer { self.dataTask = nil }
                 if let data = data, let response = response as? HTTPURLResponse, response.statusCode == 200 {
                     result = Result<Data, Error>.Success(data)
-                    print("Result: " + "\(String(describing: result))")
+                    //print("Result: " + "\(String(describing: result))")
                 } else {
                     if let error = error {
                         result = Result<Data, Error>.Failure(error)
@@ -176,7 +176,7 @@ class InternetService: FlickrAPIProtocol, WeatherAPIProtocol {
                 observer.onCompleted()
             }
             dataTask?.resume()
-            print("taskresume")
+            //print("taskresume")
             return Disposables.create {
                 dataTask?.cancel()
             }

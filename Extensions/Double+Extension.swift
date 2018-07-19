@@ -18,4 +18,8 @@ extension Double {
         return (self * 1.609344)
     }
     
+    func roundToInt() -> Int {
+        return Int(self.rounded())
+    }
+    
 }

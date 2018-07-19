@@ -25,6 +25,7 @@ class WeatherViewModel {
     
     // MARK: - Output
     var weatherForecastData:Observable<(AnyRealmCollection<WeatherForecastModel>, RealmChangeset?)>!
+    //var weatherForecastModel = BehaviorRelay<WeatherForecastModel?>(value: nil)
    
     // MARK: - Init
     
@@ -33,7 +34,7 @@ class WeatherViewModel {
         self.lat = lat
         self.lon = lon
         self.apiType = apiType
-        
+       
         weatherObservable = InternetService.getWeatherObservable(lat: lat, lon: lon)
         
         bindWeather()
@@ -46,15 +47,20 @@ class WeatherViewModel {
             .subscribe(onNext: { result in
                 switch result {
                 case .Success(let weatherModel):
-                   print("weatherModel: " + "\(weatherModel)")
-                   print("latitude: " + "\(weatherModel.latitude)")
-                   print("longitude: " + "\(weatherModel.longitude)")
+                  // print("weatherModel: " + "\(weatherModel)")
+                  // print("latitude: " + "\(weatherModel.latitude)")
+                  // print("longitude: " + "\(weatherModel.longitude)")
                    weatherModel.configure(latitude: weatherModel.latitude, longitude: weatherModel.longitude)
                      print("compoundkey: " + "\(weatherModel.compoundKey)")
                    let realm = try! Realm()
                    try! realm.write {
                      realm.add(weatherModel, update: true)
                   }
+                  /*   let weatherForecastModels = realm.objects(WeatherForecastModel.self)
+                     let firstItem = weatherForecastModels.first
+                  // let firstItem =  (weatherForecastModels[0].hourly)?.hourlyWeatherModel.count
+                      print("firstItem: " + "\(firstItem)")
+                     //print("weatherForecastModels: " + "\(weatherForecastModels)")*/
                  case .Failure(let error):
                    print(error)
                 }
@@ -67,9 +73,17 @@ class WeatherViewModel {
         guard let realm = try? Realm() else {
             return
         }
+       /*let weatherForecastModels = realm.objects(WeatherForecastModel.self)
+        
+        print("weatherForecastModels: " + "\(weatherForecastModels)")*/
+        
         weatherForecastData = Observable.changeset(from: realm.objects(WeatherForecastModel.self))
-        print("weatherForecastData: " + "\(weatherForecastData)")
-    }
+        /*weatherForecastData
+           .subscribe(onNext: { (element) in
+            print("WeatherData: " + "\(element)")
+        })
+            .disposed(by: bag)
+    }*/
 
-    
+    }
 }

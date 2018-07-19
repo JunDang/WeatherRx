@@ -8,11 +8,15 @@
 
 import UIKit
 import Cartography
+import RxSwift
+import RxCocoa
 
 class HourlyForecastTableViewCell: UITableViewCell, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
   
     private var didSetupConstraints = false
     var collectionView: UICollectionView?
+    var weatherViewModel: WeatherViewModel?
+    private let bag = DisposeBag()
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
       super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -66,6 +70,18 @@ extension HourlyForecastTableViewCell {
     
    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
       let cell:HourlyForecastCell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! HourlyForecastCell
+      if let weatherViewModel = weatherViewModel {
+        weatherViewModel.weatherForecastData
+            .subscribe(onNext: { (weatherForecastModel) in
+                let hourlyWeatherModel = weatherForecastModel.0.first?.hourly?.hourlyWeatherModel
+                let hourlyForecastData = hourlyWeatherModel![indexPath.row]
+                cell.updateHourlyCell(with: hourlyForecastData)
+                print("hourlyForecastData: " + "\(hourlyForecastData)")
+            })
+            .disposed(by: bag)
+    } else {
+        
+    }
       return cell
    }
 }

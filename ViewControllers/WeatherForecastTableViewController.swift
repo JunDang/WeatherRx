@@ -7,24 +7,15 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 
 class WeatherForecastTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-   /* var lat: Double = 0.0
-    var lon: Double = 0.0*/
     let tableView: UITableView = UITableView(frame: CGRect.zero)
-    //var weatherViewModel: WeatherViewModel?
-    
-   /* init(lat: Double, lon: Double) {
-        super.init(nibName: nil, bundle: nil)
-        self.lat = lat
-        self.lon = lon
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }*/
+    var weatherViewModel: WeatherViewModel?
+    private let bag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,26 +31,51 @@ class WeatherForecastTableViewController: UIViewController, UITableViewDelegate,
         tableView.backgroundColor = UIColor.black.withAlphaComponent(0.6)
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 99
-       
-        //weatherViewModel = WeatherViewModel(lat: 43.6532, lon: -79.3832, apiType: InternetService.self)
+      
      }
+    init(with weatherViewModel: WeatherViewModel) {
+        super.init(nibName: nil, bundle: nil)
+        self.weatherViewModel = weatherViewModel
+    }
     
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 9
+        return 8
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        print("tableViewMethodcalled")
         if indexPath.row == 0 {
-            let cell1: HourlyForecastTableViewCell = tableView.dequeueReusableCell(withIdentifier: "HourlyCell", for: indexPath) as! HourlyForecastTableViewCell
-            return cell1
+            let cell: HourlyForecastTableViewCell = tableView.dequeueReusableCell(withIdentifier: "HourlyCell", for: indexPath) as! HourlyForecastTableViewCell
+            if let weatherViewModel = weatherViewModel {
+               cell.weatherViewModel = weatherViewModel
+            } else {
+                
+            }
+            return cell
         } else {
-            let cell2: DailyForecastTableViewCell = tableView.dequeueReusableCell(withIdentifier: "DailyCell", for: indexPath) as! DailyForecastTableViewCell
-            return cell2
-        }
+            let cell: DailyForecastTableViewCell = tableView.dequeueReusableCell(withIdentifier: "DailyCell", for: indexPath) as! DailyForecastTableViewCell
+            if let weatherViewModel = weatherViewModel {
+                weatherViewModel.weatherForecastData
+                  .subscribe(onNext: { (weatherForecastModel) in
+                       let dailyWeatherModel = weatherForecastModel.0[0].daily?.dailyWeatherModel
+                    print("dailycount: " + "\(dailyWeatherModel?.count)")
+                       let dailyForecastData = dailyWeatherModel![indexPath.row]
+                       cell.updateDailyCell(with: dailyForecastData)
+                      print("dailyForecastData: " + "\(dailyForecastData)")
+                  })
+                  .disposed(by: bag)
+            } else {
+                
+            }
+             return cell
+       }
     }
   
    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

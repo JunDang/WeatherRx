@@ -41,8 +41,7 @@ import RealmSwift
     override static func primaryKey() -> String? {
         return "compoundKey"
     }
-    
-   
+  
     enum WeatherCodingKeys : String, CodingKey {
         case latitude = "latitude"
         case longitude = "longitude"

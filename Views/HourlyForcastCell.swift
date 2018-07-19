@@ -22,7 +22,7 @@ class HourlyForecastCell: UICollectionViewCell, UICollectionViewDelegateFlowLayo
         setup()
         setStyle()
         layoutView()
-        renderHourlyForecast()
+        //updateHourlyCell()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -87,9 +87,13 @@ private extension HourlyForecastCell {
 }
 
 extension HourlyForecastCell {
-    func renderHourlyForecast() {
-        hourLbl.text = "8:00"
-        tempsLbl.text = "15\u{00B0}"
-        iconImage.image = UIImage(named: "sunny")
+    func updateHourlyCell(with hourlyForecastData: HourlyForecastData) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HH:mm"
+        hourLbl.text = dateFormatter.string(from: hourlyForecastData.timeDate!)
+        tempsLbl.text = "\(hourlyForecastData.temperature.roundToInt())" + "\u{00B0}"
+        let iconName = WeatherIcon.iconMap[hourlyForecastData.icon]
+        print("hourlyIconName: " + "\(iconName)")
+        iconImage.image = UIImage(named: "\(String(describing: iconName!))")
     }
 }

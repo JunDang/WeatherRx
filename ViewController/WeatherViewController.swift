@@ -30,7 +30,8 @@ class WeatherViewController: UIViewController {
     private let bag = DisposeBag()
     private let temperatureUnitControl = UISegmentedControl()
     private let windSpeedUnitControl = UISegmentedControl()
-    var weatherViewModel: WeatherViewModel?
+    //var weatherViewModel: WeatherViewModel?
+    var weatherViewModel = WeatherViewModel(lat: 43.6532, lon: -79.3832, apiType: InternetService.self)
 
     override func viewDidLoad() {
       super.viewDidLoad()
@@ -48,16 +49,25 @@ class WeatherViewController: UIViewController {
          })
          .disposed(by: bag)*/
     
-       weatherViewModel = WeatherViewModel(lat: 43.6532, lon: -79.3832, apiType: InternetService.self)
+       //weatherViewModel = WeatherViewModel(lat: 43.6532, lon: -79.3832, apiType: InternetService.self)
+      /* weatherViewModel!.weatherForecastData.elementAt(0)
+        .subscribe(onNext: { (element) in
+             print("weatherElement: " + "\(element)")
+        })
+        .disposed(by: bag)*/
         
-       weatherViewModel!.weatherForecastData
+       // let firstItem =  (weatherForecastModels[0].hourly)?.hourlyWeatherModel.count
+      
+        //print("weatherForecastModels: " + "\(weatherForecastModels)")*/
+      /* weatherViewModel!.weatherForecastData
          .subscribe(onNext: { (element) in
-         print("ViewDidLoadWeatherData")
-         print("ViewDidLoadWeatherData: " + "\(element)")
+            let retrievedWeather = element.0[0].hourly?.hourlyWeatherModel
+         print("hourlyWeatherModel: " + "\(retrievedWeather)")
          })
-         .disposed(by: bag)
+         .disposed(by: bag)*/
         
     }
+        
    
     //Lincoln: lat: 40.8136, lon: -96.7026
     override func didReceiveMemoryWarning() {
@@ -67,7 +77,7 @@ class WeatherViewController: UIViewController {
     override var prefersStatusBarHidden: Bool {
         return true
     }
-    /*func bindBackground() {
+   /* func bindBackground() {
         let flickrViewModel: FlickrViewModel = FlickrViewModel(lat: 43.6532, lon: -79.3832, currentWeather: "sunny", apiType: InternetService.self, imageDataCacheType: ImageDataCaching.self)
         flickrViewModel.backgroundImage.asDriver()
            .drive(onNext: { [weak self] backgroundImage in
@@ -87,7 +97,7 @@ class WeatherViewController: UIViewController {
     }
     
     private lazy var tableViewController: WeatherForecastTableViewController = {
-        let viewController = WeatherForecastTableViewController()
+        let viewController = WeatherForecastTableViewController(with: weatherViewModel)
         self.add(asChildViewController: viewController)
         return viewController
     }()
@@ -172,10 +182,16 @@ extension WeatherViewController{
             //view.centerY == view.superview!.centerY + self.view.frame.height/2
             view.bottom == view.superview!.top + self.view.frame.height - 120
         }
-        constrain(segmentedControl,currentWeatherView) {
+        /*constrain(segmentedControl,currentWeatherView) {
             $0.width == $0.superview!.width
             $0.centerX == $0.superview!.centerX
             $0.top == $1.bottom + 10
+            $0.height == 40
+        }*/
+        constrain(segmentedControl,currentWeatherView) {
+            $0.width == $0.superview!.width
+            $0.centerX == $0.superview!.centerX
+            $0.top == $1.top
             $0.height == 40
         }
         constrain(containerView,segmentedControl) {

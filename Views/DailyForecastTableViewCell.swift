@@ -22,7 +22,7 @@ class DailyForecastTableViewCell: UITableViewCell {
         setup()
         setStyle()
         layoutView()
-        render()
+        //render()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -98,11 +98,19 @@ private extension DailyForecastTableViewCell {
 }
 
 extension DailyForecastTableViewCell{
-    func render(){
-        dayLbl.text = "Saturday"
+    func updateDailyCell(with dailyForecastData: DailyForecastData){
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "EEEE"
+        dayLbl.text = dateFormatter.string(from: dailyForecastData.timeDate!)
+        let iconName = WeatherIcon.iconMap[dailyForecastData.icon]
+        iconImage.image = UIImage(named: "\(String(describing: iconName!))")
+        lowTempLbl.text = "\(dailyForecastData.temperatureMin.roundToInt())" + "\u{00B0}"
+        highTempLbl.text = "\(dailyForecastData.temperatureMax.roundToInt())" + "\u{00B0}"
+        print("dailyIconName: " + "\(iconName)")
+        /*dayLbl.text = "Saturday"
         iconImage.image = UIImage(named: "sunny")
         lowTempLbl.text = "5\u{00B0}"
-        highTempLbl.text = "20\u{00B0}"
+        highTempLbl.text = "20\u{00B0}"*/
     }
 }
 
