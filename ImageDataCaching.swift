@@ -18,9 +18,8 @@ class ImageDataCaching: ImageDataCachingProtocol {
             imageDataCashe.setObject(data, forKey: url)
         }
     }
-    
+   
     static func imageDataFromURLFromChache(url: NSURL) -> NSData? {
          return imageDataCashe.object(forKey: url) as? NSData
     }
-    
 }
