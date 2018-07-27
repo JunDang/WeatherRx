@@ -8,6 +8,7 @@
 
 import Foundation
 
+
 struct FlickrModel: Codable {
     private enum CodingKeys : String, CodingKey {
         case flickrModel = "photos" }

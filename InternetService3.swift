@@ -1,16 +1,17 @@
 //
-//  InternetService.swift
+//  InternetService3.swift
 //  WeatherRx
 //
-//  Created by Jun Dang on 2018-06-06.
+//  Created by Jun Dang on 2018-07-26.
 //  Copyright © 2018 Jun Dang. All rights reserved.
 //
 
 import Foundation
+import Foundation
 import RxSwift
 import RxCocoa
 
-enum Result<T, Error> {
+/*enum Result<T, Error> {
     case Success(T)
     case Failure(Error)
 }
@@ -43,91 +44,90 @@ class InternetService: InternetServiceProtocol {
         
         let baseURLString = FlickrAPI.baseURLString
         let parameters = [
-           "method": FlickrAPI.searchMethod,
-           "api_key": FlickrAPI.apiKey,
-           "format": "json",
-           "nojsoncallback": "1",
-           "per_page": "25",
-           "lat": "\(lat)",
-           "lon": "\(lon)",
-           "group_id": "92767609@N00",//"92767609@N00","1463451@N25"
-           "tagmode": "all"
+            "method": FlickrAPI.searchMethod,
+            "api_key": FlickrAPI.apiKey,
+            "format": "json",
+            "nojsoncallback": "1",
+            "per_page": "25",
+            "lat": "\(lat)",
+            "lon": "\(lon)",
+            "group_id": "92767609@N00",//"92767609@N00","1463451@N25"
+            "tagmode": "all"
         ]
         return request(baseURLString, parameters: parameters as! [String : String])
             .map({ result in
                 switch result {
-                   case .Success(let data):
-                   var flickrModel: FlickrModel?
+                case .Success(let data):
+                    var photoModel: PhotoModel?
                     do {
-                        flickrModel = try JSONDecoder().decode(FlickrModel.self, from: data)
+                        photoModel = try JSONDecoder().decode(PhotoModel.self, from: data)
                     } catch let parseError {
                         print("parseError: " + "\(parseError)")
                     }
-                    //print("flickrModel: " + "\(String(describing: flickrModel))")
-                    let flickrPhotos = flickrModel!.flickrModel!.flickrPhotos
-                    guard flickrPhotos.count > 0 else {
+                    print("photoModel: " + "\(String(describing: photoModel))")
+                    let photos = photoModel!.photoModel!.photos
+                    guard photos.count > 0 else {
                         throw flickrRequestError.emptyAlbum
                     }
-                   let randomIndex = Int(arc4random_uniform(UInt32(flickrPhotos.count)))
-                   let photo = flickrPhotos[randomIndex]
-                   let imageURL = photo.createImageURL()
+                    let randomIndex = Int(arc4random_uniform(UInt32(photos.count)))
+                    let photo = photos[randomIndex]
+                    let imageURL = photo.createImageURL()
                     return Result<NSURL, Error>.Success(imageURL)
-                 case .Failure(let error):
+                case .Failure(let error):
                     return Result<NSURL, Error>.Failure(error)
                 }
             })
     }
-   
-    static func sendRequest(resultNSURL: Result<NSURL, Error>) -> Observable<Result<Data, Error>> {
+    
+    static func sendRequest(resultNSURL: Result<NSURL, Error>) -> Observable<Result<UIImage, Error>> {
         switch resultNSURL {
         case .Success(let imageURL):
             let baseURLString = imageURL.absoluteString
             let parameters: [String: String] = [:]
-            var imageData: Data?
+            var image: UIImage?
             return request(baseURLString!, parameters: parameters)
                 .map({ result in
                     switch result {
-                    case .Success(let data):
+                    case let .Success(data):
                         if data.count < 8000 {
-                            imageData = UIImagePNGRepresentation(UIImage(named: "banff")!)
+                            image = UIImage(named: "banff")!
                         }
-                        imageData = data
-                        return Result<Data, Error>.Success(imageData!)
-                    case .Failure(let error):
-                        return Result<Data, Error>.Failure(error)
+                        image = UIImage(data: data)
+                        return Result<UIImage, Error>.Success(image!)
+                    case let .Failure(error):
+                        return Result<UIImage, Error>.Failure(error)
                     }
                 })
         case .Failure(let error):
-            return Observable.just(Result<Data, Error>.Failure(error))
+            return Observable.just(Result<UIImage, Error>.Failure(error))
         }
         
     }
-    static func getImage(resultNSURL: Result<NSURL, Error>, cache: ImageDataCachingProtocol.Type) -> Observable<Result<UIImage, Error>> {
-        switch resultNSURL {
-        case .Success(let imageURL):
-            if let imageDataFromCache = cache.imageDataFromURLFromChache(url: imageURL) {
-                let imageFromCache = UIImage(data: imageDataFromCache as Data)
-                return Observable.just(Result<UIImage, Error>.Success(imageFromCache!))
-            } else {
-                return self.sendRequest(resultNSURL:resultNSURL)
-                    .map() {(imageDataResult) in
-                        switch imageDataResult {
-                        case .Success(let imageData):
-                            cache.saveImageDataToCache(data: imageData as NSData, url: imageURL)
-                            let imageFromRequest = UIImage(data: imageData as Data)
-                            return Result<UIImage, Error>.Success(imageFromRequest!)
-                        case .Failure(let error):
-                            return Result<UIImage, Error>.Failure(error)
-                        }
-                    }
-           }
-       case .Failure(let error):
-          return Observable.just(Result<UIImage, Error>.Failure(error))
-      }
-  }
- 
+    /*static func sendRequest(to imageURL: NSURL) -> Observable<Result<UIImage, Error>> {
+     let baseURLString = imageURL.absoluteString
+     let parameters: [String: String] = [:]
+     var image: UIImage?
+     return request(baseURLString!, parameters: parameters)
+     .map({ result in
+     switch result {
+     case let .Success(data):
+     if data.count < 8000 {
+     image = UIImage(named: "banff")!
+     }
+     image = UIImage(data: data)
+     return Result<UIImage, Error>.Success(image!)
+     case let .Failure(error):
+     return Result<UIImage, Error>.Failure(error)
+     }
+     })
+     }
+     
+     static func getImage(imageURL: NSURL) -> Observable<Result<UIImage, Error>> {
+     return self.sendRequest(to: imageURL)
+     }*/
     // MARK: - Weather
-   static func getWeatherObservable(lat: Double, lon: Double) -> Observable<Result<WeatherForecastModel, Error>> {
+    static func getWeatherObservable(lat: Double, lon: Double) -> Observable<Result<WeatherForecastModel, Error>> {
+        print("weatherfunctioncalled")
         var baseURL = URL(string: DarskyAPI.baseURLString)!
         baseURL.appendPathComponent(DarskyAPI.apiKey)
         baseURL.appendPathComponent("\(lat),\(lon)")
@@ -143,8 +143,13 @@ class InternetService: InternetServiceProtocol {
                     } catch let parseError {
                         print("parseError: " + "\(parseError)")
                     }
+                    //let currentlyWeather = weatherForecastModel?.currently
+                    //print("currentlyWeather: " + "\(String(describing: currentlyWeather))")
+                    //print("weatherForecastModel: " + "\(String(describing: weatherForecastModel))")
                     return Result<WeatherForecastModel, Error>.Success(weatherForecastModel!)
                 case .Failure(let error):
+                    //print("error: " + "\(String(describing: error))")
+                    //throw error
                     return Result<WeatherForecastModel, Error>.Failure(error)
                 }
             })
@@ -160,11 +165,11 @@ class InternetService: InternetServiceProtocol {
             var components = URLComponents(string: baseURL)!
             components.queryItems = parameters.map(URLQueryItem.init)
             let url = components.url!
-            //print("url: " + "\(String(describing: url))")
+            print("url: " + "\(String(describing: url))")
             
             var result: Result<Data, Error>?
             dataTask = defaultSession.dataTask(with: url) { data, response, error in
-                defer { dataTask = nil }
+                defer { /*self.*/dataTask = nil }
                 if let data = data, let response = response as? HTTPURLResponse, response.statusCode == 200 {
                     result = Result<Data, Error>.Success(data)
                 } else {
@@ -176,9 +181,41 @@ class InternetService: InternetServiceProtocol {
                 observer.onCompleted()
             }
             dataTask?.resume()
+            //print("taskresume")
             return Disposables.create {
                 dataTask?.cancel()
             }
         }
     }
-}
+    /* static private func request(_ baseURL: String = "", parameters: [String: String] = [:]) -> Observable<Result<Data, Error>> {
+     //print("requestfunctioncalled")
+     // print("baseURLinrequest " + "\(baseURL)")
+     dataTask?.cancel()
+     return Observable.create { observer in
+     print("observableblockcalled")
+     var components = URLComponents(string: baseURL)!
+     components.queryItems = parameters.map(URLQueryItem.init)
+     let url = components.url!
+     print("url: " + "\(String(describing: url))")
+     
+     var result: Result<Data, Error>?
+     dataTask = defaultSession.dataTask(with: url) { data, response, error in
+     defer { self.dataTask = nil }
+     if let data = data, let response = response as? HTTPURLResponse, response.statusCode == 200 {
+     result = Result<Data, Error>.Success(data)
+     } else {
+     if let error = error {
+     result = Result<Data, Error>.Failure(error)
+     }
+     }
+     observer.onNext(result!)
+     observer.onCompleted()
+     }
+     dataTask?.resume()
+     //print("taskresume")
+     return Disposables.create {
+     dataTask?.cancel()
+     }
+     }
+     }*/
+}*/

@@ -20,10 +20,12 @@ struct WeatherIcon {
         "snow"  : "snow",
         "fog" : "fog",
         "cloudy" : "cloudy",
-        "rain" : "rainIcon",
+        "rain" : "rain",
         "partly-cloudy-night" : "nightPartlyCloudy",
         "wind" : "wind",
         "drizzle" : "drizzle"
     ]
 
 }
+
+

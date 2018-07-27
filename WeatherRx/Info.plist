@@ -39,5 +39,9 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>For retreive weather information</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>For retreive weather information</string>
 </dict>
 </plist>

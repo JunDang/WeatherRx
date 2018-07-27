@@ -54,7 +54,7 @@ private extension HourlyForecastCell {
         constrain(iconImage) {
             $0.center == $0.superview!.center
             $0.height == 30
-            $0.width == 42
+            $0.width == 40
         }
         constrain(hourLbl, iconImage) {
             $0.bottom == $1.top

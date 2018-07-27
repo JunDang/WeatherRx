@@ -61,7 +61,7 @@ private extension DailyForecastTableViewCell {
             $0.bottom == $0.superview!.bottom - 2
             $0.centerX == $0.superview!.centerX - 5
             $0.centerY == $0.superview!.centerY
-            //$0.width == 50
+            $0.width == 50
         }
         constrain(lowTempLbl) {
             $0.centerY == $0.superview!.centerY

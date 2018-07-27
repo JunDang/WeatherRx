@@ -10,7 +10,10 @@ import UIKit
 import Cartography
 import RxSwift
 import RxCocoa
+import RxRealm
+import RealmSwift
 import DynamicBlurView
+import CoreLocation
 
 
 class WeatherViewController: UIViewController {
@@ -30,46 +33,38 @@ class WeatherViewController: UIViewController {
     private let bag = DisposeBag()
     private let temperatureUnitControl = UISegmentedControl()
     private let windSpeedUnitControl = UISegmentedControl()
-    //var weatherViewModel: WeatherViewModel?
-    var weatherViewModel = WeatherViewModel(lat: 43.6532, lon: -79.3832, apiType: InternetService.self)
-
-    override func viewDidLoad() {
-      super.viewDidLoad()
-      setup()
-      layoutView()
-      style()
-      //bindBackground()
-      setupSegmentedView()
-      setupNavigationbar()
-      
-     /*InternetService.getWeatherObservable(lat:43.6532, lon: -79.3832)
-         .subscribe(onNext: { (element) in
-         print(element)
-         print("getWeatherObservablecallback")
-         })
-         .disposed(by: bag)*/
+    var weatherForecastData: Observable<(AnyRealmCollection<WeatherForecastModel>, RealmChangeset?)>?
+    var flickrImage = BehaviorRelay<UIImage?>(value: UIImage(named: "banff")!)
+    var viewModel: ViewModel?
+    let locationManager = CLLocationManager()
+    var searchTextField: UITextField?
+    var lat: Double?
+    var lon: Double?
     
-       //weatherViewModel = WeatherViewModel(lat: 43.6532, lon: -79.3832, apiType: InternetService.self)
-      /* weatherViewModel!.weatherForecastData.elementAt(0)
-        .subscribe(onNext: { (element) in
-             print("weatherElement: " + "\(element)")
-        })
-        .disposed(by: bag)*/
-        
-       // let firstItem =  (weatherForecastModels[0].hourly)?.hourlyWeatherModel.count
+    override func viewDidLoad() {
+       super.viewDidLoad()
+       setup()
+       layoutView()
+       style()
+       //bindBackground()
+       setupSegmentedView()
+       setupNavigationbar()
       
-        //print("weatherForecastModels: " + "\(weatherForecastModels)")*/
-      /* weatherViewModel!.weatherForecastData
-         .subscribe(onNext: { (element) in
-            let retrievedWeather = element.0[0].hourly?.hourlyWeatherModel
-         print("hourlyWeatherModel: " + "\(retrievedWeather)")
-         })
-         .disposed(by: bag)*/
+       let locationDriver = GeoLocationService.instance.getLocation()
+       weatherForecastData = locationDriver.asObservable()
+           .flatMap(){ location -> Observable<(AnyRealmCollection<WeatherForecastModel>, RealmChangeset?)> in
+               let lat = location.latitude
+               let lon = location.longitude
+               self.viewModel = ViewModel(lat: lat, lon: lon, apiType: InternetService.self)
+               self.weatherForecastData = self.viewModel?.weatherForecastData
+               self.flickrImage = (self.viewModel?.flickrImage)!
+               self.bindBackground(flickrImage: self.flickrImage)
+               return self.weatherForecastData!
+            }
+
         
     }
-        
-   
-    //Lincoln: lat: 40.8136, lon: -96.7026
+
     override func didReceiveMemoryWarning() {
       super.didReceiveMemoryWarning()
     // Dispose of any resources that can be recreated.
@@ -77,27 +72,37 @@ class WeatherViewController: UIViewController {
     override var prefersStatusBarHidden: Bool {
         return true
     }
-   /* func bindBackground() {
-        let flickrViewModel: FlickrViewModel = FlickrViewModel(lat: 43.6532, lon: -79.3832, currentWeather: "sunny", apiType: InternetService.self, imageDataCacheType: ImageDataCaching.self)
-        flickrViewModel.backgroundImage.asDriver()
-           .drive(onNext: { [weak self] backgroundImage in
-            let resizedImage = backgroundImage?.scaled(CGSize(width: (self?.view.frame.width)!, height: (self?.view.frame.height)! * 1.5))
-            self?.backgroundView.image = resizedImage
-            self?.blurredImageView = DynamicBlurView(frame: (self?.view.bounds)!)
-            self?.blurredImageView.blurRadius = 10
-            self?.blurredImageView.alpha = 0
-            self?.backgroundView.addSubview((self?.blurredImageView)!)
-        })
-        .disposed(by: bag)
-      }*/
-    
+    func bindBackground(flickrImage: BehaviorRelay<UIImage?>) {
+        
+        flickrImage.asDriver()
+            .drive(onNext: { [weak self] flickrImage in
+                let resizedImage = flickrImage?.scaled(CGSize(width: (self?.view.frame.width)!, height: (self?.view.frame.height)! * 1.5))
+                self?.backgroundView.image = resizedImage
+                self?.blurredImageView = DynamicBlurView(frame: (self?.view.bounds)!)
+                self?.blurredImageView.blurRadius = 10
+                self?.blurredImageView.alpha = 0
+                self?.backgroundView.addSubview((self?.blurredImageView)!)
+            })
+            .disposed(by: bag)
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        currentWeatherView.render()
+        weatherForecastData?
+            .subscribe(onNext: { (weatherForecastData) in
+                //print("weatherForecastData: " + "\(weatherForecastData)")
+                let weatherForecastModel = weatherForecastData.0.first
+                if weatherForecastModel != nil {
+                    self.currentWeatherView.update(with: weatherForecastModel!)
+                    self.tableViewController.weatherForecastModel = weatherForecastModel
+                    self.tableViewController.tableView.reloadData()
+                }
+            })
+            .disposed(by: bag)
     }
-    
+
     private lazy var tableViewController: WeatherForecastTableViewController = {
-        let viewController = WeatherForecastTableViewController(with: weatherViewModel)
+        let viewController = WeatherForecastTableViewController()
         self.add(asChildViewController: viewController)
         return viewController
     }()
@@ -182,16 +187,10 @@ extension WeatherViewController{
             //view.centerY == view.superview!.centerY + self.view.frame.height/2
             view.bottom == view.superview!.top + self.view.frame.height - 120
         }
-        /*constrain(segmentedControl,currentWeatherView) {
-            $0.width == $0.superview!.width
-            $0.centerX == $0.superview!.centerX
-            $0.top == $1.bottom + 10
-            $0.height == 40
-        }*/
         constrain(segmentedControl,currentWeatherView) {
             $0.width == $0.superview!.width
             $0.centerX == $0.superview!.centerX
-            $0.top == $1.top
+            $0.top == $1.bottom + 10
             $0.height == 40
         }
         constrain(containerView,segmentedControl) {

@@ -8,6 +8,8 @@
 
 import UIKit
 import Cartography
+import RxSwift
+import RxCocoa
 
 class CurrentWeatherView: UIView {
     private var didSetupConstraints = false
@@ -18,7 +20,9 @@ class CurrentWeatherView: UIView {
     private let iconImage = UIImageView()
     private let weatherLbl = UILabel()
     private let minutelySummaryLbl = UILabel()
-    
+    //var currentWeather: CurrentlyWeatherModel?
+    //var weatherViewModel: WeatherViewModel?
+ 
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -135,20 +139,20 @@ private extension CurrentWeatherView{
         currentTempLbl.textColor = UIColor.white
         currentTempLbl.sizeToFit()
         
-        feelsLikeTempLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 18)
+        feelsLikeTempLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 16)
         feelsLikeTempLbl.textColor = UIColor.white
         feelsLikeTempLbl.sizeToFit()
         
-        minutelySummaryLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 18)
+        minutelySummaryLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 16)
         minutelySummaryLbl.textColor = UIColor.white
         minutelySummaryLbl.sizeToFit()
         minutelySummaryLbl.lineBreakMode = NSLineBreakMode.byWordWrapping
         
-        lowTempLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 18)
+        lowTempLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 16)
         lowTempLbl.textColor = UIColor.white
         lowTempLbl.sizeToFit()
         
-        highTempLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 18)
+        highTempLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 16)
         highTempLbl.textColor = UIColor.white
         highTempLbl.sizeToFit()
         
@@ -157,14 +161,44 @@ private extension CurrentWeatherView{
 
 // MARK: Render
 extension CurrentWeatherView{
-    func render(){
-        weatherLbl.text = "Sunny"
+    /*func update(with currentWeather: CurrentlyWeatherModel){
+        self.currentWeather = currentWeather
+        self.weatherLbl.text = currentWeather.summary
+        self.currentTempLbl.text = "\(String(describing: currentWeather.temperature.roundToInt()))" + "\u{00B0}"
+        self.feelsLikeTempLbl.text = "Feels like: " + "\(String(describing: currentWeather.apparentTemperature.roundToInt()))" + "\u{00B0}"
+        let iconName = WeatherIcon.iconMap[(currentWeather.icon)]
+        self.iconImage.image = UIImage(named: "\(String(describing: iconName!))")
+     */
+      /*  let currentDaily = weatherForecastModel.0[0].daily?.dailyWeatherModel.first
+        self.lowTempLbl.text = "\(String(describing: currentDaily!.temperatureMin.roundToInt()))" + "\u{00B0}"
+        self.highTempLbl.text = "\(String(describing: currentDaily!.temperatureMax.roundToInt()))" + "\u{00B0}"*/
+        
+    
+    
+    func update(with weatherForecastModel: WeatherForecastModel){
+             let currentWeather = weatherForecastModel.currently
+             print("currentWeather: " + "\(String(describing: currentWeather))")
+             self.weatherLbl.text = currentWeather!.summary
+             self.currentTempLbl.text = "\(String(describing: currentWeather!.temperature.roundToInt()))" + "\u{00B0}"
+             self.feelsLikeTempLbl.text = "Feels like: " + "\(String(describing: currentWeather!.apparentTemperature.roundToInt()))" + "\u{00B0}"
+             let iconName = WeatherIcon.iconMap[(currentWeather?.icon)!]
+             self.iconImage.image = UIImage(named: "\(String(describing: iconName!))")
+            
+             let currentDaily = weatherForecastModel.daily?.dailyWeatherModel.first
+             self.lowTempLbl.text = "min: " + "\(String(describing: currentDaily!.temperatureMin.roundToInt()))" + "\u{00B0}"
+             self.highTempLbl.text = "max: " + "\(String(describing: currentDaily!.temperatureMax.roundToInt()))" + "\u{00B0}"
+        
+             let minutelySummary = weatherForecastModel.minutely?.summary
+             self.minutelySummaryLbl.text = minutelySummary
+       
+        
+     /*   weatherLbl.text = "Sunny"
         currentTempLbl.text = "15\u{00B0}"
         iconImage.image = UIImage(named: "sunny")
         feelsLikeTempLbl.text = "Feels like: 15\u{00B0}"
         minutelySummaryLbl.text = "sunny in the hour"
         lowTempLbl.text = "Low: 5\u{00B0}"
-        highTempLbl.text = "High: 20\u{00B0}"
+        highTempLbl.text = "High: 20\u{00B0}"*/
     }
 
 }

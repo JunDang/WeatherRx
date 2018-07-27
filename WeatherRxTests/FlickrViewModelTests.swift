@@ -14,7 +14,7 @@ import RxBlocking
 
 @testable import WeatherRx
 
-class FlickrViewModelTests: XCTestCase {
+/*class FlickrViewModelTests: XCTestCase {
   
     private func createViewModel(_ lat:Double, _ lon: Double, _ currentWeather: String) -> FlickrViewModel {
         return FlickrViewModel(lat: lat, lon: lon, currentWeather:currentWeather, apiType: MockFlickrService.self, imageDataCacheType: ImageDataCaching.self)
@@ -55,4 +55,4 @@ class FlickrViewModelTests: XCTestCase {
     
     
     
-}
+}*/

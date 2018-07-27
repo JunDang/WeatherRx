@@ -15,39 +15,24 @@ import RealmSwift
    dynamic var currently: CurrentlyWeatherModel?
    dynamic var hourly: HourlyWeatherModel?
    dynamic var daily: DailyWeatherModel?
+    dynamic var minutely: MinutelyWeatherModel?
    dynamic var compoundKey: String?
     
-   /*func setCompoundLatitude(latitude: Double) {
-        self.latitude = latitude
-        compoundKey = compoundKeyValue()
-    }
-    
-    func compoundKeyValue() -> String {
-        return "\(latitude)\(longitude)"
-    }
-    
-    func setCompoundLongitude(longitude: Double) {
-        self.longitude = longitude
-        compoundKey = compoundKeyValue()
-    }*/
-    
-    func configure(latitude: Double, longitude: Double){
-        print("configureCompoundKey")
+   func configure(latitude: Double, longitude: Double){
         self.latitude = latitude
         self.longitude = longitude
         self.compoundKey = "\(Int(self.latitude*10000))\(Int(self.longitude)*10000)"
     }
-    
-    override static func primaryKey() -> String? {
+   override static func primaryKey() -> String? {
         return "compoundKey"
     }
-  
-    enum WeatherCodingKeys : String, CodingKey {
+   enum WeatherCodingKeys : String, CodingKey {
         case latitude = "latitude"
         case longitude = "longitude"
         case currently = "currently"
         case hourly = "hourly"
         case daily = "daily"
+        case minutely = "minutely"
     }
  }
 
@@ -58,12 +43,7 @@ import RealmSwift
     dynamic var icon: String = ""
     dynamic var temperature: Double = 0.0
     dynamic var apparentTemperature: Double = 0.0
-    
-   /* // MARK: - Primary key
-    override static func primaryKey() -> String? {
-        return "time"
-    }*/
-    
+ 
     private enum CurrentlyCodingKeys : String, CodingKey {
         case time = "time"
         case summary = "summary"
@@ -181,7 +161,6 @@ class DailyWeatherModel: Object, Decodable {
         sunsetTimeDate = Date(timeIntervalSince1970: TimeInterval(sunsetTime))
     }
    convenience required init(from decoder: Decoder) throws {
-    
         let container = try decoder.container(keyedBy: DailyCodingKeys.self)
         let time = try container.decode(Int.self, forKey: .time)
         let temperatureMax = try container.decode(Double.self, forKey: .temperatureMax)
@@ -189,7 +168,6 @@ class DailyWeatherModel: Object, Decodable {
         let icon = try container.decode(String.self, forKey: .icon)
         let sunriseTime = try container.decode(Int.self, forKey: .sunriseTime)
         let sunsetTime = try container.decode(Int.self, forKey: .sunsetTime)
-       // precipType = try container.decode(String.self, forKey: .precipType)
         let precipType = try container.decodeIfPresent(String.self, forKey: .precipType) ?? ""
         let precipProbability = try container.decode(Double.self, forKey: .temperatureMin)
         let precipIntensity = try container.decode(Double.self, forKey: .precipIntensity)
@@ -204,13 +182,11 @@ class DailyWeatherModel: Object, Decodable {
         let ozone = try container.decode(Double.self, forKey: .ozone)
         self.init(time: time, temperatureMax: temperatureMax, temperatureMin: temperatureMin, icon: icon, sunriseTime: sunriseTime, sunsetTime: sunsetTime, precipType: precipType, precipProbability: precipProbability, precipIntensity: precipIntensity, dewPoint: dewPoint, pressure: pressure, humidity: humidity, windSpeed: windSpeed, windBearing: windBearing, cloudCover: cloudCover, uvIndex: uvIndex, visibility: visibility, ozone: ozone)
     }
-    
 }
 
 class HourlyWeatherModel: Object, Decodable {
     private enum HourlyWeatherCodingKeys : String, CodingKey {
         case hourlyWeatherModel = "data" }
-    //@objc var hourlyWeatherModel: [HourlyForecastData] = []
     var hourlyWeatherModel = List<HourlyForecastData>()
     convenience init(hourlyWeatherModel:List<HourlyForecastData>) throws {
         self.init()
@@ -249,6 +225,22 @@ class HourlyWeatherModel: Object, Decodable {
         let temperature = try container.decode(Double.self, forKey: .temperature)
         let timeDate = Date(timeIntervalSince1970: TimeInterval(time))
         try self.init(time: time, icon: icon, temperature: temperature, timeDate: timeDate)
+    }
+}
+
+@objcMembers class MinutelyWeatherModel: Object, Decodable {
+    dynamic var summary: String?
+    private enum MinutelyCodingKeys : String, CodingKey {
+       case summary = "summary"
+    }
+    convenience init(summary: String) throws {
+        self.init()
+        self.summary = summary
+    }
+    convenience required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: MinutelyCodingKeys.self)
+        let summary = try container.decode(String.self, forKey: .summary)
+        try self.init(summary:summary)
     }
 }
 

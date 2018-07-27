@@ -14,8 +14,9 @@ import RxCocoa
 class WeatherForecastTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     let tableView: UITableView = UITableView(frame: CGRect.zero)
-    var weatherViewModel: WeatherViewModel?
-    private let bag = DisposeBag()
+    //var weatherViewModel: WeatherViewModel?
+    var weatherForecastModel: WeatherForecastModel?
+    //private let bag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,14 +34,14 @@ class WeatherForecastTableViewController: UIViewController, UITableViewDelegate,
         tableView.estimatedRowHeight = 99
       
      }
-    init(with weatherViewModel: WeatherViewModel) {
+    /*init(with weatherViewModel: WeatherViewModel) {
         super.init(nibName: nil, bundle: nil)
         self.weatherViewModel = weatherViewModel
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
+    }*/
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -53,24 +54,21 @@ class WeatherForecastTableViewController: UIViewController, UITableViewDelegate,
         print("tableViewMethodcalled")
         if indexPath.row == 0 {
             let cell: HourlyForecastTableViewCell = tableView.dequeueReusableCell(withIdentifier: "HourlyCell", for: indexPath) as! HourlyForecastTableViewCell
-            if let weatherViewModel = weatherViewModel {
-               cell.weatherViewModel = weatherViewModel
+            if let weatherForecastModel = weatherForecastModel {
+               cell.weatherForecastModel = weatherForecastModel
+               cell.collectionView?.reloadData()
             } else {
                 
             }
             return cell
         } else {
             let cell: DailyForecastTableViewCell = tableView.dequeueReusableCell(withIdentifier: "DailyCell", for: indexPath) as! DailyForecastTableViewCell
-            if let weatherViewModel = weatherViewModel {
-                weatherViewModel.weatherForecastData
-                  .subscribe(onNext: { (weatherForecastModel) in
-                       let dailyWeatherModel = weatherForecastModel.0[0].daily?.dailyWeatherModel
-                    print("dailycount: " + "\(dailyWeatherModel?.count)")
-                       let dailyForecastData = dailyWeatherModel![indexPath.row]
-                       cell.updateDailyCell(with: dailyForecastData)
-                      print("dailyForecastData: " + "\(dailyForecastData)")
-                  })
-                  .disposed(by: bag)
+            if let weatherForecastModel = weatherForecastModel {
+               let dailyWeatherModel = weatherForecastModel.daily?.dailyWeatherModel
+                 print("dailycount: " + "\(dailyWeatherModel?.count)")
+                 let dailyForecastData = dailyWeatherModel![indexPath.row]
+                 cell.updateDailyCell(with: dailyForecastData)
+                 print("dailyForecastData: " + "\(dailyForecastData)")
             } else {
                 
             }

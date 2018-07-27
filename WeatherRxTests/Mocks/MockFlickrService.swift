@@ -16,7 +16,7 @@ import Unbox
 
 @testable import WeatherRx
 
-class MockFlickrService: FlickrAPIProtocol{
+/*class MockFlickrService: FlickrAPIProtocol{
     
     static var flickrImageURL = PublishSubject<NSURL>()
     //static var flickrImage = PublishSubject<UIImage?>()
@@ -38,3 +38,4 @@ class MockFlickrService: FlickrAPIProtocol{
         })
     }
 }
+*/

@@ -8,12 +8,13 @@
 
 import Foundation
 
-import RealmSwift
+import RxCocoa
 import RxSwift
 import RxRealm
-import RxCocoa
+import RealmSwift
 
-class WeatherViewModel {
+
+/*class WeatherViewModel {
     private let bag = DisposeBag()
     var weatherObservable: Observable<Result<WeatherForecastModel, Error>>?
     let apiType: WeatherAPIProtocol.Type
@@ -24,8 +25,9 @@ class WeatherViewModel {
     
     
     // MARK: - Output
-    var weatherForecastData:Observable<(AnyRealmCollection<WeatherForecastModel>, RealmChangeset?)>!
-    //var weatherForecastModel = BehaviorRelay<WeatherForecastModel?>(value: nil)
+     var weatherForecastData:Observable<(AnyRealmCollection<WeatherForecastModel>, RealmChangeset?)>!
+     //var weatherForecastModel = BehaviorRelay<WeatherForecastModel?>(value: nil)
+    //var weatherForecastModels: Observable<WeatherForecastModel>?
    
     // MARK: - Init
     
@@ -73,9 +75,10 @@ class WeatherViewModel {
         guard let realm = try? Realm() else {
             return
         }
-       /*let weatherForecastModels = realm.objects(WeatherForecastModel.self)
+        //let weatherForecastModelsResults = realm.objects(WeatherForecastModel.self)
+       
         
-        print("weatherForecastModels: " + "\(weatherForecastModels)")*/
+       //print("weatherForecastModels: " + "\(weatherForecastModels)")
         
         weatherForecastData = Observable.changeset(from: realm.objects(WeatherForecastModel.self))
         /*weatherForecastData
@@ -86,4 +89,4 @@ class WeatherViewModel {
     }*/
 
     }
-}
+}*/
