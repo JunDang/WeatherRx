@@ -49,8 +49,11 @@ class WeatherViewController: UIViewController {
        //bindBackground()
        setupSegmentedView()
        setupNavigationbar()
-      
-       let locationDriver = GeoLocationService.instance.getLocation()
+       InternetService.locationGeocoding(address: "Toronto")
+        .subscribe(onNext: { element in
+            print("geocoding: " + "\(element)")
+        }).disposed(by: bag)
+       /*let locationDriver = GeoLocationService.instance.getLocation()
        weatherForecastData = locationDriver.asObservable()
            .flatMap(){ location -> Observable<(AnyRealmCollection<WeatherForecastModel>, RealmChangeset?)> in
                let lat = location.latitude
@@ -60,7 +63,7 @@ class WeatherViewController: UIViewController {
                self.flickrImage = (self.viewModel?.flickrImage)!
                self.bindBackground(flickrImage: self.flickrImage)
                return self.weatherForecastData!
-            }
+            }*/
 
         
     }

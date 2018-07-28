@@ -9,12 +9,13 @@
 import Foundation
 import RxSwift
 import RxCocoa
+import CoreLocation
 
 enum Result<T, Error> {
     case Success(T)
     case Failure(Error)
 }
-// MARK: -URL Components
+// MARK: -Flickr URL Components
 struct FlickrAPI {
     static let baseURLString = "https://api.flickr.com/services/rest/"
     static let apiKey = "5a45bd8e5e5a3424a42246944f98d7fd"
@@ -28,12 +29,22 @@ enum flickrRequestError: Error {
     case emptyAlbum
     case imageNotExist
 }
-
+//MARK: -Weather URL Components
 struct DarskyAPI {
     static let baseURLString = "https://api.forecast.io/forecast/"
     static let apiKey = "03d4359e5f3bcc9a216e2900ebea8130"
 }
 
+//MARK: -Geocoding URL Components
+struct GoogleGeocodingAPI {
+    static let baseURLString = "https://maps.googleapis.com/maps/api/geocode/json?"
+    static let apiKey = "AIzaSyBdTOGf2Apyxjck8RxFk2ffcYTnGU7btk8"
+}
+//MARK: -ReverseGeocoding URL Components
+struct GoogleReverseGeocodingAPI {
+    static let baseURLString = "https://maps.googleapis.com/maps/api/geocode/json?"
+    static let apiKey = "AIzaSyBdTOGf2Apyxjck8RxFk2ffcYTnGU7btk8"
+}
 class InternetService: InternetServiceProtocol {
     //static var defaultSession = URLSession(configuration: .default)
     //static var dataTask: URLSessionDataTask?
@@ -149,6 +160,53 @@ class InternetService: InternetServiceProtocol {
                 }
             })
     }
+    //MARK: -Geocoding
+    class func locationGeocoding(address: String) -> Observable<Result<PositionModel, Error>> {
+        var baseURL = URL(string: GoogleGeocodingAPI.baseURLString)!
+        let parameters = [
+            "key": GoogleGeocodingAPI.apiKey,
+            "address": "\(address)"
+        ]
+        return request(baseURL.absoluteString, parameters: parameters)
+            .map({result in
+                switch result {
+                case .Success(let data):
+                    var positonModel: PositionModel?
+                    do {
+                        positonModel = try JSONDecoder().decode(PositionModel.self, from: data)
+                    } catch let parseError {
+                        print("parseError: " + "\(parseError)")
+                    }
+                    print(" positonModel: " + "\(String(describing:  positonModel))")
+                    // print(" positonModel: " + "\(String(describing:  positonModel.))")
+                    return Result<PositionModel, Error>.Success(positonModel!)
+                case .Failure(let error):
+                    return Result<PositionModel, Error>.Failure(error)
+                }
+            })
+        
+    }
+    
+  /*  class func getLocationFromCoordinates(coordinate: CLLocationCoordinate2D, success: ((LocationData: NSData!) -> Void)) {
+        
+        let latitude = coordinate.latitude
+        let longitude = coordinate.longitude
+        let passedLatlng = String(latitude) + "," + String(longitude)
+        let reverseGeocodingURL = "https://maps.googleapis.com/maps/api/geocode/json?latlng=\(passedLatlng)&key=AIzaSyBdTOGf2Apyxjck8RxFk2ffcYTnGU7btk8"
+        let urlString = reverseGeocodingURL.stringByAddingPercentEncodingWithAllowedCharacters( NSCharacterSet.URLQueryAllowedCharacterSet())
+        let url = NSURL(string: urlString!)
+        
+        if url != nil {
+            loadDataFromURL(url!, completion: { (data, error) -> Void in
+                if let urlData = data {
+                    
+                    success(LocationData: urlData)
+                }
+            })
+            
+        }
+        
+    }*/
     
     //MARK: - URL request
     static private func request(_ baseURL: String = "", parameters: [String: String] = [:]) -> Observable<Result<Data, Error>> {
@@ -160,7 +218,7 @@ class InternetService: InternetServiceProtocol {
             var components = URLComponents(string: baseURL)!
             components.queryItems = parameters.map(URLQueryItem.init)
             let url = components.url!
-            //print("url: " + "\(String(describing: url))")
+            print("url: " + "\(String(describing: url))")
             
             var result: Result<Data, Error>?
             dataTask = defaultSession.dataTask(with: url) { data, response, error in
