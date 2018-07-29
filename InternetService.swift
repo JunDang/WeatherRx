@@ -41,7 +41,7 @@ struct GoogleGeocodingAPI {
     static let apiKey = "AIzaSyBdTOGf2Apyxjck8RxFk2ffcYTnGU7btk8"
 }
 //MARK: -ReverseGeocoding URL Components
-struct GoogleReverseGeocodingAPI {
+struct ReverseGeocodingAPI {
     static let baseURLString = "https://maps.googleapis.com/maps/api/geocode/json?"
     static let apiKey = "AIzaSyBdTOGf2Apyxjck8RxFk2ffcYTnGU7btk8"
 }
@@ -161,7 +161,7 @@ class InternetService: InternetServiceProtocol {
             })
     }
     //MARK: -Geocoding
-    class func locationGeocoding(address: String) -> Observable<Result<PositionModel, Error>> {
+    class func locationGeocoding(address: String) -> Observable<Result<GeocodingModel, Error>> {
         var baseURL = URL(string: GoogleGeocodingAPI.baseURLString)!
         let parameters = [
             "key": GoogleGeocodingAPI.apiKey,
@@ -171,42 +171,46 @@ class InternetService: InternetServiceProtocol {
             .map({result in
                 switch result {
                 case .Success(let data):
-                    var positonModel: PositionModel?
+                    var geocodingModel: GeocodingModel?
                     do {
-                        positonModel = try JSONDecoder().decode(PositionModel.self, from: data)
+                        geocodingModel = try JSONDecoder().decode(GeocodingModel.self, from: data)
                     } catch let parseError {
                         print("parseError: " + "\(parseError)")
                     }
-                    print(" positonModel: " + "\(String(describing:  positonModel))")
-                    // print(" positonModel: " + "\(String(describing:  positonModel.))")
-                    return Result<PositionModel, Error>.Success(positonModel!)
+                    print(" geocodingModel: " + "\(String(describing:  geocodingModel))")
+                    return Result<GeocodingModel, Error>.Success(geocodingModel!)
                 case .Failure(let error):
-                    return Result<PositionModel, Error>.Failure(error)
+                    return Result<GeocodingModel, Error>.Failure(error)
                 }
             })
         
     }
-    
-  /*  class func getLocationFromCoordinates(coordinate: CLLocationCoordinate2D, success: ((LocationData: NSData!) -> Void)) {
-        
-        let latitude = coordinate.latitude
-        let longitude = coordinate.longitude
-        let passedLatlng = String(latitude) + "," + String(longitude)
-        let reverseGeocodingURL = "https://maps.googleapis.com/maps/api/geocode/json?latlng=\(passedLatlng)&key=AIzaSyBdTOGf2Apyxjck8RxFk2ffcYTnGU7btk8"
-        let urlString = reverseGeocodingURL.stringByAddingPercentEncodingWithAllowedCharacters( NSCharacterSet.URLQueryAllowedCharacterSet())
-        let url = NSURL(string: urlString!)
-        
-        if url != nil {
-            loadDataFromURL(url!, completion: { (data, error) -> Void in
-                if let urlData = data {
-                    
-                    success(LocationData: urlData)
+    //MARK: - reverse geocoding
+    class func reverseGeocoding(lat: Double, lon: Double) -> Observable<Result<ReverseGeocodingModel, Error>> {
+        var baseURL = URL(string: ReverseGeocodingAPI.baseURLString)!
+        let parameters = [
+            "key": ReverseGeocodingAPI.apiKey,
+            "latlng": "\(lat)" + "," + "\(lon)"
+        ]
+        return request(baseURL.absoluteString, parameters: parameters)
+            .map({result in
+                switch result {
+                case .Success(let data):
+                    var reverseGeocodingModel: ReverseGeocodingModel?
+                    do {
+                        reverseGeocodingModel = try JSONDecoder().decode(ReverseGeocodingModel.self, from: data)
+                    } catch let parseError {
+                        print("parseError: " + "\(parseError)")
+                    }
+                    //let address = reverseGeocodingModel?.reverseGeocodingResults[0].address
+                    print(" reverseGeocodingModel: " + "\(String(describing:  reverseGeocodingModel?.reverseGeocodingResults[0].address))")
+                    return Result<ReverseGeocodingModel, Error>.Success(reverseGeocodingModel!)
+                case .Failure(let error):
+                    return Result<ReverseGeocodingModel, Error>.Failure(error)
                 }
             })
-            
-        }
         
-    }*/
+    }
     
     //MARK: - URL request
     static private func request(_ baseURL: String = "", parameters: [String: String] = [:]) -> Observable<Result<Data, Error>> {
@@ -214,12 +218,10 @@ class InternetService: InternetServiceProtocol {
         var dataTask: URLSessionDataTask?
         dataTask?.cancel()
         return Observable.create { observer in
-            print("observableblockcalled")
             var components = URLComponents(string: baseURL)!
             components.queryItems = parameters.map(URLQueryItem.init)
             let url = components.url!
             print("url: " + "\(String(describing: url))")
-            
             var result: Result<Data, Error>?
             dataTask = defaultSession.dataTask(with: url) { data, response, error in
                 defer { dataTask = nil }

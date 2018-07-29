@@ -49,10 +49,14 @@ class WeatherViewController: UIViewController {
        //bindBackground()
        setupSegmentedView()
        setupNavigationbar()
-       InternetService.locationGeocoding(address: "Toronto")
+       /*InternetService.locationGeocoding(address: "Toronto")
         .subscribe(onNext: { element in
             print("geocoding: " + "\(element)")
-        }).disposed(by: bag)
+        }).disposed(by: bag)*/
+        InternetService.reverseGeocoding(lat: 40.714224, lon: -73.961452)
+            .subscribe(onNext: { element in
+                print("geocoding: " + "\(element)")
+            }).disposed(by: bag)
        /*let locationDriver = GeoLocationService.instance.getLocation()
        weatherForecastData = locationDriver.asObservable()
            .flatMap(){ location -> Observable<(AnyRealmCollection<WeatherForecastModel>, RealmChangeset?)> in

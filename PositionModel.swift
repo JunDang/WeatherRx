@@ -9,60 +9,13 @@
 import Foundation
 import Foundation
 
-/*struct PositionModel: Codable {
-    /*private enum CodingKeys : String, CodingKey {
-        case positionModel = "results" }*/
-    var address: AddressComponents?
-    var geometry: Geometry?
-}
-struct AddressComponents: Codable {
-    private enum CodingKeys : String, CodingKey {
-        case addressComponents = "address_components"}
- var addressComponents: [AddressCmoponent] = []
-}
-struct AddressCmoponent: Codable {
-    private enum CodingKeys: String, CodingKey {
-        case longName = "long_name"
-    }
-    var longName: String = ""
-    init(longName: String) {
-        self.longName = longName
-    }
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        longName = try container.decode(String.self, forKey: .longName)
-    }
-}
-struct Geometry: Codable {
-    private enum CodingKeys : String, CodingKey {
-        case location = "geometry" }
-    var location: Location?
-}
-struct Location: Codable {
-    private enum CodingKeys: String, CodingKey {
-        case lat = "lat"
-        case lon = "lng"
-    }
-    var lat: Double = 0.0
-    var lon: Double = 0.0
-    
-    init(lat: Double, lon: Double) {
-        self.lat = lat
-        self.lon = lon
-    }
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        lat = try container.decode(Double.self, forKey: .lat)
-        lon = try container.decode(Double.self, forKey: .lon)
-    }
-}*/
-struct PositionModel: Codable {
+struct GeocodingModel: Codable {
      private enum CodingKeys : String, CodingKey {
-     case positionResults = "results"
+     case geocodingResults = "results"
     }
-     var positionResults: [PositionResult] = []
+     var geocodingResults: [GeocodingResult] = []
 }
-struct PositionResult: Codable {
+struct GeocodingResult: Codable {
     private enum CodingKeys : String, CodingKey {
         case addressComponents = "address_components"
         case geometry = "geometry"
@@ -106,3 +59,25 @@ struct Location: Codable {
         lon = try container.decode(Double.self, forKey: .lon)
     }
 }
+
+//MARK: -ReverseGeocodingModel
+struct ReverseGeocodingModel: Codable {
+    private enum CodingKeys : String, CodingKey {
+        case reverseGeocodingResults = "results"
+    }
+    var reverseGeocodingResults: [ReverseGeocodingResult] = []
+}
+struct ReverseGeocodingResult: Codable {
+    private enum CodingKeys : String, CodingKey {
+        case address = "formatted_address"
+    }
+    var address: String = ""
+    init(address: String) {
+        self.address = address
+    }
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        address = try container.decode(String.self, forKey: .address)
+    }
+}
+
