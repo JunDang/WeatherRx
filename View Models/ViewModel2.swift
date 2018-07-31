@@ -2,9 +2,10 @@
 //  ViewModel2.swift
 //  WeatherRx
 //
-//  Created by Jun Dang on 2018-07-25.
+//  Created by Jun Dang on 2018-07-31.
 //  Copyright © 2018 Jun Dang. All rights reserved.
 //
+/*
 import Foundation
 import RxCocoa
 import RxSwift
@@ -36,7 +37,7 @@ class ViewModel {
         
         weatherModelObservable = apiType.getWeatherObservable(lat: lat, lon: lon)
         
-        /*imageResultObservable =
+        imageResultObservable =
             weatherModelObservable!
                 .flatMap(){weatherModelResult -> Observable<Result<UIImage, Error>> in
                     switch weatherModelResult {
@@ -50,15 +51,7 @@ class ViewModel {
                     case .Failure(let error):
                         return Observable.just(Result<UIImage, Error>.Failure(error))
                     }
-        }*/
-        imageResultObservable =
-                                apiType
-                                    .searchImageURL(lat: lat, lon: lon)
-                                    .flatMap ({resultNSURL -> Observable<Result<UIImage, Error>> in
-                                        print("resultNSURL: " + "\(resultNSURL)")
-                                        return self.apiType.getImage(resultNSURL: resultNSURL, cache: self.imageDataCacheType)
-                                    })
-        
+        }
         bindOutPut()
         writeWeatherModelInRealm(weatherModelObservable:weatherModelObservable!)
     }
@@ -81,7 +74,7 @@ class ViewModel {
             .disposed(by: bag)
     }
     
-   func bindOutPut() {
+    func bindOutPut() {
         print("bindOutput")
         guard let realm = try? Realm() else {
             return
@@ -91,19 +84,20 @@ class ViewModel {
             print("weatherForecastData: " + "\(weatherdata)")
         })
         
-       let imageObservable =
-                         imageResultObservable!.map() { result -> UIImage in
-                            switch result {
-                            case .Success(let image):
-                            return image
-                            case .Failure:
-                            return UIImage(named: "banff")!
-                            }
-                         }
-    imageObservable
-        .bind(to: flickrImage)
-        .disposed(by:bag)
-    
+        let imageObservable =
+            imageResultObservable!.map() { result -> UIImage in
+                switch result {
+                case .Success(let image):
+                    return image
+                case .Failure:
+                    return UIImage(named: "banff")!
+                }
+        }
+        imageObservable
+            .bind(to: flickrImage)
+            .disposed(by:bag)
+        
     }
-}
+}*/
+
 

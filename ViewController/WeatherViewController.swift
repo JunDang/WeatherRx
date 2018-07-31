@@ -37,7 +37,8 @@ class WeatherViewController: UIViewController {
     var weatherForecastData: Observable<(AnyRealmCollection<WeatherForecastModel>, RealmChangeset?)>?
     var flickrImage = BehaviorRelay<UIImage?>(value: UIImage(named: "banff")!)
     var viewModel: ViewModel?
-    var geoCodingViewModel: GeocodingViewModel?
+    //var geoCodingViewModel: GeocodingViewModel?
+    var geoLocation: Observable<Result<CLLocationCoordinate2D, Error>>?
     let locationManager = CLLocationManager()
     var searchTextField: UITextField?
     var lat: Double?
@@ -59,7 +60,7 @@ class WeatherViewController: UIViewController {
             .subscribe(onNext: { element in
                 print("geocoding: " + "\(element)")
             }).disposed(by: bag)*/
-       /*let locationDriver = GeoLocationService.instance.getLocation()
+       let locationDriver = GeoLocationService.instance.getLocation()
        weatherForecastData = locationDriver.asObservable()
            .flatMap(){[unowned self] location -> Observable<(AnyRealmCollection<WeatherForecastModel>, RealmChangeset?)> in
                let lat = location.latitude
@@ -69,7 +70,7 @@ class WeatherViewController: UIViewController {
                self.flickrImage = (self.viewModel?.flickrImage)!
                self.bindBackground(flickrImage: self.flickrImage)
                return self.weatherForecastData!
-            }*/
+            }
 
         
     }
@@ -354,21 +355,21 @@ extension WeatherViewController: UISearchBarDelegate {
     }
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         // this method is being called when search btn in the keyboard tapped
-        
-       
-         searchBar.setShowsCancelButton(false, animated: false)
+         //searchBar.setShowsCancelButton(false, animated: false)
+         searchBar.isHidden = true
     }
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         print("searchBarSearchButtonClicked")
-       /* if searchBar.isFirstResponder {
+       if searchBar.isFirstResponder {
             _ = searchBar.resignFirstResponder()
-        }*/
-        if searchBar.text != nil {
-            geoCodingViewModel = GeocodingViewModel(cityName: searchBar.text!, apiType: InternetService.self)
-            print("geoCodingViewModel: " + "\(geoCodingViewModel)")
         }
-        
-        weatherForecastData = geoCodingViewModel!.geoLocation?
+        guard searchBar.text != nil else {
+            //geoCodingViewModel = GeocodingViewModel(cityName: searchBar.text!, apiType: InternetService.self)
+            //print("geoCodingViewModel: " + "\(geoCodingViewModel)")
+            return
+        }
+        geoLocation = GeoLocationService.instance.locationGeocoding(address: searchBar.text!)
+        weatherForecastData = geoLocation!
             .observeOn(MainScheduler.instance)
             .flatMap(){ [unowned self] locationResult -> Observable<(AnyRealmCollection<WeatherForecastModel>, RealmChangeset?)> in
                 switch locationResult {
@@ -377,6 +378,7 @@ extension WeatherViewController: UISearchBarDelegate {
                     let lon = location.longitude
                     self.viewModel = ViewModel(lat: lat, lon: lon, apiType: InternetService.self)
                     self.weatherForecastData = self.viewModel?.weatherForecastData
+                    self.backgroundView.image = nil
                     self.flickrImage = (self.viewModel?.flickrImage)!
                     self.bindBackground(flickrImage: self.flickrImage)
                     self.weatherForecastData = self.viewModel?.weatherForecastData
@@ -397,7 +399,7 @@ extension WeatherViewController: UISearchBarDelegate {
                     self.tableViewController.tableView.reloadData()
                 }
             })
-            .disposed(by: bag)
+        
        
     }
         

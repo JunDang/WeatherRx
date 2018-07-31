@@ -12,7 +12,7 @@ import RxSwift
 import CoreLocation
 
 
-class GeocodingViewModel {
+/*class GeocodingViewModel {
 
     private let bag = DisposeBag()
     let apiType: InternetServiceProtocol.Type
@@ -40,6 +40,9 @@ class GeocodingViewModel {
        return geocodingModelObservable.map() {result in
            switch result {
            case .Success(let geocodingModel):
+            guard geocodingModel.geocodingResults.count > 0 else {
+                return Result<CLLocationCoordinate2D, Error>.Failure(geocodingError.locationNotFound)
+            }
               let lat = geocodingModel.geocodingResults[0].geometry?.location?.lat
               let lon = geocodingModel.geocodingResults[0].geometry?.location?.lon
               let geoLocation = CLLocationCoordinate2D(latitude: lat!, longitude: lon!)
@@ -61,6 +64,6 @@ class GeocodingViewModel {
             }
         }
     }
-}
+}*/
 
 

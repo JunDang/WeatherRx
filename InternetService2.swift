@@ -1,12 +1,12 @@
 //
-//  InternetService.swift
+//  InternetService2.swift
 //  WeatherRx
 //
-//  Created by Jun Dang on 2018-06-06.
+//  Created by Jun Dang on 2018-07-31.
 //  Copyright © 2018 Jun Dang. All rights reserved.
 //
 
-import Foundation
+/*import Foundation
 import RxSwift
 import RxCocoa
 import CoreLocation
@@ -52,7 +52,7 @@ struct ReverseGeocodingAPI {
     static let apiKey = "AIzaSyBdTOGf2Apyxjck8RxFk2ffcYTnGU7btk8"
 }
 class InternetService: InternetServiceProtocol {
-    //static var defaultSession = URLSession(configuration: .default)
+    static var defaultSession = URLSession(configuration: .default)
     //static var dataTask: URLSessionDataTask?
     
     //MARK: - Flickr
@@ -60,21 +60,21 @@ class InternetService: InternetServiceProtocol {
         
         let baseURLString = FlickrAPI.baseURLString
         let parameters = [
-           "method": FlickrAPI.searchMethod,
-           "api_key": FlickrAPI.apiKey,
-           "format": "json",
-           "nojsoncallback": "1",
-           "per_page": "25",
-           "lat": "\(lat)",
-           "lon": "\(lon)",
-           "group_id": "92767609@N00",//"92767609@N00","1463451@N25"
-           "tagmode": "all"
+            "method": FlickrAPI.searchMethod,
+            "api_key": FlickrAPI.apiKey,
+            "format": "json",
+            "nojsoncallback": "1",
+            "per_page": "25",
+            "lat": "\(lat)",
+            "lon": "\(lon)",
+            "group_id": "92767609@N00",//"92767609@N00","1463451@N25"
+            "tagmode": "all"
         ]
         return request(baseURLString, parameters: parameters)
             .map({ result in
                 switch result {
-                   case .Success(let data):
-                   var flickrModel: FlickrModel?
+                case .Success(let data):
+                    var flickrModel: FlickrModel?
                     do {
                         flickrModel = try JSONDecoder().decode(FlickrModel.self, from: data)
                     } catch let parseError {
@@ -85,16 +85,16 @@ class InternetService: InternetServiceProtocol {
                     guard flickrPhotos.count > 0 else {
                         return Result<NSURL, Error>.Failure(flickrRequestError.emptyAlbum)
                     }
-                   let randomIndex = Int(arc4random_uniform(UInt32(flickrPhotos.count)))
-                   let photo = flickrPhotos[randomIndex]
-                   let imageURL = photo.createImageURL()
-                   return Result<NSURL, Error>.Success(imageURL)
-                 case .Failure(let error):
+                    let randomIndex = Int(arc4random_uniform(UInt32(flickrPhotos.count)))
+                    let photo = flickrPhotos[randomIndex]
+                    let imageURL = photo.createImageURL()
+                    return Result<NSURL, Error>.Success(imageURL)
+                case .Failure(let error):
                     return Result<NSURL, Error>.Failure(error)
                 }
             })
     }
-   
+    
     static func sendRequest(resultNSURL: Result<NSURL, Error>) -> Observable<Result<Data, Error>> {
         switch resultNSURL {
         case .Success(let imageURL):
@@ -136,19 +136,19 @@ class InternetService: InternetServiceProtocol {
                         case .Failure(let error):
                             return Result<UIImage, Error>.Failure(error)
                         }
-                    }
-           }
-       case .Failure(let error):
-          return Observable.just(Result<UIImage, Error>.Failure(error))
-      }
-  }
- 
+                }
+            }
+        case .Failure(let error):
+            return Observable.just(Result<UIImage, Error>.Failure(error))
+        }
+    }
+    
     // MARK: - Weather
-   static func getWeatherObservable(lat: Double, lon: Double) -> Observable<Result<WeatherForecastModel, Error>> {
+    static func getWeatherObservable(lat: Double, lon: Double) -> Observable<Result<WeatherForecastModel, Error>> {
         var baseURL = URL(string: DarskyAPI.baseURLString)!
         baseURL.appendPathComponent(DarskyAPI.apiKey)
         baseURL.appendPathComponent("\(lat),\(lon)")
-       // print("baseURL: " + "\(baseURL)")
+        // print("baseURL: " + "\(baseURL)")
         let parameters: [String: String] = [:]
         return request(baseURL.absoluteString, parameters: parameters)
             .map({result in
@@ -166,11 +166,62 @@ class InternetService: InternetServiceProtocol {
                 }
             })
     }
-  
+    /*  //MARK: -Geocoding
+     static func locationGeocoding(address: String) -> Observable<Result<GeocodingModel, Error>> {
+     let address = address.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
+     let baseURL = URL(string: GoogleGeocodingAPI.baseURLString)!
+     let parameters = [
+     "key": GoogleGeocodingAPI.apiKey,
+     "address": "\(String(describing: address))"
+     ]
+     return request(baseURL.absoluteString, parameters: parameters)
+     .map({result in
+     switch result {
+     case .Success(let data):
+     var geocodingModel: GeocodingModel?
+     do {
+     geocodingModel = try JSONDecoder().decode(GeocodingModel.self, from: data)
+     } catch let parseError {
+     print("parseError: " + "\(parseError)")
+     }
+     //print(" geocodingModel: " + "\(String(describing:  geocodingModel))")
+     return Result<GeocodingModel, Error>.Success(geocodingModel!)
+     case .Failure(let error):
+     return Result<GeocodingModel, Error>.Failure(error)
+     }
+     })
+     
+     }
+     //MARK: - reverse geocoding
+     static func reverseGeocoding(lat: Double, lon: Double) -> Observable<Result<ReverseGeocodingModel, Error>> {
+     var baseURL = URL(string: ReverseGeocodingAPI.baseURLString)!
+     let parameters = [
+     "key": ReverseGeocodingAPI.apiKey,
+     "latlng": "\(lat)" + "," + "\(lon)"
+     ]
+     return request(baseURL.absoluteString, parameters: parameters)
+     .map({result in
+     switch result {
+     case .Success(let data):
+     var reverseGeocodingModel: ReverseGeocodingModel?
+     do {
+     reverseGeocodingModel = try JSONDecoder().decode(ReverseGeocodingModel.self, from: data)
+     } catch let parseError {
+     print("parseError: " + "\(parseError)")
+     }
+     //let address = reverseGeocodingModel?.reverseGeocodingResults[0].address
+     print(" reverseGeocodingModel: " + "\(String(describing:  reverseGeocodingModel?.reverseGeocodingResults[0].address))")
+     return Result<ReverseGeocodingModel, Error>.Success(reverseGeocodingModel!)
+     case .Failure(let error):
+     return Result<ReverseGeocodingModel, Error>.Failure(error)
+     }
+     })
+     
+     }*/
     
     //MARK: - URL request
     static private func request(_ baseURL: String = "", parameters: [String: String] = [:]) -> Observable<Result<Data, Error>> {
-        let defaultSession = URLSession(configuration: .default)
+        //var defaultSession = URLSession(configuration: .default)
         var dataTask: URLSessionDataTask?
         dataTask?.cancel()
         return Observable.create { observer in
@@ -198,3 +249,4 @@ class InternetService: InternetServiceProtocol {
         }
     }
 }
+*/

@@ -10,7 +10,7 @@ import Foundation
 import RxCocoa
 import RxSwift
 
-class ReverseGeocodingViewModel {
+/*class ReverseGeocodingViewModel {
     
     private let bag = DisposeBag()
     let apiType: InternetServiceProtocol.Type
@@ -48,4 +48,4 @@ class ReverseGeocodingViewModel {
           }
       }
    }
-}
+}*/
