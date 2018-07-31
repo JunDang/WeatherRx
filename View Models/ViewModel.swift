@@ -57,6 +57,7 @@ class ViewModel {
     
     func writeWeatherModelInRealm(weatherModelObservable: Observable<Result<WeatherForecastModel, Error>>) {
         weatherModelObservable
+            //.observeOn(MainScheduler.instance)
             .subscribe(onNext: { result in
                 switch result {
                 case .Success(let weatherForecastModel):
@@ -72,7 +73,7 @@ class ViewModel {
             .disposed(by: bag)
     }
     
-    func bindOutPut() {
+   func bindOutPut() {
         print("bindOutput")
         guard let realm = try? Realm() else {
             return
@@ -82,16 +83,19 @@ class ViewModel {
             print("weatherForecastData: " + "\(weatherdata)")
         })
         
-        imageResultObservable!.map() { result -> UIImage in
-            switch result {
-            case .Success(let image):
-                return image
-            case .Failure:
-                return UIImage(named: "banff")!
-            }
-            }
-            .bind(to: flickrImage)
-            .disposed(by:bag)
+       let imageObservable =
+                         imageResultObservable!.map() { result -> UIImage in
+                            switch result {
+                            case .Success(let image):
+                            return image
+                            case .Failure:
+                            return UIImage(named: "banff")!
+                            }
+                         }
+    imageObservable
+        .bind(to: flickrImage)
+        .disposed(by:bag)
+    
     }
 }
 

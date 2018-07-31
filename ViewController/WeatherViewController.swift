@@ -28,6 +28,7 @@ class WeatherViewController: UIViewController {
     private var blurredImageView = DynamicBlurView(frame: CGRect.zero)
     private var menuButton:UIButton = UIButton()
     private var searchController = UISearchController()
+    //private var searchCity: UITextField!
     private var sideMenuBarContainerView = UIView(frame: CGRect.zero)
     private var isMenuButtonPressed: Bool = true
     private let bag = DisposeBag()
@@ -36,6 +37,7 @@ class WeatherViewController: UIViewController {
     var weatherForecastData: Observable<(AnyRealmCollection<WeatherForecastModel>, RealmChangeset?)>?
     var flickrImage = BehaviorRelay<UIImage?>(value: UIImage(named: "banff")!)
     var viewModel: ViewModel?
+    var geoCodingViewModel: GeocodingViewModel?
     let locationManager = CLLocationManager()
     var searchTextField: UITextField?
     var lat: Double?
@@ -53,13 +55,13 @@ class WeatherViewController: UIViewController {
         .subscribe(onNext: { element in
             print("geocoding: " + "\(element)")
         }).disposed(by: bag)*/
-        InternetService.reverseGeocoding(lat: 40.714224, lon: -73.961452)
+       /* GeocodingViewModel(cityName: "Toronto", apiType: InternetService.self).geoLocation?
             .subscribe(onNext: { element in
                 print("geocoding: " + "\(element)")
-            }).disposed(by: bag)
+            }).disposed(by: bag)*/
        /*let locationDriver = GeoLocationService.instance.getLocation()
        weatherForecastData = locationDriver.asObservable()
-           .flatMap(){ location -> Observable<(AnyRealmCollection<WeatherForecastModel>, RealmChangeset?)> in
+           .flatMap(){[unowned self] location -> Observable<(AnyRealmCollection<WeatherForecastModel>, RealmChangeset?)> in
                let lat = location.latitude
                let lon = location.longitude
                self.viewModel = ViewModel(lat: lat, lon: lon, apiType: InternetService.self)
@@ -348,8 +350,57 @@ extension WeatherViewController: UISearchBarDelegate {
         // Make this class the delegate and present the search
         self.searchController.searchBar.delegate = self
         present(searchController, animated: true, completion: nil)
-        
+       
     }
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        // this method is being called when search btn in the keyboard tapped
+        
+       
+         searchBar.setShowsCancelButton(false, animated: false)
+    }
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        print("searchBarSearchButtonClicked")
+       /* if searchBar.isFirstResponder {
+            _ = searchBar.resignFirstResponder()
+        }*/
+        if searchBar.text != nil {
+            geoCodingViewModel = GeocodingViewModel(cityName: searchBar.text!, apiType: InternetService.self)
+            print("geoCodingViewModel: " + "\(geoCodingViewModel)")
+        }
+        
+        weatherForecastData = geoCodingViewModel!.geoLocation?
+            .observeOn(MainScheduler.instance)
+            .flatMap(){ [unowned self] locationResult -> Observable<(AnyRealmCollection<WeatherForecastModel>, RealmChangeset?)> in
+                switch locationResult {
+                case .Success(let location):
+                    let lat = location.latitude
+                    let lon = location.longitude
+                    self.viewModel = ViewModel(lat: lat, lon: lon, apiType: InternetService.self)
+                    self.weatherForecastData = self.viewModel?.weatherForecastData
+                    self.flickrImage = (self.viewModel?.flickrImage)!
+                    self.bindBackground(flickrImage: self.flickrImage)
+                    self.weatherForecastData = self.viewModel?.weatherForecastData
+                    print("weatherForecastData: " + "\(String(describing: self.weatherForecastData))")
+                case .Failure(let error):
+                    //show in alert
+                    print(error)
+                }
+                return self.weatherForecastData!
+        }
+        weatherForecastData?
+            .subscribe(onNext: { (weatherForecastData) in
+                //print("weatherForecastData: " + "\(weatherForecastData)")
+                let weatherForecastModel = weatherForecastData.0.first
+                if weatherForecastModel != nil {
+                    self.currentWeatherView.update(with: weatherForecastModel!)
+                    self.tableViewController.weatherForecastModel = weatherForecastModel
+                    self.tableViewController.tableView.reloadData()
+                }
+            })
+            .disposed(by: bag)
+       
+    }
+        
 }
 
 extension WeatherViewController {

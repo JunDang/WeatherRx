@@ -50,6 +50,10 @@
 		A546E349210B9DD400D8E76F /* PositionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A546E347210B9DD400D8E76F /* PositionModel.swift */; };
 		A546E34B210CACE500D8E76F /* GeoCodingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A546E34A210CACE500D8E76F /* GeoCodingService.swift */; };
 		A546E34C210CACE500D8E76F /* GeoCodingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A546E34A210CACE500D8E76F /* GeoCodingService.swift */; };
+		A546E34E210E01FA00D8E76F /* GeoCodingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A546E34D210E01FA00D8E76F /* GeoCodingViewModel.swift */; };
+		A546E34F210E01FA00D8E76F /* GeoCodingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A546E34D210E01FA00D8E76F /* GeoCodingViewModel.swift */; };
+		A546E351210E2A5F00D8E76F /* ReverseGeocodingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A546E350210E2A5F00D8E76F /* ReverseGeocodingViewModel.swift */; };
+		A546E352210E2A5F00D8E76F /* ReverseGeocodingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A546E350210E2A5F00D8E76F /* ReverseGeocodingViewModel.swift */; };
 		A54EC6E52104C75100108139 /* CLLocationManager+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54EC6E42104C75100108139 /* CLLocationManager+Rx.swift */; };
 		A54EC6E62104C75100108139 /* CLLocationManager+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54EC6E42104C75100108139 /* CLLocationManager+Rx.swift */; };
 		A54EC6EC210502F600108139 /* GeoLocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54EC6EB210502F600108139 /* GeoLocationService.swift */; };
@@ -120,6 +124,8 @@
 		A546E3342108E8C700D8E76F /* InternetServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternetServiceProtocol.swift; sourceTree = "<group>"; };
 		A546E347210B9DD400D8E76F /* PositionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PositionModel.swift; sourceTree = "<group>"; };
 		A546E34A210CACE500D8E76F /* GeoCodingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoCodingService.swift; sourceTree = "<group>"; };
+		A546E34D210E01FA00D8E76F /* GeoCodingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoCodingViewModel.swift; sourceTree = "<group>"; };
+		A546E350210E2A5F00D8E76F /* ReverseGeocodingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReverseGeocodingViewModel.swift; sourceTree = "<group>"; };
 		A54EC6E42104C75100108139 /* CLLocationManager+Rx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLLocationManager+Rx.swift"; sourceTree = "<group>"; };
 		A54EC6EB210502F600108139 /* GeoLocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoLocationService.swift; sourceTree = "<group>"; };
 		A54FC92786D45EEF4C724417 /* Pods_WeatherRxAbstract_WeatherRxTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WeatherRxAbstract_WeatherRxTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -173,6 +179,8 @@
 			isa = PBXGroup;
 			children = (
 				A546E328210817B000D8E76F /* ViewModel.swift */,
+				A546E34D210E01FA00D8E76F /* GeoCodingViewModel.swift */,
+				A546E350210E2A5F00D8E76F /* ReverseGeocodingViewModel.swift */,
 			);
 			path = "View Models";
 			sourceTree = "<group>";
@@ -581,6 +589,7 @@
 				A546E329210817B000D8E76F /* ViewModel.swift in Sources */,
 				A571C5FB20D82F0A005693B3 /* FlickrPhotos.swift in Sources */,
 				A59D0F2620B1076400111552 /* DailyForecastTableViewCell.swift in Sources */,
+				A546E34E210E01FA00D8E76F /* GeoCodingViewModel.swift in Sources */,
 				A50D28EB20503D5E00351630 /* WeatherViewController.swift in Sources */,
 				A54EC6E52104C75100108139 /* CLLocationManager+Rx.swift in Sources */,
 				A597123B209F5190006C3566 /* CurrentWeatherView.swift in Sources */,
@@ -588,6 +597,7 @@
 				A51E092420DFEEF300A45A39 /* WindDirection.swift in Sources */,
 				A546E3352108E8C700D8E76F /* InternetServiceProtocol.swift in Sources */,
 				A546E32C210884B000D8E76F /* PhotoModel.swift in Sources */,
+				A546E351210E2A5F00D8E76F /* ReverseGeocodingViewModel.swift in Sources */,
 				A54EC6EC210502F600108139 /* GeoLocationService.swift in Sources */,
 				A51E098820FBFBD700A45A39 /* WeatherIcon.swift in Sources */,
 				A5146B661F799A2600EE1DF7 /* AppDelegate.swift in Sources */,
@@ -633,12 +643,14 @@
 				A5146B941F7C731F00EE1DF7 /* WeatherTest.swift in Sources */,
 				A546E34C210CACE500D8E76F /* GeoCodingService.swift in Sources */,
 				A546E32D210884B000D8E76F /* PhotoModel.swift in Sources */,
+				A546E34F210E01FA00D8E76F /* GeoCodingViewModel.swift in Sources */,
 				A5192BEB20A5222C00C8D483 /* WeatherForecastTableViewController.swift in Sources */,
 				A51F45372093607700ACCAB7 /* FlickrViewModelTests.swift in Sources */,
 				A5F4177A20B6068800FE45D8 /* WeatherForecastSummaryViewController.swift in Sources */,
 				A5146B7B1F799A2600EE1DF7 /* WeatherRxTests.swift in Sources */,
 				A59D0F2820B20C9800111552 /* DailyForecastTableViewCell.swift in Sources */,
 				A571C5FC20D82F0A005693B3 /* FlickrPhotos.swift in Sources */,
+				A546E352210E2A5F00D8E76F /* ReverseGeocodingViewModel.swift in Sources */,
 				A546E3272108056E00D8E76F /* DataModel.swift in Sources */,
 				A54EC6ED210502F600108139 /* GeoLocationService.swift in Sources */,
 				A57F6DB92072D00400509E7E /* ImageDataCachingProtocol.swift in Sources */,

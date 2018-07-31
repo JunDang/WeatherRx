@@ -64,7 +64,7 @@ class InternetService: InternetServiceProtocol {
            "group_id": "92767609@N00",//"92767609@N00","1463451@N25"
            "tagmode": "all"
         ]
-        return request(baseURLString, parameters: parameters as! [String : String])
+        return request(baseURLString, parameters: parameters)
             .map({ result in
                 switch result {
                    case .Success(let data):
@@ -77,7 +77,7 @@ class InternetService: InternetServiceProtocol {
                     //print("flickrModel: " + "\(String(describing: flickrModel))")
                     let flickrPhotos = flickrModel!.flickrModel!.flickrPhotos
                     guard flickrPhotos.count > 0 else {
-                        throw flickrRequestError.emptyAlbum
+                        return Result<NSURL, Error>.Failure(flickrRequestError.emptyAlbum)
                     }
                    let randomIndex = Int(arc4random_uniform(UInt32(flickrPhotos.count)))
                    let photo = flickrPhotos[randomIndex]
@@ -142,7 +142,7 @@ class InternetService: InternetServiceProtocol {
         var baseURL = URL(string: DarskyAPI.baseURLString)!
         baseURL.appendPathComponent(DarskyAPI.apiKey)
         baseURL.appendPathComponent("\(lat),\(lon)")
-        print("baseURL: " + "\(baseURL)")
+       // print("baseURL: " + "\(baseURL)")
         let parameters: [String: String] = [:]
         return request(baseURL.absoluteString, parameters: parameters)
             .map({result in
@@ -161,11 +161,12 @@ class InternetService: InternetServiceProtocol {
             })
     }
     //MARK: -Geocoding
-    class func locationGeocoding(address: String) -> Observable<Result<GeocodingModel, Error>> {
-        var baseURL = URL(string: GoogleGeocodingAPI.baseURLString)!
+    static func locationGeocoding(address: String) -> Observable<Result<GeocodingModel, Error>> {
+        let address = address.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
+        let baseURL = URL(string: GoogleGeocodingAPI.baseURLString)!
         let parameters = [
             "key": GoogleGeocodingAPI.apiKey,
-            "address": "\(address)"
+            "address": "\(String(describing: address))"
         ]
         return request(baseURL.absoluteString, parameters: parameters)
             .map({result in
@@ -177,7 +178,7 @@ class InternetService: InternetServiceProtocol {
                     } catch let parseError {
                         print("parseError: " + "\(parseError)")
                     }
-                    print(" geocodingModel: " + "\(String(describing:  geocodingModel))")
+                    //print(" geocodingModel: " + "\(String(describing:  geocodingModel))")
                     return Result<GeocodingModel, Error>.Success(geocodingModel!)
                 case .Failure(let error):
                     return Result<GeocodingModel, Error>.Failure(error)
@@ -186,7 +187,7 @@ class InternetService: InternetServiceProtocol {
         
     }
     //MARK: - reverse geocoding
-    class func reverseGeocoding(lat: Double, lon: Double) -> Observable<Result<ReverseGeocodingModel, Error>> {
+    static func reverseGeocoding(lat: Double, lon: Double) -> Observable<Result<ReverseGeocodingModel, Error>> {
         var baseURL = URL(string: ReverseGeocodingAPI.baseURLString)!
         let parameters = [
             "key": ReverseGeocodingAPI.apiKey,
