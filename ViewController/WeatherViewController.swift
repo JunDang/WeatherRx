@@ -386,6 +386,7 @@ extension WeatherViewController: UISearchBarDelegate {
                 case .Failure(let error):
                     //show in alert
                     print(error)
+                    self.weatherForecastData = nil
                 }
                 return self.weatherForecastData!
         }

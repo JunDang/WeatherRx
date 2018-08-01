@@ -24,6 +24,7 @@ class ViewModel {
     
     // MARK: - Output
     var weatherForecastData: Observable<(AnyRealmCollection<WeatherForecastModel>, RealmChangeset?)>!
+    var emptyWeatherForecastData: Observable<(AnyRealmCollection<WeatherForecastModel>, RealmChangeset?)>!
     var flickrImage = BehaviorRelay<UIImage?>(value: UIImage(named: "banff")!)
     
     // MARK: - Init

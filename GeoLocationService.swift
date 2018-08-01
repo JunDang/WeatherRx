@@ -41,7 +41,7 @@ class GeoLocationService {
         let baseURL = URL(string: GoogleGeocodingAPI.baseURLString)!
         let parameters = [
             "key": GoogleGeocodingAPI.apiKey,
-            "address": "\(String(describing: address))"
+            "address": "\(String(describing: address!))"
         ]
         return request(baseURL.absoluteString, parameters: parameters)
             .map({result in
@@ -54,7 +54,10 @@ class GeoLocationService {
                         print("parseError: " + "\(parseError)")
                     }
                     guard geocodingModel!.geocodingResults.count > 0 else {
-                        return Result<CLLocationCoordinate2D, Error>.Failure(geocodingError.locationNotFound)
+                        let lat = 0.0
+                        let lon = 0.0
+                        let fakedGeoLocation = CLLocationCoordinate2D(latitude: lat, longitude: lon)
+                        return Result<CLLocationCoordinate2D, Error>.Success(fakedGeoLocation)
                     }
                     let lat = geocodingModel!.geocodingResults[0].geometry?.location?.lat
                     let lon = geocodingModel!.geocodingResults[0].geometry?.location?.lon

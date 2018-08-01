@@ -57,7 +57,7 @@ class InternetService: InternetServiceProtocol {
     
     //MARK: - Flickr
     static func searchImageURL(lat: Double, lon: Double) -> Observable<Result<NSURL, Error>> {
-        
+       
         let baseURLString = FlickrAPI.baseURLString
         let parameters = [
            "method": FlickrAPI.searchMethod,
@@ -67,7 +67,8 @@ class InternetService: InternetServiceProtocol {
            "per_page": "25",
            "lat": "\(lat)",
            "lon": "\(lon)",
-           "group_id": "92767609@N00",//"92767609@N00","1463451@N25"
+           "interestingness-desc&tags": "scenic,landscape,flower,tree,nature,insects,water,sea,cloud,leaf,colorful",
+           //"group_id": "92767609@N00",//"92767609@N00","1463451@N25"
            "tagmode": "all"
         ]
         return request(baseURLString, parameters: parameters)
