@@ -65,10 +65,10 @@ class WeatherForecastTableViewController: UIViewController, UITableViewDelegate,
             let cell: DailyForecastTableViewCell = tableView.dequeueReusableCell(withIdentifier: "DailyCell", for: indexPath) as! DailyForecastTableViewCell
             if let weatherForecastModel = weatherForecastModel {
                let dailyWeatherModel = weatherForecastModel.daily?.dailyWeatherModel
-                 print("dailycount: " + "\(dailyWeatherModel?.count)")
+                 //print("dailycount: " + "\(dailyWeatherModel?.count)")
                  let dailyForecastData = dailyWeatherModel![indexPath.row]
                  cell.updateDailyCell(with: dailyForecastData)
-                 print("dailyForecastData: " + "\(dailyForecastData)")
+                 //print("dailyForecastData: " + "\(dailyForecastData)")
             } else {
                 
             }

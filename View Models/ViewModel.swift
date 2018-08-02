@@ -29,7 +29,6 @@ class ViewModel {
     
     // MARK: - Init
     init(lat: Double, lon: Double, apiType: InternetServiceProtocol.Type, imageDataCacheType: ImageDataCachingProtocol.Type = ImageDataCaching.self) {
-        print("wwv init called")
         self.lat = lat
         self.lon = lon
         self.apiType = apiType
@@ -56,7 +55,7 @@ class ViewModel {
                                 apiType
                                     .searchImageURL(lat: lat, lon: lon)
                                     .flatMap ({resultNSURL -> Observable<Result<UIImage, Error>> in
-                                        print("resultNSURL: " + "\(resultNSURL)")
+                                        //print("resultNSURL: " + "\(resultNSURL)")
                                         return self.apiType.getImage(resultNSURL: resultNSURL, cache: self.imageDataCacheType)
                                     })
         
@@ -89,7 +88,7 @@ class ViewModel {
         }
         weatherForecastData = Observable.changeset(from: realm.objects(WeatherForecastModel.self))
         weatherForecastData.subscribe(onNext: {weatherdata in
-            print("weatherForecastData: " + "\(weatherdata)")
+           // print("weatherForecastData: " + "\(weatherdata)")
         })
         
        let imageObservable =

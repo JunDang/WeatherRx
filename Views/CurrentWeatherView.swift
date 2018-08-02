@@ -177,7 +177,7 @@ extension CurrentWeatherView{
     
     func update(with weatherForecastModel: WeatherForecastModel){
              let currentWeather = weatherForecastModel.currently
-             print("currentWeather: " + "\(String(describing: currentWeather))")
+            //print("currentWeather: " + "\(String(describing: currentWeather))")
              self.weatherLbl.text = currentWeather!.summary
              self.currentTempLbl.text = "\(String(describing: currentWeather!.temperature.roundToInt()))" + "\u{00B0}"
              self.feelsLikeTempLbl.text = "Feels like: " + "\(String(describing: currentWeather!.apparentTemperature.roundToInt()))" + "\u{00B0}"

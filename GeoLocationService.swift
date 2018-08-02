@@ -54,10 +54,11 @@ class GeoLocationService {
                         print("parseError: " + "\(parseError)")
                     }
                     guard geocodingModel!.geocodingResults.count > 0 else {
-                        let lat = 0.0
+                       /* let lat = 0.0
                         let lon = 0.0
                         let fakedGeoLocation = CLLocationCoordinate2D(latitude: lat, longitude: lon)
-                        return Result<CLLocationCoordinate2D, Error>.Success(fakedGeoLocation)
+                        return Result<CLLocationCoordinate2D, Error>.Success(fakedGeoLocation)*/
+                       return Result<CLLocationCoordinate2D, Error>.Failure(geocodingError.locationNotFound)
                     }
                     let lat = geocodingModel!.geocodingResults[0].geometry?.location?.lat
                     let lon = geocodingModel!.geocodingResults[0].geometry?.location?.lon

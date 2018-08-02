@@ -67,8 +67,8 @@ class InternetService: InternetServiceProtocol {
            "per_page": "25",
            "lat": "\(lat)",
            "lon": "\(lon)",
-           "interestingness-desc&tags": "scenic,landscape,flower,tree,nature,insects,water,sea,cloud,leaf,colorful",
-           //"group_id": "92767609@N00",//"92767609@N00","1463451@N25"
+           //"interestingness-desc&tags": "scenic,landscape,flower,tree,nature,insects,water,sea,cloud,leaf,colorful",
+           "group_id": "92767609@N00",//"92767609@N00","1463451@N25"
            "tagmode": "all"
         ]
         return request(baseURLString, parameters: parameters)
@@ -106,10 +106,12 @@ class InternetService: InternetServiceProtocol {
                 .map({ result in
                     switch result {
                     case .Success(let data):
-                        if data.count < 8000 {
+                        //print("data.count: " + "\(data.count)")
+                        if data.count < 6000 {
                             imageData = UIImagePNGRepresentation(UIImage(named: "banff")!)
+                        } else {
+                            imageData = data
                         }
-                        imageData = data
                         return Result<Data, Error>.Success(imageData!)
                     case .Failure(let error):
                         return Result<Data, Error>.Failure(error)
@@ -178,7 +180,7 @@ class InternetService: InternetServiceProtocol {
             var components = URLComponents(string: baseURL)!
             components.queryItems = parameters.map(URLQueryItem.init)
             let url = components.url!
-            print("url: " + "\(String(describing: url))")
+            //print("url: " + "\(String(describing: url))")
             var result: Result<Data, Error>?
             dataTask = defaultSession.dataTask(with: url) { data, response, error in
                 //defer { dataTask = nil }

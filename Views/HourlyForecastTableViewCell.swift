@@ -49,7 +49,7 @@ extension HourlyForecastTableViewCell {
        layout.minimumInteritemSpacing = 0.0
        layout.estimatedItemSize = CGSize(42, 90)
        layout.scrollDirection = UICollectionViewScrollDirection.horizontal
-       print("layout: " + "\(layout)")
+       //print("layout: " + "\(layout)")
        collectionView = UICollectionView(frame: self.contentView.frame, collectionViewLayout: layout)
        collectionView!.dataSource = self
        collectionView!.delegate = self
@@ -69,13 +69,13 @@ extension HourlyForecastTableViewCell {
    }
     
    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    print("collectionViewCalled")
+    //print("collectionViewCalled")
       let cell:HourlyForecastCell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! HourlyForecastCell
       if let weatherForecastModel = weatherForecastModel {
            let hourlyWeatherModel = weatherForecastModel.hourly?.hourlyWeatherModel
            let hourlyForecastData = hourlyWeatherModel![indexPath.row]
            cell.updateHourlyCell(with: hourlyForecastData)
-           print("hourlyForecastData: " + "\(hourlyForecastData)")
+           //print("hourlyForecastData: " + "\(hourlyForecastData)")
         
       } else {
         

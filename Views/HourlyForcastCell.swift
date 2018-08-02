@@ -93,7 +93,7 @@ extension HourlyForecastCell {
         hourLbl.text = dateFormatter.string(from: hourlyForecastData.timeDate!)
         tempsLbl.text = "\(hourlyForecastData.temperature.roundToInt())" + "\u{00B0}"
         let iconName = WeatherIcon.iconMap[hourlyForecastData.icon]
-        print("hourlyIconName: " + "\(iconName)")
+       // print("hourlyIconName: " + "\(iconName)")
         iconImage.image = UIImage(named: "\(String(describing: iconName!))")
     }
 }

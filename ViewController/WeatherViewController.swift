@@ -37,6 +37,7 @@ class WeatherViewController: UIViewController {
     var weatherForecastData: Observable<(AnyRealmCollection<WeatherForecastModel>, RealmChangeset?)>?
     var flickrImage = BehaviorRelay<UIImage?>(value: UIImage(named: "banff")!)
     var viewModel: ViewModel?
+    var weatherForecastModelObservable: Observable<WeatherForecastModel>?
     //var geoCodingViewModel: GeocodingViewModel?
     var geoLocation: Observable<Result<CLLocationCoordinate2D, Error>>?
     let locationManager = CLLocationManager()
@@ -369,7 +370,7 @@ extension WeatherViewController: UISearchBarDelegate {
             return
         }
         geoLocation = GeoLocationService.instance.locationGeocoding(address: searchBar.text!)
-        weatherForecastData = geoLocation!
+       /* weatherForecastData = geoLocation!
             .observeOn(MainScheduler.instance)
             .flatMap(){ [unowned self] locationResult -> Observable<(AnyRealmCollection<WeatherForecastModel>, RealmChangeset?)> in
                 switch locationResult {
@@ -386,7 +387,11 @@ extension WeatherViewController: UISearchBarDelegate {
                 case .Failure(let error):
                     //show in alert
                     print(error)
-                    self.weatherForecastData = nil
+                    let realm = try? Realm()
+                    //let count = realm?.objects(WeatherForecastModel.self).count
+                    let weatherForecastModelLast = realm?.objects(WeatherForecastModel.self)[0]
+                    //self.weatherForecastData = Observable.changeset(from: realm!.objects(WeatherForecastModel.self))
+                    print("self.weatherForecastData: " + "\(String(describing: weatherForecastModelLast))")
                 }
                 return self.weatherForecastData!
         }
@@ -399,11 +404,43 @@ extension WeatherViewController: UISearchBarDelegate {
                     self.tableViewController.weatherForecastModel = weatherForecastModel
                     self.tableViewController.tableView.reloadData()
                 }
-            })
-        
-       
+            }).disposed(by: bag)*/
+         self.weatherForecastModelObservable = geoLocation!
+            .observeOn(MainScheduler.instance)
+            .flatMap(){ [unowned self] locationResult -> Observable<WeatherForecastModel> in
+                switch locationResult {
+                case .Success(let location):
+                    let lat = location.latitude
+                    let lon = location.longitude
+                    self.viewModel = ViewModel(lat: lat, lon: lon, apiType: InternetService.self)
+                    self.backgroundView.image = nil
+                    self.flickrImage = (self.viewModel?.flickrImage)!
+                    self.bindBackground(flickrImage: self.flickrImage)
+                    return (self.viewModel?.weatherForecastData
+                        .map(){ weatherData in
+                            print("weatherForecastDataSearch: " + "\(String(describing: weatherData.0.last))")
+                            return weatherData.0.last!
+                        })!
+                    
+                case .Failure(let error):
+                    //show in alert
+                    print(error)
+                    let realm = try? Realm()
+                    //let count = realm?.objects(WeatherForecastModel.self).count
+                    let weatherForecastModelLast = realm?.objects(WeatherForecastModel.self).last
+                    print("weatherForecastModelLast: " + "\(String(describing: weatherForecastModelLast))")
+                    return Observable.just(weatherForecastModelLast!)
+                }
+            }
+        self.weatherForecastModelObservable?
+            .subscribe(onNext: { (weatherForecastModel) in
+                print("weatherForecastModelLast: " + "\(weatherForecastModel)")
+                self.currentWeatherView.update(with: weatherForecastModel)
+                self.tableViewController.weatherForecastModel = weatherForecastModel
+                self.tableViewController.tableView.reloadData()
+           })
+           .disposed(by: bag)
     }
-        
 }
 
 extension WeatherViewController {

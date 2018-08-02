@@ -106,7 +106,7 @@ extension DailyForecastTableViewCell{
         iconImage.image = UIImage(named: "\(String(describing: iconName!))")
         lowTempLbl.text = "\(dailyForecastData.temperatureMin.roundToInt())" + "\u{00B0}"
         highTempLbl.text = "\(dailyForecastData.temperatureMax.roundToInt())" + "\u{00B0}"
-        print("dailyIconName: " + "\(iconName)")
+       // print("dailyIconName: " + "\(iconName)")
         /*dayLbl.text = "Saturday"
         iconImage.image = UIImage(named: "sunny")
         lowTempLbl.text = "5\u{00B0}"
