@@ -51,8 +51,7 @@ class WeatherForecastTableViewController: UIViewController, UITableViewDelegate,
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        print("tableViewMethodcalled")
-        if indexPath.row == 0 {
+       if indexPath.row == 0 {
             let cell: HourlyForecastTableViewCell = tableView.dequeueReusableCell(withIdentifier: "HourlyCell", for: indexPath) as! HourlyForecastTableViewCell
             if let weatherForecastModel = weatherForecastModel {
                cell.weatherForecastModel = weatherForecastModel

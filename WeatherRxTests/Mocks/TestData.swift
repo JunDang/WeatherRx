@@ -7,7 +7,9 @@
 //
 
 import Foundation
-import Unbox
+import RxCocoa
+import UIKit
+
 
 @testable import WeatherRx
 class TestData {

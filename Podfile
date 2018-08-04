@@ -4,8 +4,6 @@ use_frameworks!
 abstract_target 'WeatherRxAbstract' do
 
     pod "Reachability"
-    pod "RxAlamofire"
-    pod "Unbox"
     pod "Cartography"
     pod "DynamicBlurView"
     pod "RxSwift"
@@ -14,6 +12,7 @@ abstract_target 'WeatherRxAbstract' do
     pod "RxRealm"
     pod "RxRealmDataSources"
     pod "RxGesture"
+    pod "RxSwiftUtilities"
  
     target ‘WeatherRx’ do
       pod "RxDataSources"

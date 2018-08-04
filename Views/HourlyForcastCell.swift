@@ -22,7 +22,6 @@ class HourlyForecastCell: UICollectionViewCell, UICollectionViewDelegateFlowLayo
         setup()
         setStyle()
         layoutView()
-        //updateHourlyCell()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -30,8 +29,7 @@ class HourlyForecastCell: UICollectionViewCell, UICollectionViewDelegateFlowLayo
     }
     
     override func updateConstraints() {
-        //print("hourlycellupdateconstraintscalled")
-        if didSetupConstraints {
+       if didSetupConstraints {
             super.updateConstraints()
             return
         }

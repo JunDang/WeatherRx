@@ -14,6 +14,7 @@ import RxRealm
 import RealmSwift
 import DynamicBlurView
 import CoreLocation
+import RxSwiftUtilities
 
 
 class WeatherViewController: UIViewController {
@@ -27,7 +28,7 @@ class WeatherViewController: UIViewController {
     private let containerView = UIView(frame: CGRect.zero)
     private var blurredImageView = DynamicBlurView(frame: CGRect.zero)
     private var menuButton:UIButton = UIButton()
-    private var searchController = UISearchController()
+    //private var searchController = UISearchController()
     //private var searchCity: UITextField!
     private var sideMenuBarContainerView = UIView(frame: CGRect.zero)
     private var isMenuButtonPressed: Bool = true
@@ -44,23 +45,18 @@ class WeatherViewController: UIViewController {
     var searchTextField: UITextField?
     var lat: Double?
     var lon: Double?
+    var searchController: UISearchController?
+    let activityIndicator = ActivityIndicator()
+    let activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
     
     override func viewDidLoad() {
        super.viewDidLoad()
        setup()
        layoutView()
        style()
-       //bindBackground()
        setupSegmentedView()
        setupNavigationbar()
-       /*InternetService.locationGeocoding(address: "Toronto")
-        .subscribe(onNext: { element in
-            print("geocoding: " + "\(element)")
-        }).disposed(by: bag)*/
-       /* GeocodingViewModel(cityName: "Toronto", apiType: InternetService.self).geoLocation?
-            .subscribe(onNext: { element in
-                print("geocoding: " + "\(element)")
-            }).disposed(by: bag)*/
+     
        let locationDriver = GeoLocationService.instance.getLocation()
        weatherForecastData = locationDriver.asObservable()
            .flatMap(){[unowned self] location -> Observable<(AnyRealmCollection<WeatherForecastModel>, RealmChangeset?)> in
@@ -71,8 +67,12 @@ class WeatherViewController: UIViewController {
                self.flickrImage = (self.viewModel?.flickrImage)!
                self.bindBackground(flickrImage: self.flickrImage)
                return self.weatherForecastData!
-            }
-
+            }.trackActivity(activityIndicator)
+             .observeOn(MainScheduler.instance)
+    
+        activityIndicator.asDriver()
+            .drive(activityIndicatorView.rx.isAnimating)
+            .disposed(by: bag)
         
     }
 
@@ -110,6 +110,7 @@ class WeatherViewController: UIViewController {
                 }
             })
             .disposed(by: bag)
+      
     }
 
     private lazy var tableViewController: WeatherForecastTableViewController = {
@@ -151,6 +152,7 @@ private extension WeatherViewController{
         frontScrollView.addSubview(currentWeatherView)
         frontScrollView.addSubview(segmentedControl)
         frontScrollView.addSubview(containerView)
+        frontScrollView.addSubview(activityIndicatorView)
         backScrollView.showsVerticalScrollIndicator = false
         backScrollView.isDirectionalLockEnabled = true
         frontScrollView.showsVerticalScrollIndicator = false
@@ -192,10 +194,13 @@ extension WeatherViewController{
             view.left == view.superview!.left
             view.right == view.superview!.right
         }
+        constrain(activityIndicatorView) { view in
+            view.centerX == view.superview!.centerX
+            view.centerY == view.superview!.centerY
+        }
         constrain(currentWeatherView) { view in
             view.width == view.superview!.width
             view.centerX == view.superview!.centerX
-            //view.centerY == view.superview!.centerY + self.view.frame.height/2
             view.bottom == view.superview!.top + self.view.frame.height - 120
         }
         constrain(segmentedControl,currentWeatherView) {
@@ -340,9 +345,9 @@ extension WeatherViewController: UINavigationControllerDelegate, UINavigationBar
 extension WeatherViewController: UISearchBarDelegate {
     @objc func searchCity(_ sender: AnyObject) {
         searchController = UISearchController(searchResultsController: nil)
-        searchController.hidesNavigationBarDuringPresentation = false
-        searchController.searchBar.keyboardType = UIKeyboardType.asciiCapable
-        let searchBar = searchController.searchBar
+        searchController!.hidesNavigationBarDuringPresentation = false
+        searchController!.searchBar.keyboardType = UIKeyboardType.asciiCapable
+        let searchBar = searchController!.searchBar
         searchBar.searchBarStyle = UISearchBarStyle.prominent
         searchBar.tintColor = UIColor.white
         searchBar.placeholder = "Search City"
@@ -350,20 +355,23 @@ extension WeatherViewController: UISearchBarDelegate {
         let textFieldInsideUISearchBar = searchBar.value(forKey: "searchField") as? UITextField
         textFieldInsideUISearchBar?.font = UIFont(name: "HelveticaNeue-Bold", size: 17)
         // Make this class the delegate and present the search
-        self.searchController.searchBar.delegate = self
-        present(searchController, animated: true, completion: nil)
+        self.searchController!.searchBar.delegate = self
+        present(searchController!, animated: true, completion: nil)
        
     }
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         // this method is being called when search btn in the keyboard tapped
          //searchBar.setShowsCancelButton(false, animated: false)
-         searchBar.isHidden = true
+         /*searchBar.isHidden = true
+        if searchBar.isFirstResponder {
+            _ = searchBar.resignFirstResponder()
+        }*/
+        if searchController != nil {
+             searchController!.dismiss(animated: true, completion: nil)
+        }
     }
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         print("searchBarSearchButtonClicked")
-       if searchBar.isFirstResponder {
-            _ = searchBar.resignFirstResponder()
-        }
         guard searchBar.text != nil else {
             //geoCodingViewModel = GeocodingViewModel(cityName: searchBar.text!, apiType: InternetService.self)
             //print("geoCodingViewModel: " + "\(geoCodingViewModel)")
@@ -424,13 +432,15 @@ extension WeatherViewController: UISearchBarDelegate {
                     
                 case .Failure(let error):
                     //show in alert
-                    print(error)
+                    self.displayErrorMessage(userMessage: "\(String(describing: error))", handler: nil)
                     let realm = try? Realm()
                     //let count = realm?.objects(WeatherForecastModel.self).count
                     let weatherForecastModelLast = realm?.objects(WeatherForecastModel.self).last
                     print("weatherForecastModelLast: " + "\(String(describing: weatherForecastModelLast))")
                     return Observable.just(weatherForecastModelLast!)
                 }
+                
+                //searchBar.isHidden = true
             }
         self.weatherForecastModelObservable?
             .subscribe(onNext: { (weatherForecastModel) in

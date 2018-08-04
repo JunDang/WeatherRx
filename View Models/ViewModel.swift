@@ -10,6 +10,7 @@ import RxCocoa
 import RxSwift
 import RxRealm
 import RealmSwift
+import RxSwiftUtilities
 
 class ViewModel {
     private let bag = DisposeBag()
@@ -17,6 +18,7 @@ class ViewModel {
     let imageDataCacheType: ImageDataCachingProtocol.Type
     var weatherModelObservable: Observable<Result<WeatherForecastModel, Error>>?
     var imageResultObservable: Observable<Result<UIImage, Error>>?
+    let activityIndicator = ActivityIndicator()
     
     // MARK: - Input
     let lat: Double
@@ -35,7 +37,9 @@ class ViewModel {
         self.imageDataCacheType = imageDataCacheType
         
         weatherModelObservable = apiType.getWeatherObservable(lat: lat, lon: lon)
-        
+                                     .trackActivity(activityIndicator)
+                                     .observeOn(MainScheduler.instance)
+           
         /*imageResultObservable =
             weatherModelObservable!
                 .flatMap(){weatherModelResult -> Observable<Result<UIImage, Error>> in

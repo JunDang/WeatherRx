@@ -30,7 +30,6 @@ class DailyForecastTableViewCell: UITableViewCell {
     }
     
     override func updateConstraints() {
-        //print("dailycellupdateconstraintscalled")
         if didSetupConstraints {
             super.updateConstraints()
             return

@@ -9,7 +9,6 @@
 import XCTest
 import RxSwift
 import RxCocoa
-import Unbox
 import RxBlocking
 
 @testable import WeatherRx
