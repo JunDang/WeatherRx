@@ -46,8 +46,8 @@ class WeatherViewController: UIViewController {
     var lat: Double?
     var lon: Double?
     var searchController: UISearchController?
-    let activityIndicator = ActivityIndicator()
-    let activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
+    //let activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+    let progressHUD = ProgressHUD(text: "Loading")
     
     override func viewDidLoad() {
        super.viewDidLoad()
@@ -57,9 +57,19 @@ class WeatherViewController: UIViewController {
        setupSegmentedView()
        setupNavigationbar()
      
+       self.frontScrollView.addSubview(self.progressHUD)
+        print("frontScrollViewFrame: " + "\(frontScrollView.frame)")
+       //progressHUD.show()
+        //self.activityIndicatorView.startAnimating()
        let locationDriver = GeoLocationService.instance.getLocation()
        weatherForecastData = locationDriver.asObservable()
            .flatMap(){[unowned self] location -> Observable<(AnyRealmCollection<WeatherForecastModel>, RealmChangeset?)> in
+            /*self.frontScrollView.addSubview(self.activityIndicatorView)
+            constrain(self.activityIndicatorView) { view in
+                view.centerY == view.superview!.centerY
+                view.centerX == view.superview!.centerX
+            }
+             self.activityIndicatorView.startAnimating()*/
                let lat = location.latitude
                let lon = location.longitude
                self.viewModel = ViewModel(lat: lat, lon: lon, apiType: InternetService.self)
@@ -67,13 +77,8 @@ class WeatherViewController: UIViewController {
                self.flickrImage = (self.viewModel?.flickrImage)!
                self.bindBackground(flickrImage: self.flickrImage)
                return self.weatherForecastData!
-            }.trackActivity(activityIndicator)
-             .observeOn(MainScheduler.instance)
+            }
     
-        activityIndicator.asDriver()
-            .drive(activityIndicatorView.rx.isAnimating)
-            .disposed(by: bag)
-        
     }
 
     override func didReceiveMemoryWarning() {
@@ -107,9 +112,12 @@ class WeatherViewController: UIViewController {
                     self.currentWeatherView.update(with: weatherForecastModel!)
                     self.tableViewController.weatherForecastModel = weatherForecastModel
                     self.tableViewController.tableView.reloadData()
+                    self.progressHUD.hide()
+                    //self.activityIndicatorView.removeFromSuperview()
                 }
             })
             .disposed(by: bag)
+        
       
     }
 
@@ -149,10 +157,10 @@ private extension WeatherViewController{
         frontScrollView.clipsToBounds = true
         frontScrollView.delegate = self
         frontScrollView.contentSize = CGSize(width: self.view.bounds.width, height: self.view.bounds.height * 2)
+        //frontScrollView.addSubview(progressHUD)
         frontScrollView.addSubview(currentWeatherView)
         frontScrollView.addSubview(segmentedControl)
         frontScrollView.addSubview(containerView)
-        frontScrollView.addSubview(activityIndicatorView)
         backScrollView.showsVerticalScrollIndicator = false
         backScrollView.isDirectionalLockEnabled = true
         frontScrollView.showsVerticalScrollIndicator = false
@@ -194,10 +202,10 @@ extension WeatherViewController{
             view.left == view.superview!.left
             view.right == view.superview!.right
         }
-        constrain(activityIndicatorView) { view in
-            view.centerX == view.superview!.centerX
+        /*constrain(progressHUD) { view in
             view.centerY == view.superview!.centerY
-        }
+            view.centerX == view.superview!.centerX
+        }*/
         constrain(currentWeatherView) { view in
             view.width == view.superview!.width
             view.centerX == view.superview!.centerX
@@ -377,43 +385,9 @@ extension WeatherViewController: UISearchBarDelegate {
             //print("geoCodingViewModel: " + "\(geoCodingViewModel)")
             return
         }
+        self.progressHUD.show()
         geoLocation = GeoLocationService.instance.locationGeocoding(address: searchBar.text!)
-       /* weatherForecastData = geoLocation!
-            .observeOn(MainScheduler.instance)
-            .flatMap(){ [unowned self] locationResult -> Observable<(AnyRealmCollection<WeatherForecastModel>, RealmChangeset?)> in
-                switch locationResult {
-                case .Success(let location):
-                    let lat = location.latitude
-                    let lon = location.longitude
-                    self.viewModel = ViewModel(lat: lat, lon: lon, apiType: InternetService.self)
-                    self.weatherForecastData = self.viewModel?.weatherForecastData
-                    self.backgroundView.image = nil
-                    self.flickrImage = (self.viewModel?.flickrImage)!
-                    self.bindBackground(flickrImage: self.flickrImage)
-                    self.weatherForecastData = self.viewModel?.weatherForecastData
-                    print("weatherForecastData: " + "\(String(describing: self.weatherForecastData))")
-                case .Failure(let error):
-                    //show in alert
-                    print(error)
-                    let realm = try? Realm()
-                    //let count = realm?.objects(WeatherForecastModel.self).count
-                    let weatherForecastModelLast = realm?.objects(WeatherForecastModel.self)[0]
-                    //self.weatherForecastData = Observable.changeset(from: realm!.objects(WeatherForecastModel.self))
-                    print("self.weatherForecastData: " + "\(String(describing: weatherForecastModelLast))")
-                }
-                return self.weatherForecastData!
-        }
-        weatherForecastData?
-            .subscribe(onNext: { (weatherForecastData) in
-                //print("weatherForecastData: " + "\(weatherForecastData)")
-                let weatherForecastModel = weatherForecastData.0.first
-                if weatherForecastModel != nil {
-                    self.currentWeatherView.update(with: weatherForecastModel!)
-                    self.tableViewController.weatherForecastModel = weatherForecastModel
-                    self.tableViewController.tableView.reloadData()
-                }
-            }).disposed(by: bag)*/
-         self.weatherForecastModelObservable = geoLocation!
+        self.weatherForecastModelObservable = geoLocation!
             .observeOn(MainScheduler.instance)
             .flatMap(){ [unowned self] locationResult -> Observable<WeatherForecastModel> in
                 switch locationResult {
@@ -448,6 +422,7 @@ extension WeatherViewController: UISearchBarDelegate {
                 self.currentWeatherView.update(with: weatherForecastModel)
                 self.tableViewController.weatherForecastModel = weatherForecastModel
                 self.tableViewController.tableView.reloadData()
+                self.progressHUD.hide()
            })
            .disposed(by: bag)
     }
