@@ -59,29 +59,6 @@ class ProgressHUD: UIVisualEffectView {
         label.font = UIFont.boldSystemFont(ofSize: 16)
     }
     
-   /* override func didMoveToSuperview() {
-        super.didMoveToSuperview()
-        
-        if let superview = self.superview {
-           let height: CGFloat = 50.0
-            self.frame = CGRect(0,
-             0, 120, height)
-             vibrancyView.frame = self.bounds
-            
-            let activityIndicatorSize: CGFloat = 30
-            activityIndictor.frame = CGRect(5, height / 2 - activityIndicatorSize / 2,
-                                                activityIndicatorSize,
-                                                activityIndicatorSize)
-            
-            layer.cornerRadius = 8.0
-            layer.masksToBounds = true
-            label.text = text
-            label.textAlignment = NSTextAlignment.center
-            label.frame = CGRect(activityIndicatorSize + 5, 0, 100 - activityIndicatorSize, height)
-            label.textColor = UIColor.gray
-            label.font = UIFont.boldSystemFont(ofSize: 16)
-        }
-    }*/
     
     func show() {
         self.isHidden = false

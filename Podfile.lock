@@ -2,7 +2,7 @@ PODS:
   - Cartography (3.0.2)
   - Differentiator (3.0.2)
   - DynamicBlurView (2.0.2)
-  - Reachability (3.2)
+  - ReachabilitySwift (4.1.0)
   - Realm (3.7.5):
     - Realm/Headers (= 3.7.5)
   - Realm/Headers (3.7.5)
@@ -14,9 +14,6 @@ PODS:
     - RxSwift (~> 4.0)
   - RxDataSources (3.0.2):
     - Differentiator (~> 3.0)
-    - RxCocoa (~> 4.0)
-    - RxSwift (~> 4.0)
-  - RxGesture (1.2.1):
     - RxCocoa (~> 4.0)
     - RxSwift (~> 4.0)
   - RxRealm (0.7.5):
@@ -37,30 +34,28 @@ PODS:
 DEPENDENCIES:
   - Cartography
   - DynamicBlurView
-  - Reachability
+  - ReachabilitySwift
   - RealmSwift
-  - RxBlocking
-  - RxCocoa
+  - RxBlocking (~> 4.2.0)
+  - RxCocoa (~> 4.2.0)
   - RxDataSources
-  - RxGesture
   - RxRealm
   - RxRealmDataSources
-  - RxSwift
+  - RxSwift (~> 4.2.0)
   - RxSwiftUtilities
-  - RxTest
+  - RxTest (~> 4.2.0)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Cartography
     - Differentiator
     - DynamicBlurView
-    - Reachability
+    - ReachabilitySwift
     - Realm
     - RealmSwift
     - RxBlocking
     - RxCocoa
     - RxDataSources
-    - RxGesture
     - RxRealm
     - RxRealmDataSources
     - RxSwift
@@ -71,19 +66,18 @@ SPEC CHECKSUMS:
   Cartography: 231190d7d0b3107ce8d67c54189f059a509b3760
   Differentiator: a87be69eba49ec4ab460c7671143ee3a9eececfd
   DynamicBlurView: aa6db4defc6e537eb86fc5e58dd3991666178399
-  Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
+  ReachabilitySwift: 6849231cd4e06559f3b9ef4a97a0a0f96d41e09f
   Realm: c286caf4dbf346ce24aad49ca76c7ce622d4a082
   RealmSwift: 2a9281e37d6de55f66f76254d49d28aeb1b729e4
   RxBlocking: e339d8a6e752e25ade95ff858466c55436668f59
   RxCocoa: 0b54909c902e1e581212a03e690bbd94032d8baa
   RxDataSources: cb7c31e652a87ebb919da45f716bbb87b3765f6b
-  RxGesture: c278eb05b187abd47e11e65464ae4de53ab71d95
   RxRealm: a6c6c0a07cb61f34209969ca6657734edfdfff30
   RxRealmDataSources: 798303f1d7db18d80da9e95bab9605010378040e
   RxSwift: 99e10317ddfcc7fbe01356aafd118fde4a0be104
   RxSwiftUtilities: 0edb01ef16c527c10fb352485b62cbd951e4a04d
   RxTest: 8da864c0ee47534f586ff18fb0c7e5b2f1fe5023
 
-PODFILE CHECKSUM: 7095dde10ff3d4f16498ce50a643e47ada9d7693
+PODFILE CHECKSUM: 22cdc265657ca85c16bff5ae4d97d636751238ee
 
 COCOAPODS: 1.5.3

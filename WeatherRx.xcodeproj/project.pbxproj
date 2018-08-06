@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		456C3AC445D2467351A85848 /* Pods_WeatherRxAbstract_WeatherRxTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A54FC92786D45EEF4C724417 /* Pods_WeatherRxAbstract_WeatherRxTests.framework */; };
+		A507D78A2117E9FD005E05F6 /* RxReachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = A507D7892117E9FD005E05F6 /* RxReachability.swift */; };
+		A507D78B2117E9FD005E05F6 /* RxReachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = A507D7892117E9FD005E05F6 /* RxReachability.swift */; };
+		A507D78D2117EA28005E05F6 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = A507D78C2117EA28005E05F6 /* Reachability.swift */; };
+		A507D78E2117EA28005E05F6 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = A507D78C2117EA28005E05F6 /* Reachability.swift */; };
 		A50D28EB20503D5E00351630 /* WeatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50D28EA20503D5E00351630 /* WeatherViewController.swift */; };
 		A50D28EC20503D5E00351630 /* WeatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50D28EA20503D5E00351630 /* WeatherViewController.swift */; };
 		A5146B661F799A2600EE1DF7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5146B651F799A2600EE1DF7 /* AppDelegate.swift */; };
@@ -60,8 +64,6 @@
 		A546E3582110EA1000D8E76F /* ViewModel2.swift in Sources */ = {isa = PBXBuildFile; fileRef = A546E3562110EA1000D8E76F /* ViewModel2.swift */; };
 		A546E35A21137DF200D8E76F /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A546E35921137DF200D8E76F /* UIViewController+Extension.swift */; };
 		A546E35B21137DF200D8E76F /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A546E35921137DF200D8E76F /* UIViewController+Extension.swift */; };
-		A546E35D2113EA2900D8E76F /* RxReachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = A546E35C2113EA2900D8E76F /* RxReachability.swift */; };
-		A546E35E2113EA2900D8E76F /* RxReachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = A546E35C2113EA2900D8E76F /* RxReachability.swift */; };
 		A546E360211531F800D8E76F /* ProgressHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = A546E35F211531F800D8E76F /* ProgressHUD.swift */; };
 		A546E361211534AF00D8E76F /* ProgressHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = A546E35F211531F800D8E76F /* ProgressHUD.swift */; };
 		A54EC6E52104C75100108139 /* CLLocationManager+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54EC6E42104C75100108139 /* CLLocationManager+Rx.swift */; };
@@ -104,6 +106,8 @@
 /* Begin PBXFileReference section */
 		1A68D25BA2AB8DB2DD394F1E /* Pods_WeatherRxAbstract_WeatherRx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WeatherRxAbstract_WeatherRx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		360C7B016505B4E9406C0A73 /* Pods-WeatherRxAbstract-WeatherRx.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeatherRxAbstract-WeatherRx.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WeatherRxAbstract-WeatherRx/Pods-WeatherRxAbstract-WeatherRx.debug.xcconfig"; sourceTree = "<group>"; };
+		A507D7892117E9FD005E05F6 /* RxReachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxReachability.swift; sourceTree = "<group>"; };
+		A507D78C2117EA28005E05F6 /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		A50D28EA20503D5E00351630 /* WeatherViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewController.swift; sourceTree = "<group>"; };
 		A5146B621F799A2600EE1DF7 /* WeatherRx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherRx.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5146B651F799A2600EE1DF7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -139,7 +143,6 @@
 		A546E3532110E68600D8E76F /* InternetService2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternetService2.swift; sourceTree = "<group>"; };
 		A546E3562110EA1000D8E76F /* ViewModel2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel2.swift; sourceTree = "<group>"; };
 		A546E35921137DF200D8E76F /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
-		A546E35C2113EA2900D8E76F /* RxReachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxReachability.swift; sourceTree = "<group>"; };
 		A546E35F211531F800D8E76F /* ProgressHUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressHUD.swift; sourceTree = "<group>"; };
 		A54EC6E42104C75100108139 /* CLLocationManager+Rx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLLocationManager+Rx.swift"; sourceTree = "<group>"; };
 		A54EC6EB210502F600108139 /* GeoLocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoLocationService.swift; sourceTree = "<group>"; };
@@ -326,7 +329,8 @@
 				A51E092320DFEEF300A45A39 /* WindDirection.swift */,
 				A54EC6E42104C75100108139 /* CLLocationManager+Rx.swift */,
 				A546E35921137DF200D8E76F /* UIViewController+Extension.swift */,
-				A546E35C2113EA2900D8E76F /* RxReachability.swift */,
+				A507D7892117E9FD005E05F6 /* RxReachability.swift */,
+				A507D78C2117EA28005E05F6 /* Reachability.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -492,11 +496,10 @@
 				"${SRCROOT}/Pods/Target Support Files/Pods-WeatherRxAbstract-WeatherRxTests/Pods-WeatherRxAbstract-WeatherRxTests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Cartography/Cartography.framework",
 				"${BUILT_PRODUCTS_DIR}/DynamicBlurView/DynamicBlurView.framework",
-				"${BUILT_PRODUCTS_DIR}/Reachability/Reachability.framework",
+				"${BUILT_PRODUCTS_DIR}/ReachabilitySwift/Reachability.framework",
 				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
 				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
-				"${BUILT_PRODUCTS_DIR}/RxGesture/RxGesture.framework",
 				"${BUILT_PRODUCTS_DIR}/RxRealm/RxRealm.framework",
 				"${BUILT_PRODUCTS_DIR}/RxRealmDataSources/RxRealmDataSources.framework",
 				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
@@ -512,7 +515,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxGesture.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxRealm.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxRealmDataSources.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
@@ -553,12 +555,11 @@
 				"${BUILT_PRODUCTS_DIR}/Cartography/Cartography.framework",
 				"${BUILT_PRODUCTS_DIR}/Differentiator/Differentiator.framework",
 				"${BUILT_PRODUCTS_DIR}/DynamicBlurView/DynamicBlurView.framework",
-				"${BUILT_PRODUCTS_DIR}/Reachability/Reachability.framework",
+				"${BUILT_PRODUCTS_DIR}/ReachabilitySwift/Reachability.framework",
 				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
 				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
 				"${BUILT_PRODUCTS_DIR}/RxDataSources/RxDataSources.framework",
-				"${BUILT_PRODUCTS_DIR}/RxGesture/RxGesture.framework",
 				"${BUILT_PRODUCTS_DIR}/RxRealm/RxRealm.framework",
 				"${BUILT_PRODUCTS_DIR}/RxRealmDataSources/RxRealmDataSources.framework",
 				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
@@ -574,7 +575,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxDataSources.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxGesture.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxRealm.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxRealmDataSources.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
@@ -594,6 +594,7 @@
 			files = (
 				A546E3262108056E00D8E76F /* DataModel.swift in Sources */,
 				A546E34B210CACE500D8E76F /* GeoCodingService.swift in Sources */,
+				A507D78D2117EA28005E05F6 /* Reachability.swift in Sources */,
 				A57F6DB82072D00400509E7E /* ImageDataCachingProtocol.swift in Sources */,
 				A5146B681F799A2600EE1DF7 /* ViewController.swift in Sources */,
 				A5146B8B1F799D7E00EE1DF7 /* Weather.swift in Sources */,
@@ -618,11 +619,11 @@
 				A51E091D20DFE6B900A45A39 /* UIImage+Extension.swift in Sources */,
 				A57F6DB52072B5AE00509E7E /* ImageDataCaching.swift in Sources */,
 				A52DA6C020DC1CBF0079A982 /* URLSession+Extension.swift in Sources */,
-				A546E35D2113EA2900D8E76F /* RxReachability.swift in Sources */,
 				A546E360211531F800D8E76F /* ProgressHUD.swift in Sources */,
 				A571C5F420C8C548005693B3 /* InternetService.swift in Sources */,
 				A51E091A20DFE67300A45A39 /* Double+Extension.swift in Sources */,
 				A5192BF320A8ECDD00C8D483 /* CGExtensions.swift in Sources */,
+				A507D78A2117E9FD005E05F6 /* RxReachability.swift in Sources */,
 				A582C70B20C043E70036C7D9 /* SideMenuBarView.swift in Sources */,
 				A5F4177520B3645200FE45D8 /* WeatherForecastSummaryViewController.swift in Sources */,
 				A5192BED20A6304500C8D483 /* HourlyForcastCell.swift in Sources */,
@@ -653,7 +654,6 @@
 				A50D28EC20503D5E00351630 /* WeatherViewController.swift in Sources */,
 				A51E091B20DFE67300A45A39 /* Double+Extension.swift in Sources */,
 				A5192BEE20A6304500C8D483 /* HourlyForcastCell.swift in Sources */,
-				A546E35E2113EA2900D8E76F /* RxReachability.swift in Sources */,
 				A546E361211534AF00D8E76F /* ProgressHUD.swift in Sources */,
 				A52DA6C220DC25310079A982 /* CGExtensions.swift in Sources */,
 				A52DA6C120DC1DB60079A982 /* URLSession+Extension.swift in Sources */,
@@ -666,8 +666,10 @@
 				A546E34C210CACE500D8E76F /* GeoCodingService.swift in Sources */,
 				A546E32D210884B000D8E76F /* PhotoModel.swift in Sources */,
 				A546E34F210E01FA00D8E76F /* GeoCodingViewModel.swift in Sources */,
+				A507D78B2117E9FD005E05F6 /* RxReachability.swift in Sources */,
 				A5192BEB20A5222C00C8D483 /* WeatherForecastTableViewController.swift in Sources */,
 				A51F45372093607700ACCAB7 /* FlickrViewModelTests.swift in Sources */,
+				A507D78E2117EA28005E05F6 /* Reachability.swift in Sources */,
 				A5F4177A20B6068800FE45D8 /* WeatherForecastSummaryViewController.swift in Sources */,
 				A5146B7B1F799A2600EE1DF7 /* WeatherRxTests.swift in Sources */,
 				A59D0F2820B20C9800111552 /* DailyForecastTableViewCell.swift in Sources */,

@@ -1,86 +1,71 @@
 //
 //  RxReachability.swift
-//  WeatherRx
+//  RxReachability
 //
-//  Created by Jun Dang on 2018-08-02.
+//  Created by Jun Dang on 2018-08-05.
 //  Copyright © 2018 Jun Dang. All rights reserved.
 //
 
-import SystemConfiguration
 import Foundation
 import RxSwift
+import Reachability
 
-enum Reachability {
-    case offline
-    case online
-    case unknown
+extension Reactive where Base: NotificationCenter {
+    public func notification(_ name: Notification.Name?, object: AnyObject? = nil) -> Observable<Notification> {
+        return Observable.create { [weak object] observer in
+            let nsObserver = self.base.addObserver(forName: name, object: object, queue: nil) { notification in
+                observer.on(.next(notification))
+            }
+            
+            return Disposables.create {
+                self.base.removeObserver(nsObserver)
+            }
+        }
+    }
+}
+extension Reachability: ReactiveCompatible { }
+public extension Reactive where Base: Reachability {
     
-    init(reachabilityFlags flags: SCNetworkReachabilityFlags) {
-        let connectionRequired = flags.contains(.connectionRequired)
-        let isReachable = flags.contains(.reachable)
-        
-        if !connectionRequired && isReachable {
-            self = .online
-        } else {
-            self = .offline
+    public static var reachabilityChanged: Observable<Reachability> {
+        return NotificationCenter.default.rx.notification(Notification.Name("reachabilityChanged"))
+            .flatMap { notification -> Observable<Reachability> in
+                guard let reachability = notification.object as? Reachability else {
+                    return .empty()
+                }
+                return .just(reachability)
+        }
+    }
+    
+    public static var status: Observable<Reachability.Connection> {
+        return reachabilityChanged
+            .map { $0.connection }
+    }
+    
+    public static var isReachable: Observable<Bool> {
+        return reachabilityChanged
+            .map { $0.connection != .none }
+    }
+    
+    public static var isConnected: Observable<Void> {
+        return isReachable
+            .filter { $0 }
+            .map { _ in Void() }
+    }
+    
+    public static var isDisconnected: Observable<Void> {
+        return isReachable
+            .filter { !$0 }
+            .map { _ in Void() }
+    }
+}
+
+public extension ObservableType {
+    
+    public func retryOnConnect(timeout: TimeInterval) -> Observable<E> {
+        return retryWhen { _ in
+            return Reachability.rx.isConnected
+                .timeout(timeout, scheduler: MainScheduler.asyncInstance)
         }
     }
 }
 
-class RxReachability {
-    static let shared = RxReachability()
-    
-    fileprivate init() {}
-    
-    private static var _status = Variable<Reachability>(.unknown)
-    var status: Observable<Reachability> {
-        get {
-            return RxReachability._status.asObservable().distinctUntilChanged()
-        }
-    }
-    
-    class func reachabilityStatus() -> Reachability {
-        return RxReachability._status.value
-    }
-    
-    func isOnline() -> Bool {
-        switch RxReachability._status.value {
-        case .online:
-            return true
-        case .offline, .unknown:
-            return false
-        }
-    }
-    
-    private var reachability: SCNetworkReachability?
-    
-    func startMonitor(_ host: String) -> Bool {
-        if let _ = reachability {
-            return true
-        }
-        
-        var context = SCNetworkReachabilityContext(version: 0, info: nil, retain: nil, release: nil, copyDescription: nil)
-        
-        if let reachability = SCNetworkReachabilityCreateWithName(nil, host) {
-            
-            SCNetworkReachabilitySetCallback(reachability, { (_, flags, _) in
-                let status = Reachability(reachabilityFlags: flags)
-                RxReachability._status.value = status
-            }, &context)
-            
-            SCNetworkReachabilityScheduleWithRunLoop(reachability, CFRunLoopGetMain(), CFRunLoopMode.commonModes.rawValue)
-            self.reachability = reachability
-            
-            return true
-        }
-        
-        return true
-    }
-    
-    func stopMonitor() {
-        if let _reachability = reachability {
-            SCNetworkReachabilityUnscheduleFromRunLoop(_reachability, CFRunLoopGetMain(), CFRunLoopMode.commonModes.rawValue);
-            reachability = nil
-        }
-    }
-}

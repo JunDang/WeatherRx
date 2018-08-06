@@ -11,6 +11,8 @@ import RxSwift
 import RxRealm
 import RealmSwift
 import RxSwiftUtilities
+import Reachability
+
 
 class ViewModel {
     private let bag = DisposeBag()
@@ -35,8 +37,12 @@ class ViewModel {
         self.apiType = apiType
         self.imageDataCacheType = imageDataCacheType
         
-        weatherModelObservable = apiType.getWeatherObservable(lat: lat, lon: lon)
-                               
+        weatherModelObservable =
+                                  apiType
+                                     .getWeatherObservable(lat: lat, lon: lon)
+                                     .retryOnConnect(timeout: 1)
+        
+        
         imageResultObservable =
                                 apiType
                                     .searchImageURL(lat: lat, lon: lon)

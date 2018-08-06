@@ -151,7 +151,7 @@ class InternetService: InternetServiceProtocol {
         var baseURL = URL(string: DarskyAPI.baseURLString)!
         baseURL.appendPathComponent(DarskyAPI.apiKey)
         baseURL.appendPathComponent("\(lat),\(lon)")
-       // print("baseURL: " + "\(baseURL)")
+        print("baseURL: " + "\(baseURL)")
         let parameters: [String: String] = [:]
         return request(baseURL.absoluteString, parameters: parameters)
             .map({result in
