@@ -59,28 +59,53 @@ class WeatherViewController: UIViewController {
        self.frontScrollView.addSubview(self.progressHUD)
        reachability = Reachability()
        try? reachability?.startNotifier()
+        Reachability.rx.reachabilityChanged
+            .subscribe(onNext:{ element in
+                print("Reachability changed: \(element)")
+            })
+            .disposed(by:bag)
+        
+        Reachability.rx.status
+            .subscribe(onNext:{ status in
+                print("Reachability status changed: \(status)")
+            })
+            .disposed(by:bag)
+        Reachability.rx.isReachable
+            .subscribe(onNext:{ isReachable in
+                print("isReachable: \(isReachable)")
+            })
+            .disposed(by:bag)
+        
+        Reachability.rx.isConnected
+            .subscribe(onNext:{ isConnected in
+                print("isConnected: \(isConnected)")
+            })
+            .disposed(by:bag)
+        
+        Reachability.rx.isDisconnected
+            .subscribe(onNext:{ isDisconnected in
+                print("isDisconnected: \(isDisconnected)")
+            })
+            .disposed(by:bag)
         print("frontScrollViewFrame: " + "\(frontScrollView.frame)")
-       //progressHUD.show()
         //self.activityIndicatorView.startAnimating()
-        /*let locationObservable = GeoLocationService.instance.getLocation().asObservable().retryOnConnect(timeout: 1)
-        weatherForecastData = locationObservable
-           .flatMap(){[unowned self] location -> Observable<(AnyRealmCollection<WeatherForecastModel>, RealmChangeset?)> in
-            /*self.frontScrollView.addSubview(self.activityIndicatorView)
-            constrain(self.activityIndicatorView) { view in
-                view.centerY == view.superview!.centerY
-                view.centerX == view.superview!.centerX
-            }
-             self.activityIndicatorView.startAnimating()*/
-               let lat = location.latitude
-               let lon = location.longitude
-               self.viewModel = ViewModel(lat: lat, lon: lon, apiType: InternetService.self)
-               self.weatherForecastData = self.viewModel?.weatherForecastData
-               self.flickrImage = (self.viewModel?.flickrImage)!
-               self.bindBackground(flickrImage: self.flickrImage)
-               return self.weatherForecastData!
-            }*/
-    
-    }
+        let locationObservable = Reachability.rx.isConnected
+            .flatMap(){return
+                  GeoLocationService.instance.getLocation()
+          }
+       weatherForecastData =
+                              locationObservable
+                             .flatMap(){[unowned self] location -> Observable<(AnyRealmCollection<WeatherForecastModel>, RealmChangeset?)> in
+                                 let lat = location.latitude
+                                 let lon = location.longitude
+                                 self.viewModel = ViewModel(lat: lat, lon: lon, apiType: InternetService.self)
+                                 self.weatherForecastData = self.viewModel?.weatherForecastData
+                                 self.flickrImage = (self.viewModel?.flickrImage)!
+                                 self.bindBackground(flickrImage: self.flickrImage)
+                                 return self.weatherForecastData!
+                              }
+        
+     }
 
     override func didReceiveMemoryWarning() {
       super.didReceiveMemoryWarning()
@@ -111,23 +136,7 @@ class WeatherViewController: UIViewController {
                 self.displayErrorMessage(userMessage: "Not connected to Network", handler: nil)
             })
             .disposed(by:bag)
-        let locationObservable = GeoLocationService.instance.getLocation().asObservable().retryOnConnect(timeout: 1)
-        weatherForecastData = locationObservable
-            .flatMap(){[unowned self] location -> Observable<(AnyRealmCollection<WeatherForecastModel>, RealmChangeset?)> in
-                /*self.frontScrollView.addSubview(self.activityIndicatorView)
-                 constrain(self.activityIndicatorView) { view in
-                 view.centerY == view.superview!.centerY
-                 view.centerX == view.superview!.centerX
-                 }
-                 self.activityIndicatorView.startAnimating()*/
-                let lat = location.latitude
-                let lon = location.longitude
-                self.viewModel = ViewModel(lat: lat, lon: lon, apiType: InternetService.self)
-                self.weatherForecastData = self.viewModel?.weatherForecastData
-                self.flickrImage = (self.viewModel?.flickrImage)!
-                self.bindBackground(flickrImage: self.flickrImage)
-                return self.weatherForecastData!
-        }
+     
         
         weatherForecastData?
             .subscribe(onNext: { (weatherForecastData) in
@@ -142,9 +151,8 @@ class WeatherViewController: UIViewController {
                 }
             })
             .disposed(by: bag)
-        
-      
     }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         reachability?.stopNotifier()
@@ -167,8 +175,7 @@ class WeatherViewController: UIViewController {
         self.add(asChildViewController: viewController)
         return viewController
     }()
-    
- }
+}
 
 private extension WeatherViewController{
     func setup(){

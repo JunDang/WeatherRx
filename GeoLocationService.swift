@@ -13,27 +13,27 @@ import RxSwift
 
 class GeoLocationService {
     static let instance = GeoLocationService()
-    private (set) var location: Driver<CLLocationCoordinate2D>
+    private (set) var location: Observable<CLLocationCoordinate2D>
     private let locationManager = CLLocationManager()
     var geoLocation: Observable<Result<CLLocationCoordinate2D, Error>>?
  
     private init() {
-        locationManager.distanceFilter = kCLDistanceFilterNone;
-        locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation;
+        locationManager.distanceFilter = kCLDistanceFilterNone
+        locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
        
         location = locationManager.rx.didUpdateLocations
-            .asDriver(onErrorJustReturn: [])
-            .filter { $0.count > 0 }
-            .map { $0.last!.coordinate }
-            .throttle(0.5)
-            .distinctUntilChanged({ (lhs, rhs) -> Bool in
-                fabs(lhs.latitude - rhs.latitude) <= 0.0000001 && fabs(lhs.longitude - rhs.longitude) <= 0.0000001
-            })
+                  .catchErrorJustReturn([])
+                  .filter { $0.count > 0 }
+                  .map { $0.last!.coordinate }
+                  .throttle(0.5, scheduler: MainScheduler.instance)
+                  .distinctUntilChanged({ (lhs, rhs) -> Bool in
+                   fabs(lhs.latitude - rhs.latitude) <= 0.0000001 && fabs(lhs.longitude - rhs.longitude) <= 0.0000001
+                   })
         
         locationManager.requestAlwaysAuthorization()
         locationManager.startUpdatingLocation()
     }
-    func getLocation() -> Driver<CLLocationCoordinate2D> {
+    func getLocation() -> Observable<CLLocationCoordinate2D> {
         return location
     }
     func locationGeocoding(address: String) -> Observable<Result<CLLocationCoordinate2D, Error>> {

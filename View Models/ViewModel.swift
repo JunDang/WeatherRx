@@ -20,6 +20,7 @@ class ViewModel {
     let imageDataCacheType: ImageDataCachingProtocol.Type
     var weatherModelObservable: Observable<Result<WeatherForecastModel, Error>>?
     var imageResultObservable: Observable<Result<UIImage, Error>>?
+    let reachability = Reachability()!
     
     // MARK: - Input
     let lat: Double
@@ -36,20 +37,18 @@ class ViewModel {
         self.lon = lon
         self.apiType = apiType
         self.imageDataCacheType = imageDataCacheType
+       
         
-        weatherModelObservable =
-                                  apiType
-                                     .getWeatherObservable(lat: lat, lon: lon)
-                                     .retryOnConnect(timeout: 1)
+        weatherModelObservable = apiType.getWeatherObservable(lat: lat, lon: lon)
         
         
-        imageResultObservable =
-                                apiType
+        imageResultObservable =  apiType
                                     .searchImageURL(lat: lat, lon: lon)
                                     .flatMap ({resultNSURL -> Observable<Result<UIImage, Error>> in
                                         //print("resultNSURL: " + "\(resultNSURL)")
                                         return self.apiType.getImage(resultNSURL: resultNSURL, cache: self.imageDataCacheType)
                                     })
+                                 
         
         bindOutPut()
         writeWeatherModelInRealm(weatherModelObservable:weatherModelObservable!)
