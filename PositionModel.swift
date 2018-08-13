@@ -26,14 +26,22 @@ struct GeocodingResult: Codable {
 struct AddressCmoponent: Codable {
     private enum CodingKeys: String, CodingKey {
         case longName = "long_name"
+        case shortName = "short_name"
+        case types = "types"
     }
     var longName: String = ""
-    init(longName: String) {
+    var shortName: String = ""
+    var types: [String] = []
+    init(longName: String, shortName: String,types: [String]) {
         self.longName = longName
+        self.shortName = shortName
+        self.types = types
     }
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         longName = try container.decode(String.self, forKey: .longName)
+        shortName = try container.decode(String.self, forKey: .shortName)
+        types = try container.decode(Array.self, forKey: .types)
     }
 }
 struct Geometry: Codable {
@@ -69,15 +77,9 @@ struct ReverseGeocodingModel: Codable {
 }
 struct ReverseGeocodingResult: Codable {
     private enum CodingKeys : String, CodingKey {
-        case address = "formatted_address"
+        case addressComponents = "address_components"
     }
-    var address: String = ""
-    init(address: String) {
-        self.address = address
-    }
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        address = try container.decode(String.self, forKey: .address)
-    }
+    var addressComponents: [AddressCmoponent] = []
 }
+
 

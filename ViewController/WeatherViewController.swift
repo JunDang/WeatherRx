@@ -39,7 +39,7 @@ class WeatherViewController: UIViewController {
     var flickrImage = BehaviorRelay<UIImage?>(value: UIImage(named: "banff")!)
     var viewModel: ViewModel?
     var weatherForecastModelObservable: Observable<WeatherForecastModel>?
-    var geoLocation: Observable<Result<CLLocationCoordinate2D, Error>>?
+    var geoLocation: Observable<Result<(CLLocationCoordinate2D, String), Error>>?
     let locationManager = CLLocationManager()
     var searchTextField: UITextField?
     var lat: Double?
@@ -48,6 +48,11 @@ class WeatherViewController: UIViewController {
     //let activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
     let progressHUD = ProgressHUD(text: "Loading")
     var reachability: Reachability?
+    var cityName: String = ""
+    var locationObservable: Observable<CLLocationCoordinate2D>?
+    var cityResultObservable: Observable<Result<String, Error>>?
+    var cityNameObservable: Observable<String>?
+    var dateFormatter = DateFormatter()
     
     override func viewDidLoad() {
        super.viewDidLoad()
@@ -59,51 +64,12 @@ class WeatherViewController: UIViewController {
        self.frontScrollView.addSubview(self.progressHUD)
        reachability = Reachability()
        try? reachability?.startNotifier()
-        Reachability.rx.reachabilityChanged
-            .subscribe(onNext:{ element in
-                print("Reachability changed: \(element)")
-            })
-            .disposed(by:bag)
+       //self.activityIndicatorView.startAnimating()
         
-        Reachability.rx.status
-            .subscribe(onNext:{ status in
-                print("Reachability status changed: \(status)")
-            })
-            .disposed(by:bag)
-        Reachability.rx.isReachable
-            .subscribe(onNext:{ isReachable in
-                print("isReachable: \(isReachable)")
-            })
-            .disposed(by:bag)
-        
-        Reachability.rx.isConnected
-            .subscribe(onNext:{ isConnected in
-                print("isConnected: \(isConnected)")
-            })
-            .disposed(by:bag)
-        
-        Reachability.rx.isDisconnected
-            .subscribe(onNext:{ isDisconnected in
-                print("isDisconnected: \(isDisconnected)")
-            })
-            .disposed(by:bag)
-        print("frontScrollViewFrame: " + "\(frontScrollView.frame)")
-        //self.activityIndicatorView.startAnimating()
-        let locationObservable = Reachability.rx.isConnected
-            .flatMap(){return
-                  GeoLocationService.instance.getLocation()
-          }
-       weatherForecastData =
-                              locationObservable
-                             .flatMap(){[unowned self] location -> Observable<(AnyRealmCollection<WeatherForecastModel>, RealmChangeset?)> in
-                                 let lat = location.latitude
-                                 let lon = location.longitude
-                                 self.viewModel = ViewModel(lat: lat, lon: lon, apiType: InternetService.self)
-                                 self.weatherForecastData = self.viewModel?.weatherForecastData
-                                 self.flickrImage = (self.viewModel?.flickrImage)!
-                                 self.bindBackground(flickrImage: self.flickrImage)
-                                 return self.weatherForecastData!
-                              }
+        fetchData()
+        // add refresh time
+        self.dateFormatter.dateStyle = DateFormatter.Style.short
+        self.dateFormatter.timeStyle = DateFormatter.Style.long
         
      }
 
@@ -114,6 +80,60 @@ class WeatherViewController: UIViewController {
     override var prefersStatusBarHidden: Bool {
         return true
     }
+    func fetchData() {
+        //locationObservable = GeoLocationService.instance.getLocation()
+        let locationObservable = Reachability.rx.isConnected
+            .flatMap(){return
+                GeoLocationService.instance.getLocation()
+        }
+        weatherForecastData =
+            locationObservable
+                .flatMap(){[unowned self] location -> Observable<(AnyRealmCollection<WeatherForecastModel>, RealmChangeset?)> in
+                    let lat = location.latitude
+                    let lon = location.longitude
+                    self.viewModel = ViewModel(lat: lat, lon: lon, apiType: InternetService.self)
+                    self.weatherForecastData = self.viewModel?.weatherForecastData
+                    self.flickrImage = (self.viewModel?.flickrImage)!
+                    self.bindBackground(flickrImage: self.flickrImage)
+                    return self.weatherForecastData!
+        }
+        cityResultObservable = Reachability.rx.isConnected
+            .flatMap(){ _ -> Observable<Result<String, Error>> in return
+                GeoLocationService.instance.cityResultObservable!
+            }
+        cityNameObservable = cityResultObservable?
+            .observeOn(MainScheduler.instance)
+            .map() {cityResult -> String in
+                switch cityResult {
+                case .Success(let cityName):
+                    self.cityName = cityName
+                //print("cityName: " + "\( self.cityName)")
+                case .Failure(let error):
+                    self.displayErrorMessage(userMessage:"\(String(describing: error))", handler: nil)
+                }
+                return self.cityName
+        }
+        cityNameObservable?
+            .subscribe(onNext: {cityName in
+                self.navigationItem.title = cityName
+            })
+            .disposed(by: bag)
+    }
+    func updateUI() {
+        weatherForecastData?
+            .subscribe(onNext: { (weatherForecastData) in
+                //print("weatherForecastData: " + "\(weatherForecastData)")
+                let weatherForecastModel = weatherForecastData.0.first
+                if weatherForecastModel != nil {
+                    self.currentWeatherView.update(with: weatherForecastModel!)
+                    self.tableViewController.weatherForecastModel = weatherForecastModel
+                    self.tableViewController.tableView.reloadData()
+                    self.progressHUD.hide()
+                    //self.activityIndicatorView.removeFromSuperview()
+                }
+            })
+            .disposed(by: bag)
+      }
     func bindBackground(flickrImage: BehaviorRelay<UIImage?>) {
         
         flickrImage.asDriver()
@@ -136,21 +156,7 @@ class WeatherViewController: UIViewController {
                 self.displayErrorMessage(userMessage: "Not connected to Network", handler: nil)
             })
             .disposed(by:bag)
-     
-        
-        weatherForecastData?
-            .subscribe(onNext: { (weatherForecastData) in
-                //print("weatherForecastData: " + "\(weatherForecastData)")
-                let weatherForecastModel = weatherForecastData.0.first
-                if weatherForecastModel != nil {
-                    self.currentWeatherView.update(with: weatherForecastModel!)
-                    self.tableViewController.weatherForecastModel = weatherForecastModel
-                    self.tableViewController.tableView.reloadData()
-                    self.progressHUD.hide()
-                    //self.activityIndicatorView.removeFromSuperview()
-                }
-            })
-            .disposed(by: bag)
+        updateUI()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -175,6 +181,16 @@ class WeatherViewController: UIViewController {
         self.add(asChildViewController: viewController)
         return viewController
     }()
+    
+    lazy var refreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action:
+            #selector(WeatherViewController.handleRefresh(_:)),
+                                 for: UIControlEvents.valueChanged)
+        refreshControl.tintColor = UIColor.red
+        
+        return refreshControl
+    }()
 }
 
 private extension WeatherViewController{
@@ -197,11 +213,13 @@ private extension WeatherViewController{
         frontScrollView.addSubview(currentWeatherView)
         frontScrollView.addSubview(segmentedControl)
         frontScrollView.addSubview(containerView)
+        frontScrollView.addSubview(refreshControl)
         backScrollView.showsVerticalScrollIndicator = false
         backScrollView.isDirectionalLockEnabled = true
         frontScrollView.showsVerticalScrollIndicator = false
         view.addSubview(backScrollView)
         view.addSubview(frontScrollView)
+      
     }
 }
 
@@ -358,7 +376,8 @@ extension WeatherViewController {
 
 extension WeatherViewController: UINavigationControllerDelegate, UINavigationBarDelegate {
     func setupNavigationbar() {
-        self.navigationItem.title = "Toronto"
+        self.navigationItem.title = cityName
+    
         let navigationBar = navigationController!.navigationBar
         navigationBar.titleTextAttributes =
             [NSAttributedStringKey.foregroundColor: UIColor.white, NSAttributedStringKey.font: UIFont(name: "HelveticaNeue-Bold", size: 19)!]
@@ -423,17 +442,25 @@ extension WeatherViewController: UISearchBarDelegate {
         }
         self.progressHUD.show()
         geoLocation = GeoLocationService.instance.locationGeocoding(address: searchBar.text!)
+        searchCityWeatherData()
+        updateUIWithSearchCityData()
+   }
+    func searchCityWeatherData() {
+        //geoLocation = GeoLocationService.instance.locationGeocoding(address: searchBar.text!)
         self.weatherForecastModelObservable = geoLocation!
             .observeOn(MainScheduler.instance)
             .flatMap(){ [unowned self] locationResult -> Observable<WeatherForecastModel> in
                 switch locationResult {
-                case .Success(let location):
+                case .Success(let result):
+                    let location = result.0
                     let lat = location.latitude
                     let lon = location.longitude
                     self.viewModel = ViewModel(lat: lat, lon: lon, apiType: InternetService.self)
                     self.backgroundView.image = nil
                     self.flickrImage = (self.viewModel?.flickrImage)!
                     self.bindBackground(flickrImage: self.flickrImage)
+                    self.cityName = result.1
+                    self.navigationItem.title = self.cityName
                     return (self.viewModel?.weatherForecastData
                         .map(){ weatherData in
                             print("weatherForecastDataSearch: " + "\(String(describing: weatherData.0.last))")
@@ -451,16 +478,18 @@ extension WeatherViewController: UISearchBarDelegate {
                 }
                 
                 //searchBar.isHidden = true
-            }
-        self.weatherForecastModelObservable?
+        }
+    }
+    func updateUIWithSearchCityData() {
+        weatherForecastModelObservable?
             .subscribe(onNext: { (weatherForecastModel) in
                 print("weatherForecastModelLast: " + "\(weatherForecastModel)")
                 self.currentWeatherView.update(with: weatherForecastModel)
                 self.tableViewController.weatherForecastModel = weatherForecastModel
                 self.tableViewController.tableView.reloadData()
                 self.progressHUD.hide()
-           })
-           .disposed(by: bag)
+            })
+            .disposed(by: bag)
     }
 }
 
@@ -545,6 +574,21 @@ func setupUnitSegmentedControl() {
             print("km/h")
         default:
             break
+        }
+    }
+}
+
+private extension WeatherViewController {
+    @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
+        geoLocation = GeoLocationService.instance.locationGeocoding(address: self.navigationItem.title!)
+        searchCityWeatherData()
+        updateUIWithSearchCityData()
+        let now = Date()
+        let updateString = "Last Updated at " + self.dateFormatter.string(from: now)
+        self.refreshControl.attributedTitle = NSAttributedString(string: updateString)
+        if self.refreshControl.isRefreshing {
+            self.refreshControl.endRefreshing()
+            
         }
     }
 }
