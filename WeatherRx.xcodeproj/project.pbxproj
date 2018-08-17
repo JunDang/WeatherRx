@@ -23,6 +23,10 @@
 		A5146B8B1F799D7E00EE1DF7 /* Weather.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5146B8A1F799D7E00EE1DF7 /* Weather.swift */; };
 		A5146B8C1F799D7E00EE1DF7 /* Weather.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5146B8A1F799D7E00EE1DF7 /* Weather.swift */; };
 		A5146B941F7C731F00EE1DF7 /* WeatherTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5146B931F7C731F00EE1DF7 /* WeatherTest.swift */; };
+		A5177C6B2125191C00DD9BE2 /* DefaultWeatherData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5177C6A2125191C00DD9BE2 /* DefaultWeatherData.swift */; };
+		A5177C6C2125191C00DD9BE2 /* DefaultWeatherData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5177C6A2125191C00DD9BE2 /* DefaultWeatherData.swift */; };
+		A5177C6E212522C500DD9BE2 /* WeatherTestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5177C6D212522C500DD9BE2 /* WeatherTestData.swift */; };
+		A5177C6F212522C500DD9BE2 /* WeatherTestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5177C6D212522C500DD9BE2 /* WeatherTestData.swift */; };
 		A5192BEA20A5222C00C8D483 /* WeatherForecastTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5192BE920A5222C00C8D483 /* WeatherForecastTableViewController.swift */; };
 		A5192BEB20A5222C00C8D483 /* WeatherForecastTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5192BE920A5222C00C8D483 /* WeatherForecastTableViewController.swift */; };
 		A5192BED20A6304500C8D483 /* HourlyForcastCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5192BEC20A6304500C8D483 /* HourlyForcastCell.swift */; };
@@ -121,6 +125,8 @@
 		A5146B7C1F799A2600EE1DF7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A5146B8A1F799D7E00EE1DF7 /* Weather.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Weather.swift; sourceTree = "<group>"; };
 		A5146B931F7C731F00EE1DF7 /* WeatherTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeatherTest.swift; sourceTree = "<group>"; };
+		A5177C6A2125191C00DD9BE2 /* DefaultWeatherData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultWeatherData.swift; sourceTree = "<group>"; };
+		A5177C6D212522C500DD9BE2 /* WeatherTestData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherTestData.swift; sourceTree = "<group>"; };
 		A5192BE920A5222C00C8D483 /* WeatherForecastTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherForecastTableViewController.swift; sourceTree = "<group>"; };
 		A5192BEC20A6304500C8D483 /* HourlyForcastCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyForcastCell.swift; sourceTree = "<group>"; };
 		A5192BF220A8ECDD00C8D483 /* CGExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGExtensions.swift; sourceTree = "<group>"; };
@@ -339,6 +345,8 @@
 			isa = PBXGroup;
 			children = (
 				A546E35F211531F800D8E76F /* ProgressHUD.swift */,
+				A5177C6A2125191C00DD9BE2 /* DefaultWeatherData.swift */,
+				A5177C6D212522C500DD9BE2 /* WeatherTestData.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -605,6 +613,7 @@
 				A546E34E210E01FA00D8E76F /* GeoCodingViewModel.swift in Sources */,
 				A50D28EB20503D5E00351630 /* WeatherViewController.swift in Sources */,
 				A54EC6E52104C75100108139 /* CLLocationManager+Rx.swift in Sources */,
+				A5177C6E212522C500DD9BE2 /* WeatherTestData.swift in Sources */,
 				A597123B209F5190006C3566 /* CurrentWeatherView.swift in Sources */,
 				A546E348210B9DD400D8E76F /* PositionModel.swift in Sources */,
 				A51E092420DFEEF300A45A39 /* WindDirection.swift in Sources */,
@@ -625,6 +634,7 @@
 				A5192BF320A8ECDD00C8D483 /* CGExtensions.swift in Sources */,
 				A507D78A2117E9FD005E05F6 /* RxReachability.swift in Sources */,
 				A582C70B20C043E70036C7D9 /* SideMenuBarView.swift in Sources */,
+				A5177C6B2125191C00DD9BE2 /* DefaultWeatherData.swift in Sources */,
 				A5F4177520B3645200FE45D8 /* WeatherForecastSummaryViewController.swift in Sources */,
 				A5192BED20A6304500C8D483 /* HourlyForcastCell.swift in Sources */,
 				A546E3572110EA1000D8E76F /* ViewModel2.swift in Sources */,
@@ -644,12 +654,14 @@
 				A54EC6E62104C75100108139 /* CLLocationManager+Rx.swift in Sources */,
 				A546E3552110E68600D8E76F /* InternetService2.swift in Sources */,
 				A59D0F2E20B30B3000111552 /* WeatherForecastGraphViewController.swift in Sources */,
+				A5177C6C2125191C00DD9BE2 /* DefaultWeatherData.swift in Sources */,
 				A597123C20A353F3006C3566 /* CurrentWeatherView.swift in Sources */,
 				A546E35B21137DF200D8E76F /* UIViewController+Extension.swift in Sources */,
 				A51E091E20DFE6B900A45A39 /* UIImage+Extension.swift in Sources */,
 				A51E092520DFEEF300A45A39 /* WindDirection.swift in Sources */,
 				A5146B8C1F799D7E00EE1DF7 /* Weather.swift in Sources */,
 				A51F45332090D08600ACCAB7 /* MockFlickrService.swift in Sources */,
+				A5177C6F212522C500DD9BE2 /* WeatherTestData.swift in Sources */,
 				A59D0F2720B20C9100111552 /* HourlyForecastTableViewCell.swift in Sources */,
 				A50D28EC20503D5E00351630 /* WeatherViewController.swift in Sources */,
 				A51E091B20DFE67300A45A39 /* Double+Extension.swift in Sources */,

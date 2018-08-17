@@ -22,11 +22,15 @@ class DailyForecastTableViewCell: UITableViewCell {
         setup()
         setStyle()
         layoutView()
+        UserDefaults.standard.addObserver(self, forKeyPath: "convertToMetric", options: NSKeyValueObservingOptions.new, context: nil)
         //render()
     }
     
     required init?(coder aDecoder: NSCoder) {
       fatalError("init(coder:) has not been implemented")
+    }
+    deinit {
+        UserDefaults.standard.removeObserver(self, forKeyPath: "convertToMetric", context: nil)
     }
     
     override func updateConstraints() {
@@ -97,21 +101,36 @@ private extension DailyForecastTableViewCell {
 }
 
 extension DailyForecastTableViewCell{
+   
     func updateDailyCell(with dailyForecastData: DailyForecastData){
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "EEEE"
         dayLbl.text = dateFormatter.string(from: dailyForecastData.timeDate!)
         let iconName = WeatherIcon.iconMap[dailyForecastData.icon]
         iconImage.image = UIImage(named: "\(String(describing: iconName!))")
-        lowTempLbl.text = "\(dailyForecastData.temperatureMin.roundToInt())" + "\u{00B0}"
-        highTempLbl.text = "\(dailyForecastData.temperatureMax.roundToInt())" + "\u{00B0}"
+        //lowTempLbl.text = "\(dailyForecastData.temperatureMin.roundToInt())" + "\u{00B0}"
+        //highTempLbl.text = "\(dailyForecastData.temperatureMax.roundToInt())" + "\u{00B0}"
+        let lowTempFarenheit = dailyForecastData.temperatureMin
+        let highTempFarenheit = dailyForecastData.temperatureMax
+        let lowTempCelsius = dailyForecastData.temperatureMin.toCelcius()
+        let highTempCelsius = dailyForecastData.temperatureMax.toCelcius()
+        let useMetric =  UserDefaults.standard.string(forKey: "convertToMetric")
+        if useMetric != nil {
+            print("useMetric not nil")
+            lowTempLbl.text = "\(lowTempCelsius.roundToInt())" + "\u{00B0}"
+            highTempLbl.text = "\(highTempCelsius.roundToInt())" + "\u{00B0}"
+        } else {
+            print("useMetric is nil")
+            lowTempLbl.text = "\(lowTempFarenheit.roundToInt())" + "\u{00B0}"
+            highTempLbl.text = "\(highTempFarenheit.roundToInt())" + "\u{00B0}"
+       
        // print("dailyIconName: " + "\(iconName)")
         /*dayLbl.text = "Saturday"
         iconImage.image = UIImage(named: "sunny")
         lowTempLbl.text = "5\u{00B0}"
         highTempLbl.text = "20\u{00B0}"*/
     }
+  }
+
 }
-
-
 

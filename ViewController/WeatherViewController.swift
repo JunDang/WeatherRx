@@ -33,8 +33,7 @@ class WeatherViewController: UIViewController {
     private var sideMenuBarContainerView = UIView(frame: CGRect.zero)
     private var isMenuButtonPressed: Bool = true
     private let bag = DisposeBag()
-    private let temperatureUnitControl = UISegmentedControl()
-    private let windSpeedUnitControl = UISegmentedControl()
+    private let unitControl = UISegmentedControl()
     var weatherForecastData: Observable<(AnyRealmCollection<WeatherForecastModel>, RealmChangeset?)>?
     var flickrImage = BehaviorRelay<UIImage?>(value: UIImage(named: "banff")!)
     var viewModel: ViewModel?
@@ -53,6 +52,9 @@ class WeatherViewController: UIViewController {
     var cityResultObservable: Observable<Result<String, Error>>?
     var cityNameObservable: Observable<String>?
     var dateFormatter = DateFormatter()
+    var convertToMetric: Bool?
+    var userDefaults = UserDefaults.standard
+    var defaultWeatherData: WeatherForecastModel = WeatherForecastModel()
     
     override func viewDidLoad() {
        super.viewDidLoad()
@@ -65,13 +67,57 @@ class WeatherViewController: UIViewController {
        reachability = Reachability()
        try? reachability?.startNotifier()
        //self.activityIndicatorView.startAnimating()
-        
+        defaultWeatherData.latitude = 0.0
+        defaultWeatherData.longitude = 0.0
+        defaultWeatherData.currently?.time = 0
+        defaultWeatherData.currently?.timeDate = nil
+        defaultWeatherData.currently?.summary = ""
+        defaultWeatherData.currently?.icon = ""
+        defaultWeatherData.currently?.temperature = 0.0
+        defaultWeatherData.currently?.apparentTemperature = 0.0
+        defaultWeatherData.daily?.dailyWeatherModel.first?.time = 0
+        defaultWeatherData.daily?.dailyWeatherModel.first?.timeDate = nil
+        defaultWeatherData.daily?.dailyWeatherModel.first?.temperatureMax = 0.0
+        defaultWeatherData.daily?.dailyWeatherModel.first?.temperatureMin = 0.0
+        defaultWeatherData.daily?.dailyWeatherModel.first?.icon = ""
+        defaultWeatherData.daily?.dailyWeatherModel.first?.sunsetTime = 0
+        defaultWeatherData.daily?.dailyWeatherModel.first?.sunriseTime = 0
+        defaultWeatherData.daily?.dailyWeatherModel.first?.sunriseTimeDate = nil
+        defaultWeatherData.daily?.dailyWeatherModel.first?.sunsetTimeDate = nil
+        defaultWeatherData.daily?.dailyWeatherModel.first?.precipType = ""
+        defaultWeatherData.daily?.dailyWeatherModel.first?.precipProbability = 0.0
+        defaultWeatherData.daily?.dailyWeatherModel.first?.precipIntensity = 0.0
+        defaultWeatherData.daily?.dailyWeatherModel.first?.dewPoint = 0.0
+        defaultWeatherData.daily?.dailyWeatherModel.first?.pressure = 0.0
+        defaultWeatherData.daily?.dailyWeatherModel.first?.humidity = 0.0
+        defaultWeatherData.daily?.dailyWeatherModel.first?.windSpeed = 0.0
+        defaultWeatherData.daily?.dailyWeatherModel.first?.windBearing = 0.0
+        defaultWeatherData.daily?.dailyWeatherModel.first?.cloudCover = 0.0
+        defaultWeatherData.daily?.dailyWeatherModel.first?.ozone = 0.0
+        defaultWeatherData.hourly?.hourlyWeatherModel.first?.timeDate = nil
+        defaultWeatherData.hourly?.hourlyWeatherModel.first?.time = 0
+        defaultWeatherData.hourly?.hourlyWeatherModel.first?.icon = ""
+        defaultWeatherData.hourly?.hourlyWeatherModel.first?.temperature = 0.0
+        defaultWeatherData.minutely?.summary = ""
         fetchData()
         // add refresh time
         self.dateFormatter.dateStyle = DateFormatter.Style.short
         self.dateFormatter.timeStyle = DateFormatter.Style.long
+        //NSUserDefaults
+      /* convertToMetric = userDefaults.object(forKey: "convertToMetric") as? Bool
+        if (convertToMetric == nil) {
+            convertToMetric = false
+            userDefaults.set(convertToMetric, forKey: "convertToMetric")
+        }
         
-     }
+        if convertToMetric == true {
+            unitControl.selectedSegmentIndex = 0
+        } else {
+            unitControl.selectedSegmentIndex = 1
+        }*/
+       
+       
+    }
 
     override func didReceiveMemoryWarning() {
       super.didReceiveMemoryWarning()
@@ -97,7 +143,36 @@ class WeatherViewController: UIViewController {
                     self.bindBackground(flickrImage: self.flickrImage)
                     return self.weatherForecastData!
         }
-        cityResultObservable = Reachability.rx.isConnected
+        /*weatherForecastModelObservable = weatherForecastData?
+            .map(){(weatherForecastData) in
+                //print("weatherForecastData: " + "\(weatherForecastData)")
+                    guard weatherForecastData.0.first != nil else {
+                    let defaultWeatherModel = self.defaultWeatherData
+                    return defaultWeatherModel
+                }
+                let weatherForecastModel = weatherForecastData.0.first
+                 print("weatherForecastweatherForecastModel: " + "\(weatherForecastModel)")
+                return weatherForecastModel!
+            }*/
+      /*weatherForecastModelObservable =  locationObservable
+            .flatMap(){[unowned self] location -> Observable<WeatherForecastModel> in
+                let lat = location.latitude
+                let lon = location.longitude
+                self.viewModel = ViewModel(lat: lat, lon: lon, apiType: InternetService.self)
+                self.backgroundView.image = nil
+                self.flickrImage = (self.viewModel?.flickrImage)!
+                self.bindBackground(flickrImage: self.flickrImage)
+                return (self.viewModel?.weatherForecastData
+                    .map(){ weatherData in
+                        guard weatherData.0.last != nil else {
+                           let defaultWeatherModel = self.defaultWeatherData
+                           return defaultWeatherModel
+                        }
+                        print("weatherForecastDataSearch: " + "\(String(describing: weatherData.0.last))")
+                        return weatherData.0.last!
+                    })!
+              }*/
+       cityResultObservable = Reachability.rx.isConnected
             .flatMap(){ _ -> Observable<Result<String, Error>> in return
                 GeoLocationService.instance.cityResultObservable!
             }
@@ -120,10 +195,41 @@ class WeatherViewController: UIViewController {
             .disposed(by: bag)
     }
     func updateUI() {
+       /* weatherForecastModelObservable = weatherForecastData?
+            .map(){(weatherForecastData) in
+                //print("weatherForecastData: " + "\(weatherForecastData)")
+                guard weatherForecastData.0.first != nil else {
+                    let defaultWeatherModel = self.defaultWeatherData
+                    return defaultWeatherModel
+                }
+                let weatherForecastModel = weatherForecastData.0.first
+                print("weatherForecastweatherForecastModel: " + "\(weatherForecastModel)")
+                return weatherForecastModel!
+        }*/
+      /* weatherForecastModelObservable?
+            .subscribe(onNext: { (weatherForecastModel) in
+                print("weatherForecastModelLast: " + "\(weatherForecastModel)")
+                self.currentWeatherView.update(with: weatherForecastModel)
+                self.tableViewController.weatherForecastModel = weatherForecastModel
+                self.tableViewController.tableView.reloadData()
+                self.progressHUD.hide()
+            })
+            .disposed(by: bag)*/
+ /*weatherForecastModelObservable = weatherForecastData?
+            .map(){(weatherForecastData) in
+                //print("weatherForecastData: " + "\(weatherForecastData)")
+                guard weatherForecastData.0.first != nil else {
+                    let defaultWeatherModel = self.defaultWeatherData
+                    return defaultWeatherModel
+                }
+                let weatherForecastModel = weatherForecastData.0.first
+                print("weatherForecastweatherForecastModel: " + "\(weatherForecastModel)")
+                return weatherForecastModel!
+        }*/
         weatherForecastData?
             .subscribe(onNext: { (weatherForecastData) in
                 //print("weatherForecastData: " + "\(weatherForecastData)")
-                let weatherForecastModel = weatherForecastData.0.first
+                let weatherForecastModel = weatherForecastData.0.last
                 if weatherForecastModel != nil {
                     self.currentWeatherView.update(with: weatherForecastModel!)
                     self.tableViewController.weatherForecastModel = weatherForecastModel
@@ -156,6 +262,7 @@ class WeatherViewController: UIViewController {
                 self.displayErrorMessage(userMessage: "Not connected to Network", handler: nil)
             })
             .disposed(by:bag)
+       
         updateUI()
     }
     
@@ -182,13 +289,12 @@ class WeatherViewController: UIViewController {
         return viewController
     }()
     
-    lazy var refreshControl: UIRefreshControl = {
+    private lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action:
             #selector(WeatherViewController.handleRefresh(_:)),
                                  for: UIControlEvents.valueChanged)
         refreshControl.tintColor = UIColor.red
-        
         return refreshControl
     }()
 }
@@ -498,83 +604,72 @@ extension WeatherViewController {
         if isMenuButtonPressed {
           setupUnitSegmentedView()
           isMenuButtonPressed = false
-          windSpeedUnitControl.addTarget(self, action: #selector(unitChange(_:)), for: .valueChanged)
-          temperatureUnitControl.addTarget(self, action: #selector(unitChange(_:)), for: .valueChanged)
-        } else {
-            if temperatureUnitControl.superview != nil && windSpeedUnitControl.superview != nil {
-                temperatureUnitControl.removeFromSuperview()
-                windSpeedUnitControl.removeFromSuperview()
+          unitControl.addTarget(self, action: #selector(unitChange(_:)), for: .valueChanged)
+          } else {
+            if unitControl.superview != nil {
+                unitControl.removeFromSuperview()
                 isMenuButtonPressed = true
             }
         }
        
      }
     func setupUnitSegmentedView() {
-        frontScrollView.addSubview(temperatureUnitControl)
-        frontScrollView.addSubview(windSpeedUnitControl)
+        frontScrollView.addSubview(unitControl)
         unitSegmentedViewLayout()
         unitSegmentedViewStyle()
         setupUnitSegmentedControl()
  
     }
     func unitSegmentedViewLayout() {
-        constrain(temperatureUnitControl) {
+        constrain(unitControl) {
             $0.top == $0.superview!.top
             $0.left == $0.superview!.left + 5
-            $0.width == 120
+            $0.width == 180
             $0.height == 40
          }
-        constrain(windSpeedUnitControl, temperatureUnitControl) {
-            $0.top == $1.bottom + 2
-            $0.left == $1.left
-            $0.right == $1.right
-            $0.height == 40
-        }
     }
 func unitSegmentedViewStyle() {
-    temperatureUnitControl.backgroundColor = UIColor.black.withAlphaComponent(0.6)
-    temperatureUnitControl.layer.cornerRadius = 5.0
-    temperatureUnitControl.tintColor = UIColor.white
-    temperatureUnitControl.setTitleTextAttributes([NSAttributedStringKey.font: UIFont(name: "HelveticaNeue-Bold", size: 15)!], for: .normal)
-    temperatureUnitControl.sizeToFit()
-    
-    windSpeedUnitControl.backgroundColor = UIColor.black.withAlphaComponent(0.6)
-    windSpeedUnitControl.layer.cornerRadius = 5.0
-    windSpeedUnitControl.tintColor = UIColor.white
-    windSpeedUnitControl.setTitleTextAttributes([NSAttributedStringKey.font: UIFont(name: "HelveticaNeue-Bold", size: 15)!], for: .normal)
-    windSpeedUnitControl.sizeToFit()
-    
+    unitControl.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+    unitControl.layer.cornerRadius = 5.0
+    unitControl.tintColor = UIColor.white
+    unitControl.setTitleTextAttributes([NSAttributedStringKey.font: UIFont(name: "HelveticaNeue-Bold", size: 15)!], for: .normal)
+    unitControl.sizeToFit()
 }
 func setupUnitSegmentedControl() {
     // Configure Segmented Control
-   temperatureUnitControl.removeAllSegments()
-   windSpeedUnitControl.removeAllSegments()
-   temperatureUnitControl.insertSegment(withTitle: "°F", at: 0, animated: false)
-   temperatureUnitControl.insertSegment(withTitle: "°C", at: 1, animated: false)
-   windSpeedUnitControl.insertSegment(withTitle: "mph", at: 0, animated: false)
-   windSpeedUnitControl.insertSegment(withTitle: "km/h", at: 1, animated: false)
+   unitControl.removeAllSegments()
+   unitControl.insertSegment(withTitle: "Metric", at: 0, animated: false)
+   unitControl.insertSegment(withTitle: "Imperial", at: 1, animated: false)
     
-   temperatureUnitControl.selectedSegmentIndex = 0
-   windSpeedUnitControl.selectedSegmentIndex = 0
-    
+   unitControl.selectedSegmentIndex = 0
 }
     @objc func unitChange(_ sender: UISegmentedControl) {
-        switch temperatureUnitControl.selectedSegmentIndex {
+        geoLocation = GeoLocationService.instance.locationGeocoding(address: self.navigationItem.title!)
+        searchCityWeatherData()
+        switch unitControl.selectedSegmentIndex {
         case 0:
-            print("Farenheit")
+            print("Metric")
+            convertToMetric = userDefaults.object(forKey: "convertToMetric") as? Bool
+            if (convertToMetric == nil) {
+                convertToMetric = false
+                userDefaults.set(convertToMetric, forKey: "convertToMetric")
+            }
+            convertToMetric = true
+            userDefaults.set(convertToMetric, forKey: "convertToCelsius")
+            userDefaults.synchronize()
+            updateUIWithSearchCityData()
         case 1:
-            print("Celcius")
-        default:
+            convertToMetric = false
+            userDefaults.removeObject(forKey: "convertToCelsius")
+            userDefaults.synchronize()
+            updateUIWithSearchCityData()
+            print("convertToMetric: \(convertToMetric)")
+            print("Imperial")
+            default:
             break
         }
-        switch windSpeedUnitControl.selectedSegmentIndex {
-        case 0:
-            print("mile per hour")
-        case 1:
-            print("km/h")
-        default:
-            break
-        }
+        //userDefaults.set(convertToMetric, forKey: "convertToCelsius")
+        //userDefaults.synchronize()
     }
 }
 
