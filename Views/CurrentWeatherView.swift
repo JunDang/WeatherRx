@@ -99,30 +99,7 @@ private extension CurrentWeatherView{
             $0.left == $1.right + 8
             $0.bottom == $0.superview!.bottom
         }
-       /* constrain(currentTempLbl, iconImage) {
-            $0.top == $1.bottom
-            $0.left == $1.left
-        }
-        constrain(feelsLikeTempLbl, currentTempLbl) {
-            $0.top == $1.bottom
-            $0.left == $1.left
-        }
-        constrain(lowTempLbl, feelsLikeTempLbl) {
-            $0.top == $1.top
-            $0.bottom == $1.bottom
-            $0.left == $1.right + 10
-        }
-        constrain(highTempLbl, lowTempLbl) {
-            $0.top == $1.top
-            $0.bottom == $1.bottom
-            $0.left == $1.right + 10
-        }
-        constrain(minutelySummaryLbl, feelsLikeTempLbl) {
-            $0.top == $1.bottom
-            $0.left == $1.left
-            $0.bottom == $0.superview!.bottom
-        }*/
-   }
+    }
 }
 
 // MARK: Style
@@ -161,44 +138,36 @@ private extension CurrentWeatherView{
 
 // MARK: Render
 extension CurrentWeatherView{
-    /*func update(with currentWeather: CurrentlyWeatherModel){
-        self.currentWeather = currentWeather
-        self.weatherLbl.text = currentWeather.summary
-        self.currentTempLbl.text = "\(String(describing: currentWeather.temperature.roundToInt()))" + "\u{00B0}"
-        self.feelsLikeTempLbl.text = "Feels like: " + "\(String(describing: currentWeather.apparentTemperature.roundToInt()))" + "\u{00B0}"
-        let iconName = WeatherIcon.iconMap[(currentWeather.icon)]
-        self.iconImage.image = UIImage(named: "\(String(describing: iconName!))")
-     */
-      /*  let currentDaily = weatherForecastModel.0[0].daily?.dailyWeatherModel.first
-        self.lowTempLbl.text = "\(String(describing: currentDaily!.temperatureMin.roundToInt()))" + "\u{00B0}"
-        self.highTempLbl.text = "\(String(describing: currentDaily!.temperatureMax.roundToInt()))" + "\u{00B0}"*/
-        
-    
-    
+  
     func update(with weatherForecastModel: WeatherForecastModel){
              let currentWeather = weatherForecastModel.currently
-            //print("currentWeather: " + "\(String(describing: currentWeather))")
-             self.weatherLbl.text = currentWeather!.summary
-             self.currentTempLbl.text = "\(String(describing: currentWeather!.temperature.roundToInt()))" + "\u{00B0}"
-             self.feelsLikeTempLbl.text = "Feels like: " + "\(String(describing: currentWeather!.apparentTemperature.roundToInt()))" + "\u{00B0}"
+             weatherLbl.text = currentWeather!.summary
              let iconName = WeatherIcon.iconMap[(currentWeather?.icon)!]
-             self.iconImage.image = UIImage(named: "\(String(describing: iconName!))")
+             iconImage.image = UIImage(named: "\(String(describing: iconName!))")
             
              let currentDaily = weatherForecastModel.daily?.dailyWeatherModel.first
-             self.lowTempLbl.text = "min: " + "\(String(describing: currentDaily!.temperatureMin.roundToInt()))" + "\u{00B0}"
-             self.highTempLbl.text = "max: " + "\(String(describing: currentDaily!.temperatureMax.roundToInt()))" + "\u{00B0}"
         
              let minutelySummary = weatherForecastModel.minutely?.summary
-             self.minutelySummaryLbl.text = minutelySummary
-       
+             minutelySummaryLbl.text = minutelySummary
         
-     /*   weatherLbl.text = "Sunny"
-        currentTempLbl.text = "15\u{00B0}"
-        iconImage.image = UIImage(named: "sunny")
-        feelsLikeTempLbl.text = "Feels like: 15\u{00B0}"
-        minutelySummaryLbl.text = "sunny in the hour"
-        lowTempLbl.text = "Low: 5\u{00B0}"
-        highTempLbl.text = "High: 20\u{00B0}"*/
+             let unitChange =  UserDefaults.standard.string(forKey: "UnitChange")
+             if unitChange == "convertToMetric" {
+                currentTempLbl.text = "\(String(describing: currentWeather!.temperature.toCelcius().roundToInt()))" + "\u{00B0}" + "C"
+                feelsLikeTempLbl.text = "Feels like: " + "\(String(describing: currentWeather!.apparentTemperature.toCelcius().roundToInt()))" + "\u{00B0}" + "C"
+                lowTempLbl.text = "min: " + "\(String(describing: currentDaily!.temperatureMin.toCelcius().roundToInt()))" + "\u{00B0}"  + "C"
+                highTempLbl.text = "max: " + "\(String(describing: currentDaily!.temperatureMax.toCelcius().roundToInt()))" + "\u{00B0}" + "C"
+             } else if unitChange == "convertToImperial" {
+                currentTempLbl.text = "\(String(describing: currentWeather!.temperature.roundToInt()))" + "\u{00B0}" + "F"
+                feelsLikeTempLbl.text = "Feels like: " + "\(String(describing: currentWeather!.apparentTemperature.roundToInt()))" + "\u{00B0}" + "F"
+                lowTempLbl.text = "min: " + "\(String(describing: currentDaily!.temperatureMin.roundToInt()))" + "\u{00B0}"  + "F"
+                highTempLbl.text = "max: " + "\(String(describing: currentDaily!.temperatureMax.roundToInt()))" + "\u{00B0}" + "F"
+             } else {
+                currentTempLbl.text = "\(String(describing: currentWeather!.temperature.toCelcius().roundToInt()))" + "\u{00B0}" + "C"
+                feelsLikeTempLbl.text = "Feels like: " + "\(String(describing: currentWeather!.apparentTemperature.toCelcius().roundToInt()))" + "\u{00B0}" + "C"
+                lowTempLbl.text = "min: " + "\(String(describing: currentDaily!.temperatureMin.toCelcius().roundToInt()))" + "\u{00B0}"  + "C"
+                highTempLbl.text = "max: " + "\(String(describing: currentDaily!.temperatureMax.toCelcius().roundToInt()))" + "\u{00B0}" + "C"
+             }
+        
     }
 
 }

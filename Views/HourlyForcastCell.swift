@@ -89,9 +89,17 @@ extension HourlyForecastCell {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "HH:mm"
         hourLbl.text = dateFormatter.string(from: hourlyForecastData.timeDate!)
-        tempsLbl.text = "\(hourlyForecastData.temperature.roundToInt())" + "\u{00B0}"
+        //tempsLbl.text = "\(hourlyForecastData.temperature.roundToInt())" + "\u{00B0}"
         let iconName = WeatherIcon.iconMap[hourlyForecastData.icon]
        // print("hourlyIconName: " + "\(iconName)")
         iconImage.image = UIImage(named: "\(String(describing: iconName!))")
+        let unitChange =  UserDefaults.standard.string(forKey: "UnitChange")
+        if unitChange == "convertToMetric" {
+            tempsLbl.text = "\(hourlyForecastData.temperature.toCelcius().roundToInt())" + "\u{00B0}" + "C"
+        } else if unitChange == "convertToImperial" {
+            tempsLbl.text = "\(hourlyForecastData.temperature.roundToInt())" + "\u{00B0}" + "F"
+        } else {
+            tempsLbl.text = "\(hourlyForecastData.temperature.toCelcius().roundToInt())" + "\u{00B0}" + "C"
+        }
     }
 }

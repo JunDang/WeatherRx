@@ -52,9 +52,12 @@ class WeatherViewController: UIViewController {
     var cityResultObservable: Observable<Result<String, Error>>?
     var cityNameObservable: Observable<String>?
     var dateFormatter = DateFormatter()
-    var convertToMetric: Bool?
     var userDefaults = UserDefaults.standard
-    var defaultWeatherData: WeatherForecastModel = WeatherForecastModel()
+    var valueStored:Bool?
+    let convertToMetric: String = "convertToMetric"
+    var selectedIndex = 0
+    var segmentIndexStored: Bool?
+    var segmentIndex: Int?
     
     override func viewDidLoad() {
        super.viewDidLoad()
@@ -67,56 +70,23 @@ class WeatherViewController: UIViewController {
        reachability = Reachability()
        try? reachability?.startNotifier()
        //self.activityIndicatorView.startAnimating()
-        defaultWeatherData.latitude = 0.0
-        defaultWeatherData.longitude = 0.0
-        defaultWeatherData.currently?.time = 0
-        defaultWeatherData.currently?.timeDate = nil
-        defaultWeatherData.currently?.summary = ""
-        defaultWeatherData.currently?.icon = ""
-        defaultWeatherData.currently?.temperature = 0.0
-        defaultWeatherData.currently?.apparentTemperature = 0.0
-        defaultWeatherData.daily?.dailyWeatherModel.first?.time = 0
-        defaultWeatherData.daily?.dailyWeatherModel.first?.timeDate = nil
-        defaultWeatherData.daily?.dailyWeatherModel.first?.temperatureMax = 0.0
-        defaultWeatherData.daily?.dailyWeatherModel.first?.temperatureMin = 0.0
-        defaultWeatherData.daily?.dailyWeatherModel.first?.icon = ""
-        defaultWeatherData.daily?.dailyWeatherModel.first?.sunsetTime = 0
-        defaultWeatherData.daily?.dailyWeatherModel.first?.sunriseTime = 0
-        defaultWeatherData.daily?.dailyWeatherModel.first?.sunriseTimeDate = nil
-        defaultWeatherData.daily?.dailyWeatherModel.first?.sunsetTimeDate = nil
-        defaultWeatherData.daily?.dailyWeatherModel.first?.precipType = ""
-        defaultWeatherData.daily?.dailyWeatherModel.first?.precipProbability = 0.0
-        defaultWeatherData.daily?.dailyWeatherModel.first?.precipIntensity = 0.0
-        defaultWeatherData.daily?.dailyWeatherModel.first?.dewPoint = 0.0
-        defaultWeatherData.daily?.dailyWeatherModel.first?.pressure = 0.0
-        defaultWeatherData.daily?.dailyWeatherModel.first?.humidity = 0.0
-        defaultWeatherData.daily?.dailyWeatherModel.first?.windSpeed = 0.0
-        defaultWeatherData.daily?.dailyWeatherModel.first?.windBearing = 0.0
-        defaultWeatherData.daily?.dailyWeatherModel.first?.cloudCover = 0.0
-        defaultWeatherData.daily?.dailyWeatherModel.first?.ozone = 0.0
-        defaultWeatherData.hourly?.hourlyWeatherModel.first?.timeDate = nil
-        defaultWeatherData.hourly?.hourlyWeatherModel.first?.time = 0
-        defaultWeatherData.hourly?.hourlyWeatherModel.first?.icon = ""
-        defaultWeatherData.hourly?.hourlyWeatherModel.first?.temperature = 0.0
-        defaultWeatherData.minutely?.summary = ""
-        fetchData()
+       fetchData()
         // add refresh time
         self.dateFormatter.dateStyle = DateFormatter.Style.short
         self.dateFormatter.timeStyle = DateFormatter.Style.long
         //NSUserDefaults
-      /* convertToMetric = userDefaults.object(forKey: "convertToMetric") as? Bool
-        if (convertToMetric == nil) {
-            convertToMetric = false
-            userDefaults.set(convertToMetric, forKey: "convertToMetric")
-        }
+        valueStored = userDefaults.object(forKey: "unitChange") as? Bool
+         if (valueStored == nil) {
+            valueStored = false
+           userDefaults.set(convertToMetric, forKey: "unitChange")
+         }
         
-        if convertToMetric == true {
-            unitControl.selectedSegmentIndex = 0
-        } else {
-            unitControl.selectedSegmentIndex = 1
-        }*/
-       
-       
+         /*if (valueStored == true) {
+           unitControl.selectedSegmentIndex = 0
+         } else {
+           unitControl.selectedSegmentIndex = 1
+         }*/
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -143,35 +113,7 @@ class WeatherViewController: UIViewController {
                     self.bindBackground(flickrImage: self.flickrImage)
                     return self.weatherForecastData!
         }
-        /*weatherForecastModelObservable = weatherForecastData?
-            .map(){(weatherForecastData) in
-                //print("weatherForecastData: " + "\(weatherForecastData)")
-                    guard weatherForecastData.0.first != nil else {
-                    let defaultWeatherModel = self.defaultWeatherData
-                    return defaultWeatherModel
-                }
-                let weatherForecastModel = weatherForecastData.0.first
-                 print("weatherForecastweatherForecastModel: " + "\(weatherForecastModel)")
-                return weatherForecastModel!
-            }*/
-      /*weatherForecastModelObservable =  locationObservable
-            .flatMap(){[unowned self] location -> Observable<WeatherForecastModel> in
-                let lat = location.latitude
-                let lon = location.longitude
-                self.viewModel = ViewModel(lat: lat, lon: lon, apiType: InternetService.self)
-                self.backgroundView.image = nil
-                self.flickrImage = (self.viewModel?.flickrImage)!
-                self.bindBackground(flickrImage: self.flickrImage)
-                return (self.viewModel?.weatherForecastData
-                    .map(){ weatherData in
-                        guard weatherData.0.last != nil else {
-                           let defaultWeatherModel = self.defaultWeatherData
-                           return defaultWeatherModel
-                        }
-                        print("weatherForecastDataSearch: " + "\(String(describing: weatherData.0.last))")
-                        return weatherData.0.last!
-                    })!
-              }*/
+      
        cityResultObservable = Reachability.rx.isConnected
             .flatMap(){ _ -> Observable<Result<String, Error>> in return
                 GeoLocationService.instance.cityResultObservable!
@@ -195,37 +137,7 @@ class WeatherViewController: UIViewController {
             .disposed(by: bag)
     }
     func updateUI() {
-       /* weatherForecastModelObservable = weatherForecastData?
-            .map(){(weatherForecastData) in
-                //print("weatherForecastData: " + "\(weatherForecastData)")
-                guard weatherForecastData.0.first != nil else {
-                    let defaultWeatherModel = self.defaultWeatherData
-                    return defaultWeatherModel
-                }
-                let weatherForecastModel = weatherForecastData.0.first
-                print("weatherForecastweatherForecastModel: " + "\(weatherForecastModel)")
-                return weatherForecastModel!
-        }*/
-      /* weatherForecastModelObservable?
-            .subscribe(onNext: { (weatherForecastModel) in
-                print("weatherForecastModelLast: " + "\(weatherForecastModel)")
-                self.currentWeatherView.update(with: weatherForecastModel)
-                self.tableViewController.weatherForecastModel = weatherForecastModel
-                self.tableViewController.tableView.reloadData()
-                self.progressHUD.hide()
-            })
-            .disposed(by: bag)*/
- /*weatherForecastModelObservable = weatherForecastData?
-            .map(){(weatherForecastData) in
-                //print("weatherForecastData: " + "\(weatherForecastData)")
-                guard weatherForecastData.0.first != nil else {
-                    let defaultWeatherModel = self.defaultWeatherData
-                    return defaultWeatherModel
-                }
-                let weatherForecastModel = weatherForecastData.0.first
-                print("weatherForecastweatherForecastModel: " + "\(weatherForecastModel)")
-                return weatherForecastModel!
-        }*/
+       
         weatherForecastData?
             .subscribe(onNext: { (weatherForecastData) in
                 //print("weatherForecastData: " + "\(weatherForecastData)")
@@ -256,6 +168,7 @@ class WeatherViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        //unitControl.selectedSegmentIndex = selectedIndex
         try? reachability?.startNotifier()
         Reachability.rx.isDisconnected
             .subscribe(onNext:{
@@ -265,7 +178,7 @@ class WeatherViewController: UIViewController {
        
         updateUI()
     }
-    
+   
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         reachability?.stopNotifier()
@@ -641,36 +554,63 @@ func setupUnitSegmentedControl() {
    unitControl.insertSegment(withTitle: "Metric", at: 0, animated: false)
    unitControl.insertSegment(withTitle: "Imperial", at: 1, animated: false)
     
-   unitControl.selectedSegmentIndex = 0
+   segmentIndexStored = userDefaults.object(forKey: "segmentIndex") as? Bool
+   if (segmentIndexStored == nil) {
+       segmentIndexStored = false
+       userDefaults.set(selectedIndex, forKey: "segmentIndex")
+   }
+   segmentIndex =  UserDefaults.standard.integer(forKey: "segmentIndex")
+    print("segmentIndex: \(segmentIndex)")
+   unitControl.selectedSegmentIndex = segmentIndex!
 }
-    @objc func unitChange(_ sender: UISegmentedControl) {
-        geoLocation = GeoLocationService.instance.locationGeocoding(address: self.navigationItem.title!)
-        searchCityWeatherData()
-        switch unitControl.selectedSegmentIndex {
-        case 0:
-            print("Metric")
-            convertToMetric = userDefaults.object(forKey: "convertToMetric") as? Bool
-            if (convertToMetric == nil) {
-                convertToMetric = false
-                userDefaults.set(convertToMetric, forKey: "convertToMetric")
-            }
-            convertToMetric = true
-            userDefaults.set(convertToMetric, forKey: "convertToCelsius")
-            userDefaults.synchronize()
-            updateUIWithSearchCityData()
-        case 1:
-            convertToMetric = false
-            userDefaults.removeObject(forKey: "convertToCelsius")
-            userDefaults.synchronize()
-            updateUIWithSearchCityData()
-            print("convertToMetric: \(convertToMetric)")
-            print("Imperial")
-            default:
-            break
+@objc func unitChange(_ sender: UISegmentedControl) {
+     let realm = try? Realm()
+     let weatherForecastModelLast = realm?.objects(WeatherForecastModel.self).last
+     weatherForecastModelObservable = Observable.just(weatherForecastModelLast!)
+     switch unitControl.selectedSegmentIndex {
+     case 0:
+        
+        if valueStored == true {
+            userDefaults.removeObject(forKey: "UnitChange")
         }
-        //userDefaults.set(convertToMetric, forKey: "convertToCelsius")
-        //userDefaults.synchronize()
-    }
+             userDefaults.set(convertToMetric, forKey: "UnitChange")
+        //Set segment index
+        
+        if segmentIndexStored != nil {
+            segmentIndex =  UserDefaults.standard.integer(forKey: "segmentIndex")
+            print("segment0")
+            if segmentIndex == 1 {
+            userDefaults.removeObject(forKey: "segmentIndex")
+            selectedIndex = 0
+            userDefaults.set(selectedIndex, forKey: "segmentIndex")
+            }
+        }
+        print("segmentIndex0: \(segmentIndex)")
+        updateUIWithSearchCityData()
+     case 1:
+            //let valueStored = userDefaults.object(forKey: "UnitChange") as? Bool
+        if valueStored == true {
+           userDefaults.removeObject(forKey: "UnitChange")
+        }
+        let convertToImperial: String = "convertToImperial"
+           userDefaults.set(convertToImperial, forKey: "UnitChange")
+        
+        segmentIndexStored = userDefaults.object(forKey: "segmentIndex") as? Bool
+        if segmentIndexStored != nil {
+            segmentIndex =  UserDefaults.standard.integer(forKey: "segmentIndex")
+            if segmentIndex == 0 {
+            print("segment1")
+            userDefaults.removeObject(forKey: "segmentIndex")
+            selectedIndex = 1
+            userDefaults.set(selectedIndex, forKey: "segmentIndex")
+            }
+       
+        }
+        updateUIWithSearchCityData()
+      default:
+        break
+        }
+   }
 }
 
 private extension WeatherViewController {
