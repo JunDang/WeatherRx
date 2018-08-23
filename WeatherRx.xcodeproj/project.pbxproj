@@ -27,6 +27,8 @@
 		A5177C6C2125191C00DD9BE2 /* DefaultWeatherData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5177C6A2125191C00DD9BE2 /* DefaultWeatherData.swift */; };
 		A5177C6E212522C500DD9BE2 /* WeatherTestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5177C6D212522C500DD9BE2 /* WeatherTestData.swift */; };
 		A5177C6F212522C500DD9BE2 /* WeatherTestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5177C6D212522C500DD9BE2 /* WeatherTestData.swift */; };
+		A5177CB5212DAE6900DD9BE2 /* ChartVlueFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5177CB4212DAE6900DD9BE2 /* ChartVlueFormatter.swift */; };
+		A5177CB6212DAF2400DD9BE2 /* ChartVlueFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5177CB4212DAE6900DD9BE2 /* ChartVlueFormatter.swift */; };
 		A5192BEA20A5222C00C8D483 /* WeatherForecastTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5192BE920A5222C00C8D483 /* WeatherForecastTableViewController.swift */; };
 		A5192BEB20A5222C00C8D483 /* WeatherForecastTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5192BE920A5222C00C8D483 /* WeatherForecastTableViewController.swift */; };
 		A5192BED20A6304500C8D483 /* HourlyForcastCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5192BEC20A6304500C8D483 /* HourlyForcastCell.swift */; };
@@ -127,6 +129,7 @@
 		A5146B931F7C731F00EE1DF7 /* WeatherTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeatherTest.swift; sourceTree = "<group>"; };
 		A5177C6A2125191C00DD9BE2 /* DefaultWeatherData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultWeatherData.swift; sourceTree = "<group>"; };
 		A5177C6D212522C500DD9BE2 /* WeatherTestData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherTestData.swift; sourceTree = "<group>"; };
+		A5177CB4212DAE6900DD9BE2 /* ChartVlueFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartVlueFormatter.swift; sourceTree = "<group>"; };
 		A5192BE920A5222C00C8D483 /* WeatherForecastTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherForecastTableViewController.swift; sourceTree = "<group>"; };
 		A5192BEC20A6304500C8D483 /* HourlyForcastCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyForcastCell.swift; sourceTree = "<group>"; };
 		A5192BF220A8ECDD00C8D483 /* CGExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGExtensions.swift; sourceTree = "<group>"; };
@@ -337,6 +340,7 @@
 				A546E35921137DF200D8E76F /* UIViewController+Extension.swift */,
 				A507D7892117E9FD005E05F6 /* RxReachability.swift */,
 				A507D78C2117EA28005E05F6 /* Reachability.swift */,
+				A5177CB4212DAE6900DD9BE2 /* ChartVlueFormatter.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -503,6 +507,7 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-WeatherRxAbstract-WeatherRxTests/Pods-WeatherRxAbstract-WeatherRxTests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Cartography/Cartography.framework",
+				"${BUILT_PRODUCTS_DIR}/Charts/Charts.framework",
 				"${BUILT_PRODUCTS_DIR}/DynamicBlurView/DynamicBlurView.framework",
 				"${BUILT_PRODUCTS_DIR}/ReachabilitySwift/Reachability.framework",
 				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
@@ -518,6 +523,7 @@
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Cartography.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Charts.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DynamicBlurView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Reachability.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
@@ -561,6 +567,7 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-WeatherRxAbstract-WeatherRx/Pods-WeatherRxAbstract-WeatherRx-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Cartography/Cartography.framework",
+				"${BUILT_PRODUCTS_DIR}/Charts/Charts.framework",
 				"${BUILT_PRODUCTS_DIR}/Differentiator/Differentiator.framework",
 				"${BUILT_PRODUCTS_DIR}/DynamicBlurView/DynamicBlurView.framework",
 				"${BUILT_PRODUCTS_DIR}/ReachabilitySwift/Reachability.framework",
@@ -576,6 +583,7 @@
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Cartography.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Charts.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Differentiator.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DynamicBlurView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Reachability.framework",
@@ -624,6 +632,7 @@
 				A54EC6EC210502F600108139 /* GeoLocationService.swift in Sources */,
 				A51E098820FBFBD700A45A39 /* WeatherIcon.swift in Sources */,
 				A546E3542110E68600D8E76F /* InternetService2.swift in Sources */,
+				A5177CB5212DAE6900DD9BE2 /* ChartVlueFormatter.swift in Sources */,
 				A5146B661F799A2600EE1DF7 /* AppDelegate.swift in Sources */,
 				A51E091D20DFE6B900A45A39 /* UIImage+Extension.swift in Sources */,
 				A57F6DB52072B5AE00509E7E /* ImageDataCaching.swift in Sources */,
@@ -680,6 +689,7 @@
 				A546E34F210E01FA00D8E76F /* GeoCodingViewModel.swift in Sources */,
 				A507D78B2117E9FD005E05F6 /* RxReachability.swift in Sources */,
 				A5192BEB20A5222C00C8D483 /* WeatherForecastTableViewController.swift in Sources */,
+				A5177CB6212DAF2400DD9BE2 /* ChartVlueFormatter.swift in Sources */,
 				A51F45372093607700ACCAB7 /* FlickrViewModelTests.swift in Sources */,
 				A507D78E2117EA28005E05F6 /* Reachability.swift in Sources */,
 				A5F4177A20B6068800FE45D8 /* WeatherForecastSummaryViewController.swift in Sources */,

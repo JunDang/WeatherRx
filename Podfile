@@ -12,6 +12,7 @@ abstract_target 'WeatherRxAbstract' do
     pod 'RxRealmDataSources'
     pod 'RxSwiftUtilities'
     pod 'ReachabilitySwift'
+    pod 'Charts'
      
     target ‘WeatherRx’ do
       pod "RxDataSources"

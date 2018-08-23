@@ -146,6 +146,7 @@ class WeatherViewController: UIViewController {
                     self.currentWeatherView.update(with: weatherForecastModel!)
                     self.tableViewController.weatherForecastModel = weatherForecastModel
                     self.tableViewController.tableView.reloadData()
+                    self.graphViewController.drawHourlyLine(with: weatherForecastModel!)
                     self.progressHUD.hide()
                     //self.activityIndicatorView.removeFromSuperview()
                 }
@@ -506,6 +507,7 @@ extension WeatherViewController: UISearchBarDelegate {
                 self.currentWeatherView.update(with: weatherForecastModel)
                 self.tableViewController.weatherForecastModel = weatherForecastModel
                 self.tableViewController.tableView.reloadData()
+                self.graphViewController.drawHourlyLine(with: weatherForecastModel)
                 self.progressHUD.hide()
             })
             .disposed(by: bag)

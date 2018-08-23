@@ -1,13 +1,16 @@
 PODS:
   - Cartography (3.0.2)
+  - Charts (3.1.1):
+    - Charts/Core (= 3.1.1)
+  - Charts/Core (3.1.1)
   - Differentiator (3.0.2)
   - DynamicBlurView (2.0.2)
   - ReachabilitySwift (4.1.0)
-  - Realm (3.7.5):
-    - Realm/Headers (= 3.7.5)
-  - Realm/Headers (3.7.5)
-  - RealmSwift (3.7.5):
-    - Realm (= 3.7.5)
+  - Realm (3.7.6):
+    - Realm/Headers (= 3.7.6)
+  - Realm/Headers (3.7.6)
+  - RealmSwift (3.7.6):
+    - Realm (= 3.7.6)
   - RxBlocking (4.2.0):
     - RxSwift (~> 4.0)
   - RxCocoa (4.2.0):
@@ -33,6 +36,7 @@ PODS:
 
 DEPENDENCIES:
   - Cartography
+  - Charts
   - DynamicBlurView
   - ReachabilitySwift
   - RealmSwift
@@ -48,6 +52,7 @@ DEPENDENCIES:
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Cartography
+    - Charts
     - Differentiator
     - DynamicBlurView
     - ReachabilitySwift
@@ -64,11 +69,12 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   Cartography: 231190d7d0b3107ce8d67c54189f059a509b3760
+  Charts: 90a4d61da0f6e06684c591e3bcab11940fe61736
   Differentiator: a87be69eba49ec4ab460c7671143ee3a9eececfd
   DynamicBlurView: aa6db4defc6e537eb86fc5e58dd3991666178399
   ReachabilitySwift: 6849231cd4e06559f3b9ef4a97a0a0f96d41e09f
-  Realm: c286caf4dbf346ce24aad49ca76c7ce622d4a082
-  RealmSwift: 2a9281e37d6de55f66f76254d49d28aeb1b729e4
+  Realm: 9eaecad54712d6246d08ba34c10f354e4715d7d3
+  RealmSwift: 1fe08b4ebaeeaacf17f9ba0343f7b25c9fc31fa6
   RxBlocking: e339d8a6e752e25ade95ff858466c55436668f59
   RxCocoa: 0b54909c902e1e581212a03e690bbd94032d8baa
   RxDataSources: cb7c31e652a87ebb919da45f716bbb87b3765f6b
@@ -78,6 +84,6 @@ SPEC CHECKSUMS:
   RxSwiftUtilities: 0edb01ef16c527c10fb352485b62cbd951e4a04d
   RxTest: 8da864c0ee47534f586ff18fb0c7e5b2f1fe5023
 
-PODFILE CHECKSUM: 22cdc265657ca85c16bff5ae4d97d636751238ee
+PODFILE CHECKSUM: 6d3b788861d31e0841f79896e0fba84b118e2142
 
 COCOAPODS: 1.5.3

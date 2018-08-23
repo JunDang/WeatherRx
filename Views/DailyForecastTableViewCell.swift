@@ -104,10 +104,7 @@ extension DailyForecastTableViewCell{
         let iconName = WeatherIcon.iconMap[dailyForecastData.icon]
         iconImage.image = UIImage(named: "\(String(describing: iconName!))")
         let unitChange =  UserDefaults.standard.string(forKey: "UnitChange")
-        if unitChange == "convertToMetric" {
-            lowTempLbl.text = "\(dailyForecastData.temperatureMin.toCelcius().roundToInt())" + "\u{00B0}" + "C"
-            highTempLbl.text = "\(dailyForecastData.temperatureMax.toCelcius().roundToInt())" + "\u{00B0}" + "C"
-        } else if unitChange == "convertToImperial" {
+        if unitChange == "convertToImperial" {
             lowTempLbl.text = "\(dailyForecastData.temperatureMin.roundToInt())" + "\u{00B0}" + "F"
             highTempLbl.text = "\(dailyForecastData.temperatureMax.roundToInt())" + "\u{00B0}" + "F"
         } else {

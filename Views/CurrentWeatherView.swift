@@ -112,7 +112,7 @@ private extension CurrentWeatherView{
         weatherLbl.sizeToFit()
         weatherLbl.lineBreakMode = NSLineBreakMode.byWordWrapping
         
-        currentTempLbl.font = UIFont(name: "Helvetica Neue", size: 85)
+        currentTempLbl.font = UIFont(name: "Helvetica Neue", size: 75)
         currentTempLbl.textColor = UIColor.white
         currentTempLbl.sizeToFit()
         
@@ -151,12 +151,7 @@ extension CurrentWeatherView{
              minutelySummaryLbl.text = minutelySummary
         
              let unitChange =  UserDefaults.standard.string(forKey: "UnitChange")
-             if unitChange == "convertToMetric" {
-                currentTempLbl.text = "\(String(describing: currentWeather!.temperature.toCelcius().roundToInt()))" + "\u{00B0}" + "C"
-                feelsLikeTempLbl.text = "Feels like: " + "\(String(describing: currentWeather!.apparentTemperature.toCelcius().roundToInt()))" + "\u{00B0}" + "C"
-                lowTempLbl.text = "min: " + "\(String(describing: currentDaily!.temperatureMin.toCelcius().roundToInt()))" + "\u{00B0}"  + "C"
-                highTempLbl.text = "max: " + "\(String(describing: currentDaily!.temperatureMax.toCelcius().roundToInt()))" + "\u{00B0}" + "C"
-             } else if unitChange == "convertToImperial" {
+             if unitChange == "convertToImperial" {
                 currentTempLbl.text = "\(String(describing: currentWeather!.temperature.roundToInt()))" + "\u{00B0}" + "F"
                 feelsLikeTempLbl.text = "Feels like: " + "\(String(describing: currentWeather!.apparentTemperature.roundToInt()))" + "\u{00B0}" + "F"
                 lowTempLbl.text = "min: " + "\(String(describing: currentDaily!.temperatureMin.roundToInt()))" + "\u{00B0}"  + "F"
