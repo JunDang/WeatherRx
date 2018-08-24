@@ -147,6 +147,7 @@ class WeatherViewController: UIViewController {
                     self.tableViewController.weatherForecastModel = weatherForecastModel
                     self.tableViewController.tableView.reloadData()
                     self.graphViewController.drawHourlyLine(with: weatherForecastModel!)
+                    self.graphViewController.drawDailyLines(with: weatherForecastModel!)
                     self.progressHUD.hide()
                     //self.activityIndicatorView.removeFromSuperview()
                 }
@@ -434,7 +435,7 @@ extension WeatherViewController: UISearchBarDelegate {
         searchBar.searchBarStyle = UISearchBarStyle.prominent
         searchBar.tintColor = UIColor.white
         searchBar.placeholder = "Search City"
-        searchBar.barTintColor = UIColor(red: (0/255.0), green: (76/255.0), blue: (153/255.0), alpha: 0.8)
+        searchBar.barTintColor = UIColor(red: (15/255.0), green: (16/255.0), blue: (50/255.0), alpha: 0.8)
         let textFieldInsideUISearchBar = searchBar.value(forKey: "searchField") as? UITextField
         textFieldInsideUISearchBar?.font = UIFont(name: "HelveticaNeue-Bold", size: 17)
         // Make this class the delegate and present the search
@@ -508,6 +509,7 @@ extension WeatherViewController: UISearchBarDelegate {
                 self.tableViewController.weatherForecastModel = weatherForecastModel
                 self.tableViewController.tableView.reloadData()
                 self.graphViewController.drawHourlyLine(with: weatherForecastModel)
+                self.graphViewController.drawDailyLines(with: weatherForecastModel)
                 self.progressHUD.hide()
             })
             .disposed(by: bag)
