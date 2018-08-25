@@ -30,6 +30,7 @@ class WeatherForecastGraphViewController: UIViewController {
     }
     override open func viewWillAppear(_ animated: Bool) {
        hourlyChartView.animate(xAxisDuration: 0.6, yAxisDuration: 0.6)
+       dailyChartView.animate(xAxisDuration: 0.6, yAxisDuration: 0.6)
     }
 }
 
@@ -56,7 +57,7 @@ extension WeatherForecastGraphViewController {
             $0.height == $0.superview!.height/2 - 50
             $0.left == $0.superview!.left
             $0.right == $0.superview!.right
-            $0.top == $1.bottom
+            $0.top == $1.bottom + 5
         }
         constrain(hourlyUnitLbl) {
             $0.centerY == $0.superview!.centerY
@@ -84,9 +85,9 @@ extension WeatherForecastGraphViewController {
         }
         constrain(dailyGraphView, dailyLbl ) {
             $0.height == $0.superview!.height/2 - 50
-            $0.left == $0.superview!.left + 10
-            $0.right == $0.superview!.right - 10
-            $0.top == $1.bottom
+            $0.left == $0.superview!.left
+            $0.right == $0.superview!.right
+            $0.top == $1.bottom + 5
         }
     }
 }
@@ -150,7 +151,7 @@ extension WeatherForecastGraphViewController {
             lineChartEntry.append(value)
             hours.append(hour)
         }
-        let hourlyLine = LineChartDataSet(values: lineChartEntry, label: "Hours")
+        let hourlyLine = LineChartDataSet(values: lineChartEntry, label: "Hourly Temperature")
         hourlyLine.axisDependency = .left 
         hourlyLine.setColor(UIColor.red.withAlphaComponent(0.5))
         //hourlyLine.setCircleColor(UIColor.red)
@@ -228,7 +229,7 @@ extension WeatherForecastGraphViewController {
             lineChartEntryMin.append(valueMin)
             days.append(day)
         }
-        let temperarureMaxLine = LineChartDataSet(values: lineChartEntryMax, label: "days")
+        let temperarureMaxLine = LineChartDataSet(values: lineChartEntryMax, label: "Day High Temperature")
         temperarureMaxLine.axisDependency = .left
         temperarureMaxLine.setColor(UIColor.red.withAlphaComponent(0.5))
         temperarureMaxLine.circleColors = [NSUIColor.red]
@@ -243,7 +244,7 @@ extension WeatherForecastGraphViewController {
         numberFormatter.locale = Locale.current
         temperarureMaxLine.valueFormatter = DefaultValueFormatter(formatter: numberFormatter)
         
-        let temperarureMinLine = LineChartDataSet(values: lineChartEntryMin, label: "days")
+        let temperarureMinLine = LineChartDataSet(values: lineChartEntryMin, label: "Day Low Temperature")
         temperarureMinLine.axisDependency = .left
         temperarureMinLine.setColor(UIColor.blue.withAlphaComponent(0.5))
         temperarureMinLine.circleColors = [NSUIColor.blue]

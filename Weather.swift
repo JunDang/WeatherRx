@@ -106,6 +106,7 @@ class DailyWeatherModel: Object, Decodable {
     dynamic var dewPoint: Double = 0.0
     dynamic var pressure: Double = 0.0
     dynamic var humidity: Double = 0.0
+    dynamic var summary: String = ""
     dynamic var windSpeed: Double = 0.0
     dynamic var windBearing: Double = 0.0
     dynamic var cloudCover: Double = 0.0
@@ -125,6 +126,7 @@ class DailyWeatherModel: Object, Decodable {
         case dewPoint = "dewPoint"
         case pressure = "pressure"
         case humidity = "humidity"
+        case summary = "summary"
         case windSpeed = "windSpeed"
         case windBearing = "windBearing"
         case cloudCover = "cloudCover"
@@ -132,7 +134,7 @@ class DailyWeatherModel: Object, Decodable {
         case visibility = "visibility"
         case ozone = "ozone"
     }
-    convenience init(time: Int, temperatureMax: Double, temperatureMin: Double, icon: String, sunriseTime: Int, sunsetTime: Int, precipType: String?, precipProbability: Double, precipIntensity: Double, dewPoint: Double, pressure: Double, humidity: Double, windSpeed: Double, windBearing: Double, cloudCover: Double, uvIndex: Int, visibility: Double, ozone: Double ) {
+    convenience init(time: Int, temperatureMax: Double, temperatureMin: Double, icon: String, sunriseTime: Int, sunsetTime: Int, precipType: String?, precipProbability: Double, precipIntensity: Double, dewPoint: Double, pressure: Double, humidity: Double, summary: String, windSpeed: Double, windBearing: Double, cloudCover: Double, uvIndex: Int, visibility: Double, ozone: Double ) {
         self.init()
         self.time = time
         self.temperatureMax = temperatureMax
@@ -150,6 +152,7 @@ class DailyWeatherModel: Object, Decodable {
         self.dewPoint = dewPoint
         self.pressure = pressure
         self.humidity = humidity
+        self.summary = summary
         self.windSpeed = windSpeed
         self.windBearing = windBearing
         self.cloudCover = cloudCover
@@ -174,19 +177,21 @@ class DailyWeatherModel: Object, Decodable {
         let dewPoint = try container.decode(Double.self, forKey: .dewPoint)
         let pressure = try container.decode(Double.self, forKey: .pressure)
         let humidity = try container.decode(Double.self, forKey: .humidity)
+        let summary = try container.decode(String.self, forKey: .summary)
         let windSpeed = try container.decode(Double.self, forKey: .windSpeed)
         let windBearing = try container.decode(Double.self, forKey: .windBearing)
         let cloudCover = try container.decode(Double.self, forKey: .cloudCover)
         let uvIndex = try container.decode(Int.self, forKey: .uvIndex)
         let visibility = try container.decode(Double.self, forKey: .visibility)
         let ozone = try container.decode(Double.self, forKey: .ozone)
-        self.init(time: time, temperatureMax: temperatureMax, temperatureMin: temperatureMin, icon: icon, sunriseTime: sunriseTime, sunsetTime: sunsetTime, precipType: precipType, precipProbability: precipProbability, precipIntensity: precipIntensity, dewPoint: dewPoint, pressure: pressure, humidity: humidity, windSpeed: windSpeed, windBearing: windBearing, cloudCover: cloudCover, uvIndex: uvIndex, visibility: visibility, ozone: ozone)
+        self.init(time: time, temperatureMax: temperatureMax, temperatureMin: temperatureMin, icon: icon, sunriseTime: sunriseTime, sunsetTime: sunsetTime, precipType: precipType, precipProbability: precipProbability, precipIntensity: precipIntensity, dewPoint: dewPoint, pressure: pressure, humidity: humidity, summary: summary, windSpeed: windSpeed, windBearing: windBearing, cloudCover: cloudCover, uvIndex: uvIndex, visibility: visibility, ozone: ozone)
     }
 }
 
-class HourlyWeatherModel: Object, Decodable {
+@objcMembers class HourlyWeatherModel: Object, Decodable {
     private enum HourlyWeatherCodingKeys : String, CodingKey {
-        case hourlyWeatherModel = "data" }
+        case hourlyWeatherModel = "data"
+    }
     var hourlyWeatherModel = List<HourlyForecastData>()
     convenience init(hourlyWeatherModel:List<HourlyForecastData>) throws {
         self.init()
