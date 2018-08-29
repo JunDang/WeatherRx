@@ -549,6 +549,8 @@ extension WeatherViewController: UISearchBarDelegate {
         print("weatherForecastModelLastFromRealm: " + "\(String(describing: weatherForecastModelLast))")
         guard weatherForecastModelLast != nil else {
             let weatherForecastModel = self.createEmptyWeatherModel()
+            self.flickrImage = BehaviorRelay<UIImage?>(value: UIImage(named: "banff")!)
+            self.bindBackground(flickrImage: self.flickrImage)
             return Observable.just(weatherForecastModel)
         }
         self.flickrImage = BehaviorRelay<UIImage?>(value: UIImage(named: "banff")!)
