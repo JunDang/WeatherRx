@@ -28,8 +28,7 @@ class WeatherForecastSummaryViewController: UIViewController {
         setup()
         layoutView()
         setStyle()
-        //render()
-   }
+    }
 }
 
 extension WeatherForecastSummaryViewController {
@@ -53,6 +52,8 @@ extension WeatherForecastSummaryViewController {
         constrain(todayWeatherSummaryLbl) {
             $0.top == $0.superview!.top + 10
             $0.centerX == $0.superview!.centerX
+            $0.left == $0.superview!.left
+            $0.right == $0.superview!.right
         }
         constrain(toplineView, todayWeatherSummaryLbl ) {
             $0.height == 1
@@ -112,6 +113,8 @@ extension WeatherForecastSummaryViewController {
         todayWeatherSummaryLbl.textColor = UIColor.white
         todayWeatherSummaryLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 15)
         todayWeatherSummaryLbl.textAlignment = .center
+        todayWeatherSummaryLbl.numberOfLines = 2
+        todayWeatherSummaryLbl.lineBreakMode = NSLineBreakMode.byWordWrapping
         todayWeatherSummaryLbl.sizeToFit()
         
         precipitationLbl.backgroundColor = UIColor.clear
@@ -165,33 +168,13 @@ extension WeatherForecastSummaryViewController {
  }
 
 extension WeatherForecastSummaryViewController {
-    /*func render() {
-        todayWeatherSummaryLbl.text = "Today Weather: "
-        todayWeatherSummaryDataLbl.text = "Sunny all day"
-        precipitationChanceLbl.text = "Chance of Precipitation: "
-        precipitationChanceDataLbl.text = "0%"
-        dewPointLbl.text = "Dew point: "
-        dewPointDataLbl.text = "42.52"
-        humidityLbl.text = "Humidity: "
-        humidityDataLbl.text = "85%"
-        windLbl.text = "Wind: "
-        winddirectionLbl.text = "NW"
-        windDataLbl.text = " 8 mph"
-        sunriseLbl.text = "Sunrise: "
-        sunriseDataLbl.text = "06:00"
-        sunSetLbl.text = "Sunset: "
-        sunSetDataLbl.text = "20:00"
-        cloudCoverLbl.text = "Cloud Cover: "
-        cloudCoverDataLbl.text = "0.85"
-        
-    }*/
+   
     func updateSummary(with weatherForecastModel: WeatherForecastModel) {
         let todayWeatherData = weatherForecastModel.daily?.dailyWeatherModel[0]
         guard todayWeatherData != nil else {
             return
         }
-        todayWeatherSummaryLbl.text = "Today Weather: \(String(describing: todayWeatherData!.summary))"
-        //todayWeatherSummaryDataLbl.text = "\(todayWeatherData?.summary)"
+        todayWeatherSummaryLbl.text = "Today: \(String(describing: todayWeatherData!.summary))"
         let precipChance = todayWeatherData!.precipProbability
         let precipType = todayWeatherData!.precipType
         let precipIntensity = todayWeatherData!.precipIntensity
@@ -214,8 +197,8 @@ extension WeatherForecastSummaryViewController {
         }
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "HH:mm"
-        sunriseLbl.text = "Sunrise: \(dateFormatter.string(from: todayWeatherData!.sunriseTimeDate!))"
-        sunSetLbl.text = "Sunset: \(dateFormatter.string(from: todayWeatherData!.sunsetTimeDate!))"
+        sunriseLbl.text = "Sunrise: \(dateFormatter.string(from: todayWeatherData!.sunriseTimeDate))"
+        sunSetLbl.text = "Sunset: \(dateFormatter.string(from: todayWeatherData!.sunsetTimeDate))"
         cloudCoverLbl.text = "Cloud Cover: \(todayWeatherData!.cloudCover.rounded(toPlaces: 2))"
     }
 }

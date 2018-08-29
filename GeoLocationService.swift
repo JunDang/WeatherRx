@@ -47,11 +47,10 @@ class GeoLocationService {
         return locationObservable
     }
     func locationGeocoding(address: String) -> Observable<Result<(CLLocationCoordinate2D, String), Error>> {
-        let address = address.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
         let baseURL = URL(string: GoogleGeocodingAPI.baseURLString)!
         let parameters = [
             "key": GoogleGeocodingAPI.apiKey,
-            "address": "\(String(describing: address!))"
+            "address": address
         ]
         var cityName: String = ""
         return request(baseURL.absoluteString, parameters: parameters)
@@ -71,10 +70,13 @@ class GeoLocationService {
                     let lon = geocodingModel!.geocodingResults[0].geometry?.location?.lon
                     let geoLocation = CLLocationCoordinate2D(latitude: lat!, longitude: lon!)
                     let addressComponents = geocodingModel!.geocodingResults[0].addressComponents
+                    print("addressComponents: \(addressComponents)")
                     let addressComponentsLocality = addressComponents.filter{$0.types.contains("locality")}
-                    let addressComponentsNeborhood = addressComponents.filter{$0.types.contains("neighborhood")}
-                    if addressComponentsNeborhood.count > 0 {
-                       cityName = addressComponentsNeborhood[0].longName
+                    print("addressComponentsLocality: \(addressComponentsLocality)")
+                    let addressComponentsNeighborhood = addressComponents.filter{$0.types.contains("neighborhood")}
+                    print("addressComponentsNeighborhood: \(addressComponentsNeighborhood)")
+                    if addressComponentsNeighborhood.count > 0 {
+                       cityName = addressComponentsNeighborhood[0].longName
                     } else if addressComponentsLocality.count > 0 {
                        cityName = addressComponentsLocality[0].longName
                     } else {

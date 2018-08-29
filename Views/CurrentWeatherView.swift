@@ -62,7 +62,7 @@ private extension CurrentWeatherView{
 private extension CurrentWeatherView{
     func layoutView(){
         constrain(self) {
-            $0.height == 180.0
+            $0.height == 200.0
         }
         constrain(iconImage) {
             $0.top == $0.superview!.top
@@ -73,6 +73,7 @@ private extension CurrentWeatherView{
         constrain(weatherLbl, iconImage) {
             $0.top == $1.top
             $0.left == $1.right + 10
+            $0.right == $0.superview!.right
             $0.height == $1.height
         }
         constrain(lowTempLbl, iconImage) {
@@ -92,11 +93,12 @@ private extension CurrentWeatherView{
         constrain(currentTempLbl, lowTempLbl) {
             $0.top == $1.bottom
             $0.left == $1.left
-            $0.bottom == $0.superview!.bottom
+            //$0.bottom == $0.superview!.bottom
         }
         constrain(minutelySummaryLbl, currentTempLbl) {
-            $0.bottom == $1.bottom
-            $0.left == $1.right + 8
+            $0.top == $1.bottom
+            $0.left == $1.left
+            $0.right == $0.superview!.right
             $0.bottom == $0.superview!.bottom
         }
     }
@@ -107,12 +109,14 @@ private extension CurrentWeatherView{
     func setStyle(){
         self.backgroundColor = UIColor.clear
         
-        weatherLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 19)
+        weatherLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 17)
         weatherLbl.textColor = UIColor.white
-        weatherLbl.sizeToFit()
+        weatherLbl.numberOfLines = 2
         weatherLbl.lineBreakMode = NSLineBreakMode.byWordWrapping
+        weatherLbl.sizeToFit()
         
-        currentTempLbl.font = UIFont(name: "Helvetica Neue", size: 75)
+        
+        currentTempLbl.font = UIFont(name: "Helvetica Neue", size: 72)
         currentTempLbl.textColor = UIColor.white
         currentTempLbl.sizeToFit()
         
@@ -122,8 +126,10 @@ private extension CurrentWeatherView{
         
         minutelySummaryLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 16)
         minutelySummaryLbl.textColor = UIColor.white
-        minutelySummaryLbl.sizeToFit()
+        minutelySummaryLbl.numberOfLines = 2
         minutelySummaryLbl.lineBreakMode = NSLineBreakMode.byWordWrapping
+        minutelySummaryLbl.sizeToFit()
+        
         
         lowTempLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 16)
         lowTempLbl.textColor = UIColor.white
@@ -141,7 +147,8 @@ extension CurrentWeatherView{
   
     func update(with weatherForecastModel: WeatherForecastModel){
              let currentWeather = weatherForecastModel.currently
-             weatherLbl.text = currentWeather!.summary
+        
+             weatherLbl.text = currentWeather?.summary
              let iconName = WeatherIcon.iconMap[(currentWeather?.icon)!]
              iconImage.image = UIImage(named: "\(String(describing: iconName!))")
             

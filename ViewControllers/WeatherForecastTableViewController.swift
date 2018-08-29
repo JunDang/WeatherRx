@@ -14,9 +14,7 @@ import RxCocoa
 class WeatherForecastTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     let tableView: UITableView = UITableView(frame: CGRect.zero)
-    //var weatherViewModel: WeatherViewModel?
     var weatherForecastModel: WeatherForecastModel?
-    //private let bag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,14 +32,7 @@ class WeatherForecastTableViewController: UIViewController, UITableViewDelegate,
         tableView.estimatedRowHeight = 99
       
      }
-    /*init(with weatherViewModel: WeatherViewModel) {
-        super.init(nibName: nil, bundle: nil)
-        self.weatherViewModel = weatherViewModel
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }*/
+  
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -67,7 +58,6 @@ class WeatherForecastTableViewController: UIViewController, UITableViewDelegate,
                  //print("dailycount: " + "\(dailyWeatherModel?.count)")
                  let dailyForecastData = dailyWeatherModel![indexPath.row]
                  cell.updateDailyCell(with: dailyForecastData)
-                 //print("dailyForecastData: " + "\(dailyForecastData)")
             } else {
                 
             }

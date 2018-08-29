@@ -88,7 +88,7 @@ extension HourlyForecastCell {
     func updateHourlyCell(with hourlyForecastData: HourlyForecastData) {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "HH:mm"
-        hourLbl.text = dateFormatter.string(from: hourlyForecastData.timeDate!)
+        hourLbl.text = dateFormatter.string(from: hourlyForecastData.timeDate)
         //tempsLbl.text = "\(hourlyForecastData.temperature.roundToInt())" + "\u{00B0}"
         let iconName = WeatherIcon.iconMap[hourlyForecastData.icon]
        // print("hourlyIconName: " + "\(iconName)")

@@ -115,8 +115,6 @@ extension WeatherForecastGraphViewController {
         dailyUnitLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 15)
         dailyUnitLbl.textAlignment = .left
         dailyUnitLbl.sizeToFit()
-        //unitLbl.transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 2)
-        
     }
 }
 
@@ -134,7 +132,7 @@ extension WeatherForecastGraphViewController {
         var temperature: Double = 0.0
         var lineChartEntry = [ChartDataEntry]()
         for i in 0..<hourlyWeatherModel!.count {
-             let hour = dateFormatter.string(from: hourlyWeatherModel![i].timeDate!)
+            let hour = dateFormatter.string(from: hourlyWeatherModel![i].timeDate)
             //print("hourString: \(hourString)")
             
             if unitChange == "convertToImperial" {
@@ -162,6 +160,7 @@ extension WeatherForecastGraphViewController {
         numberFormatter.numberStyle = .none
         numberFormatter.locale = Locale.current
         hourlyLine.valueFormatter = DefaultValueFormatter(formatter: numberFormatter)
+    
         // x axis setup
         let xAxis = hourlyChartView.xAxis
         xAxis.labelCount = 8
@@ -210,8 +209,7 @@ extension WeatherForecastGraphViewController {
         var lineChartEntryMax = [ChartDataEntry]()
         var lineChartEntryMin = [ChartDataEntry]()
         for i in 0..<dailyWeatherModel!.count {
-            let day = dateFormatter.string(from: dailyWeatherModel![i].timeDate!)
-            //print("days: \(days)")
+            let day = dateFormatter.string(from: dailyWeatherModel![i].timeDate)
             if unitChange == "convertToImperial" {
                 temperatureMax = dailyWeatherModel![i].temperatureMax
                 print("temperatureMax: \(temperatureMax)")
@@ -222,7 +220,6 @@ extension WeatherForecastGraphViewController {
                 temperatureMin = dailyWeatherModel![i].temperatureMin.toCelcius()
                 dailyUnitLbl.text = "\u{00B0}" + "C"
             }
-            
             let valueMax = ChartDataEntry(x: Double(i), y: temperatureMax)
             let valueMin = ChartDataEntry(x: Double(i), y: temperatureMin)
             lineChartEntryMax.append(valueMax)
@@ -258,6 +255,7 @@ extension WeatherForecastGraphViewController {
         temperarureMinLine.valueFormatter = DefaultValueFormatter(formatter: numberFormatter)
         // x axis setup
         let xAxis = dailyChartView.xAxis
+        xAxis.labelCount = 4
         xAxis.labelPosition = .bottom
         xAxis.axisLineColor = UIColor.white
         xAxis.labelTextColor = UIColor.white

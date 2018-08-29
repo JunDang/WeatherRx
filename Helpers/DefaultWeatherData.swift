@@ -6,15 +6,16 @@
 //  Copyright © 2018 Jun Dang. All rights reserved.
 //
 
-/*import Foundation
+import Foundation
 import RealmSwift
 
-class DefaultWeatherData {
+/*class DefaultWeatherData {
     var defaultWeatherData: WeatherForecastModel?
     init(defaultWeatherData: WeatherForecastModel) {
         self.defaultWeatherData = defaultWeatherData
         defaultWeatherData.latitude = 0.0
         defaultWeatherData.longitude = 0.0
+        defaultWeatherData.currently? = CurrentlyWeatherModel()
         defaultWeatherData.currently?.time = 0
         defaultWeatherData.currently?.timeDate = nil
         defaultWeatherData.currently?.summary = ""
@@ -53,4 +54,23 @@ class DefaultWeatherData {
     }
   
 }*/
+class DefaultWeatherData {
+    var defaultWeatherData: WeatherForecastModel?
+    init() {
+       
+        defaultWeatherData?.latitude = 0.0
+        defaultWeatherData?.longitude = 0.0
+        defaultWeatherData?.currently? = CurrentlyWeatherModel()
+        defaultWeatherData?.daily? = DailyWeatherModel()
+        defaultWeatherData?.minutely? = MinutelyWeatherModel()
+        
+    }
+    
+    /*convenience required init() {
+        self.init()
+  }*/
+
+}
+
+
 

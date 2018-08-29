@@ -100,7 +100,7 @@ extension DailyForecastTableViewCell{
     func updateDailyCell(with dailyForecastData: DailyForecastData){
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "EEEE"
-        dayLbl.text = dateFormatter.string(from: dailyForecastData.timeDate!)
+        dayLbl.text = dateFormatter.string(from: dailyForecastData.timeDate)
         let iconName = WeatherIcon.iconMap[dailyForecastData.icon]
         iconImage.image = UIImage(named: "\(String(describing: iconName!))")
         let unitChange =  UserDefaults.standard.string(forKey: "UnitChange")
@@ -111,11 +111,6 @@ extension DailyForecastTableViewCell{
             lowTempLbl.text = "\(dailyForecastData.temperatureMin.toCelcius().roundToInt())" + "\u{00B0}" + "C"
             highTempLbl.text = "\(dailyForecastData.temperatureMax.toCelcius().roundToInt())" + "\u{00B0}" + "C"
         }
-       // print("dailyIconName: " + "\(iconName)")
-        /*dayLbl.text = "Saturday"
-        iconImage.image = UIImage(named: "sunny")
-        lowTempLbl.text = "5\u{00B0}"
-        highTempLbl.text = "20\u{00B0}"*/
     }
 
 }

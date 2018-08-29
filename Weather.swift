@@ -15,7 +15,7 @@ import RealmSwift
    dynamic var currently: CurrentlyWeatherModel?
    dynamic var hourly: HourlyWeatherModel?
    dynamic var daily: DailyWeatherModel?
-    dynamic var minutely: MinutelyWeatherModel?
+   dynamic var minutely: MinutelyWeatherModel?
    dynamic var compoundKey: String?
     
    func configure(latitude: Double, longitude: Double){
@@ -38,9 +38,9 @@ import RealmSwift
 
 @objcMembers class CurrentlyWeatherModel: Object, Decodable {
     dynamic var time: Int = 0
-    dynamic var timeDate: Date?
+    dynamic var timeDate: Date = Date()
     dynamic var summary: String = ""
-    dynamic var icon: String = ""
+    dynamic var icon: String = "clear-day"
     dynamic var temperature: Double = 0.0
     dynamic var apparentTemperature: Double = 0.0
  
@@ -92,14 +92,14 @@ class DailyWeatherModel: Object, Decodable {
 
 @objcMembers class DailyForecastData: Object, Codable {
     dynamic var time: Int = 0
-    dynamic var timeDate: Date?
+    dynamic var timeDate: Date = Date()
     dynamic var temperatureMax: Double  = 0.0
     dynamic var temperatureMin: Double  = 0.0
-    dynamic var icon: String = ""
+    dynamic var icon: String = "clear-day"
     dynamic var sunriseTime: Int = 0
-    dynamic var sunriseTimeDate: Date?
+    dynamic var sunriseTimeDate: Date = Date()
     dynamic var sunsetTime: Int = 0
-    dynamic var sunsetTimeDate: Date?
+    dynamic var sunsetTimeDate: Date = Date()
     dynamic var precipType: String = ""
     dynamic var precipProbability: Double = 0.0
     dynamic var precipIntensity: Double = 0.0
@@ -207,9 +207,9 @@ class DailyWeatherModel: Object, Decodable {
 }
 
 @objcMembers class HourlyForecastData: Object, Codable {
-    dynamic var timeDate: Date?
+    dynamic var timeDate: Date = Date()
     dynamic var time: Int = 0
-    dynamic var icon: String = ""
+    dynamic var icon: String = "clear-day"
     dynamic var temperature: Double = 0.0
     private enum HourlyCodingKeys : String, CodingKey {
         case time = "time"

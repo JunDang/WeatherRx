@@ -28,7 +28,8 @@ class ViewModel {
     
     // MARK: - Output
     var weatherForecastData: Observable<(AnyRealmCollection<WeatherForecastModel>, RealmChangeset?)>!
-    var emptyWeatherForecastData: Observable<(AnyRealmCollection<WeatherForecastModel>, RealmChangeset?)>!
+    var weatherForecastModel: WeatherForecastModel!
+    //var emptyWeatherForecastData: Observable<(AnyRealmCollection<WeatherForecastModel>, RealmChangeset?)>!
     var flickrImage = BehaviorRelay<UIImage?>(value: UIImage(named: "banff")!)
     
     // MARK: - Init
@@ -60,6 +61,8 @@ class ViewModel {
             .subscribe(onNext: { result in
                 switch result {
                 case .Success(let weatherForecastModel):
+                    print("weatherForecastModelViewModel: " + "\(String(describing: weatherForecastModel))")
+                    self.weatherForecastModel = weatherForecastModel
                     weatherForecastModel.configure(latitude: weatherForecastModel.latitude, longitude: weatherForecastModel.longitude)
                     let realm = try! Realm()
                     try! realm.write {
@@ -78,9 +81,9 @@ class ViewModel {
             return
         }
         weatherForecastData = Observable.changeset(from: realm.objects(WeatherForecastModel.self))
-        /*weatherForecastData.subscribe(onNext: {weatherdata in
-           // print("weatherForecastData: " + "\(weatherdata)")
-        })*/
+        weatherForecastData?.subscribe(onNext: {weatherdata in
+           print("weatherForecastDataViewModel: " + "\(weatherdata)")
+        })
         
        let imageObservable =
                          imageResultObservable!.map() { result -> UIImage in

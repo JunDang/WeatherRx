@@ -20,10 +20,10 @@ struct GeocodingResult: Codable {
         case addressComponents = "address_components"
         case geometry = "geometry"
     }
-    var addressComponents: [AddressCmoponent] = []
+    var addressComponents: [AddressComponent] = []
     var geometry: Geometry?
 }
-struct AddressCmoponent: Codable {
+struct AddressComponent: Codable {
     private enum CodingKeys: String, CodingKey {
         case longName = "long_name"
         case shortName = "short_name"
@@ -79,7 +79,7 @@ struct ReverseGeocodingResult: Codable {
     private enum CodingKeys : String, CodingKey {
         case addressComponents = "address_components"
     }
-    var addressComponents: [AddressCmoponent] = []
+    var addressComponents: [AddressComponent] = []
 }
 
 
