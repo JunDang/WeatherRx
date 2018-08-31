@@ -138,8 +138,7 @@ private extension CurrentWeatherView{
         highTempLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 16)
         highTempLbl.textColor = UIColor.white
         highTempLbl.sizeToFit()
-        
-    }
+   }
 }
 
 // MARK: Render
@@ -147,13 +146,10 @@ extension CurrentWeatherView{
   
     func update(with weatherForecastModel: WeatherForecastModel){
              let currentWeather = weatherForecastModel.currently
-        
              weatherLbl.text = currentWeather?.summary
              let iconName = WeatherIcon.iconMap[(currentWeather?.icon)!]
              iconImage.image = UIImage(named: "\(String(describing: iconName!))")
-            
              let currentDaily = weatherForecastModel.daily?.dailyWeatherModel.first
-        
              let minutelySummary = weatherForecastModel.minutely?.summary
              minutelySummaryLbl.text = minutelySummary
         
@@ -169,7 +165,5 @@ extension CurrentWeatherView{
                 lowTempLbl.text = "min: " + "\(String(describing: currentDaily!.temperatureMin.toCelcius().roundToInt()))" + "\u{00B0}"  + "C"
                 highTempLbl.text = "max: " + "\(String(describing: currentDaily!.temperatureMax.toCelcius().roundToInt()))" + "\u{00B0}" + "C"
              }
-        
     }
-
 }

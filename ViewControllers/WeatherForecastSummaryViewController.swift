@@ -171,15 +171,11 @@ extension WeatherForecastSummaryViewController {
    
     func updateSummary(with weatherForecastModel: WeatherForecastModel) {
         let todayWeatherData = weatherForecastModel.daily?.dailyWeatherModel[0]
-        guard todayWeatherData != nil else {
-            return
-        }
         todayWeatherSummaryLbl.text = "Today: \(String(describing: todayWeatherData!.summary))"
         let precipChance = todayWeatherData!.precipProbability
         let precipType = todayWeatherData!.precipType
         let precipIntensity = todayWeatherData!.precipIntensity
         precipitationLbl.text = "Chance of Precipitation:  \(precipChance.roundToInt())%"
-        //precipIntensityLbl.text = "Precipitation: \(precipIntensity) \(precipType)"
         let dewPoint = todayWeatherData!.dewPoint
         dewPointLbl.text = "Dew point:  \(dewPoint.rounded(toPlaces: 2))"
         let humidity = todayWeatherData!.humidity
