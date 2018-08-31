@@ -21,7 +21,6 @@ class HourlyForecastTableViewCell: UITableViewCell, UICollectionViewDataSource, 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
       super.init(style: style, reuseIdentifier: reuseIdentifier)
       self.selectionStyle = UITableViewCellSelectionStyle.none
-      
       setupCollectionView()
       setStyle()
       layoutView()
@@ -31,7 +30,6 @@ class HourlyForecastTableViewCell: UITableViewCell, UICollectionViewDataSource, 
     }
 
    override func updateConstraints() {
-    //print("HourlyForecastTableViewCellupdateconstraintscalled")
      if didSetupConstraints {
         super.updateConstraints()
         return
@@ -49,7 +47,6 @@ extension HourlyForecastTableViewCell {
        layout.minimumInteritemSpacing = 0.0
        layout.estimatedItemSize = CGSize(42, 90)
        layout.scrollDirection = UICollectionViewScrollDirection.horizontal
-       //print("layout: " + "\(layout)")
        collectionView = UICollectionView(frame: self.contentView.frame, collectionViewLayout: layout)
        collectionView!.dataSource = self
        collectionView!.delegate = self
@@ -69,14 +66,11 @@ extension HourlyForecastTableViewCell {
    }
     
    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    //print("collectionViewCalled")
       let cell:HourlyForecastCell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! HourlyForecastCell
       if let weatherForecastModel = weatherForecastModel {
            let hourlyWeatherModel = weatherForecastModel.hourly?.hourlyWeatherModel
            let hourlyForecastData = hourlyWeatherModel![indexPath.row]
            cell.updateHourlyCell(with: hourlyForecastData)
-           //print("hourlyForecastData: " + "\(hourlyForecastData)")
-        
       } else {
         
     }

@@ -28,8 +28,6 @@ class ViewModel {
     
     // MARK: - Output
     var weatherForecastData: Observable<(AnyRealmCollection<WeatherForecastModel>, RealmChangeset?)>!
-    //var weatherForecastModel: WeatherForecastModel!
-    //var emptyWeatherForecastData: Observable<(AnyRealmCollection<WeatherForecastModel>, RealmChangeset?)>!
     var flickrImage = BehaviorRelay<UIImage?>(value: UIImage(named: "banff")!)
     
     // MARK: - Init
@@ -38,19 +36,15 @@ class ViewModel {
         self.lon = lon
         self.apiType = apiType
         self.imageDataCacheType = imageDataCacheType
-       
-        
-        weatherModelObservable = apiType.getWeatherObservable(lat: lat, lon: lon).retryOnConnect(timeout: 30)
-        
-        
+     
+        weatherModelObservable = apiType.getWeatherObservable(lat: lat, lon: lon)
+    
         imageResultObservable =  apiType
                                     .searchImageURL(lat: lat, lon: lon)
                                     .flatMap ({resultNSURL -> Observable<Result<UIImage, Error>> in
-                                        //print("resultNSURL: " + "\(resultNSURL)")
-                                        return self.apiType.getImage(resultNSURL: resultNSURL, cache: self.imageDataCacheType)
-                                    }).retryOnConnect(timeout: 30)
-                                 
-        
+                                         return self.apiType.getImage(resultNSURL: resultNSURL, cache: self.imageDataCacheType)
+                                    })
+   
         bindOutPut()
         writeWeatherModelInRealm(weatherModelObservable:weatherModelObservable!)
     }
@@ -80,7 +74,7 @@ class ViewModel {
         guard let realm = try? Realm() else {
             return
         }
-        weatherForecastData = Observable.changeset(from: realm.objects(WeatherForecastModel.self)).retryOnConnect(timeout: 30)
+        weatherForecastData = Observable.changeset(from: realm.objects(WeatherForecastModel.self))
         let imageObservable =
                          imageResultObservable!.map() { result -> UIImage in
                             switch result {
@@ -89,11 +83,10 @@ class ViewModel {
                             case .Failure:
                             return UIImage(named: "banff")!
                             }
-                         }.retryOnConnect(timeout: 30)
-    imageObservable
-        .bind(to: flickrImage)
-        .disposed(by:bag)
-    
-    }
+                         }
+       imageObservable
+          .bind(to: flickrImage)
+          .disposed(by:bag)
+  }
 }
 

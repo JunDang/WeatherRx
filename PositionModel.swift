@@ -2,18 +2,17 @@
 //  PositionModel.swift
 //  WeatherRx
 //
-//  Created by Jun Dang on 2018-07-27.
+//  Created by Jun Dang on 2018-08-31.
 //  Copyright © 2018 Jun Dang. All rights reserved.
 //
 
 import Foundation
-import Foundation
 
 struct GeocodingModel: Codable {
-     private enum CodingKeys : String, CodingKey {
-     case geocodingResults = "results"
+    private enum CodingKeys : String, CodingKey {
+        case geocodingResults = "results"
     }
-     var geocodingResults: [GeocodingResult] = []
+    var geocodingResults: [GeocodingResult] = []
 }
 struct GeocodingResult: Codable {
     private enum CodingKeys : String, CodingKey {

@@ -93,7 +93,7 @@ class InternetService: InternetServiceProtocol {
                  case .Failure(let error):
                     return Result<NSURL, Error>.Failure(error)
                 }
-            }).retryOnConnect(timeout: 30)
+            })
     }
    
     static func sendRequest(resultNSURL: Result<NSURL, Error>) -> Observable<Result<Data, Error>> {
@@ -139,7 +139,7 @@ class InternetService: InternetServiceProtocol {
                         case .Failure(let error):
                             return Result<UIImage, Error>.Failure(error)
                         }
-                    }.retryOnConnect(timeout: 30)
+                    }
            }
        case .Failure(let error):
           return Observable.just(Result<UIImage, Error>.Failure(error))
@@ -167,7 +167,7 @@ class InternetService: InternetServiceProtocol {
                 case .Failure(let error):
                     return Result<WeatherForecastModel, Error>.Failure(error)
                 }
-            }).retryOnConnect(timeout: 30)
+            })
     }
   
     

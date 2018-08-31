@@ -133,8 +133,6 @@ extension WeatherForecastGraphViewController {
         var lineChartEntry = [ChartDataEntry]()
         for i in 0..<hourlyWeatherModel!.count {
             let hour = dateFormatter.string(from: hourlyWeatherModel![i].timeDate)
-            //print("hourString: \(hourString)")
-            
             if unitChange == "convertToImperial" {
                temperature = hourlyWeatherModel![i].temperature
                hourlyUnitLbl.text = "\u{00B0}" + "F"
@@ -143,7 +141,6 @@ extension WeatherForecastGraphViewController {
                hourlyUnitLbl.text = "\u{00B0}" + "C"
             }
             let iconName = WeatherIcon.iconMap[hourlyWeatherModel![i].icon]
-            // print("hourlyIconName: " + "\(iconName)")
             let iconImage = UIImage(named: "\(String(describing: iconName!))")
             let value = ChartDataEntry(x: Double(i), y: temperature, icon: iconImage)
             lineChartEntry.append(value)
@@ -152,7 +149,6 @@ extension WeatherForecastGraphViewController {
         let hourlyLine = LineChartDataSet(values: lineChartEntry, label: "Hourly Temperature")
         hourlyLine.axisDependency = .left 
         hourlyLine.setColor(UIColor.red.withAlphaComponent(0.5))
-        //hourlyLine.setCircleColor(UIColor.red)
         hourlyLine.lineWidth = 2.0
         hourlyLine.drawCirclesEnabled = false
         hourlyLine.drawCircleHoleEnabled = false
@@ -290,7 +286,6 @@ extension WeatherForecastGraphViewController {
         dailyChartView.chartDescription?.text = "Daily Forecast Trend"
         dailyChartView.chartDescription?.textColor = UIColor.white
     }
-  
 }
 
 

@@ -37,13 +37,9 @@ class WeatherViewController: UIViewController {
     var flickrImage = BehaviorRelay<UIImage?>(value: UIImage(named: "banff")!)
     var viewModel: ViewModel!
     var weatherForecastModelObservable: Observable<WeatherForecastModel>!
-    var weatherForecastModel: WeatherForecastModel!
     var geoLocation: Observable<Result<(CLLocationCoordinate2D, String), Error>>?
-    let locationManager = CLLocationManager()
     var locationObservable: Observable<CLLocationCoordinate2D>?
     var searchTextField: UITextField?
-    var lat: Double?
-    var lon: Double?
     var searchController: UISearchController?
     //let activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
     let progressHUD = ProgressHUD(text: "Loading")
@@ -60,60 +56,52 @@ class WeatherViewController: UIViewController {
     var segmentIndex: Int?
     
     override func viewDidLoad() {
-       super.viewDidLoad()
-       setup()
-       layoutView()
-       style()
-       setupSegmentedView()
-       setupNavigationbar()
-       self.frontScrollView.addSubview(self.progressHUD)
-       reachability = Reachability()
-       try? reachability?.startNotifier()
-       //self.activityIndicatorView.startAnimating()
-        locationObservable = GeoLocationService.instance.getLocation()
-        guard locationObservable != nil else {
-            return
-        }
-        obtainData(locationObservable: self.locationObservable!)
-        // add refresh time
+        super.viewDidLoad()
+        setup()
+        layoutView()
+        style()
+        setupSegmentedView()
+        setupNavigationbar()
+        self.frontScrollView.addSubview(self.progressHUD)
+        reachability = Reachability()
+        try? reachability?.startNotifier()
+        Reachability.rx.isConnected
+            .subscribe(onNext:{
+                self.locationObservable = GeoLocationService.instance.getLocation()
+                guard self.locationObservable != nil else {
+                    return
+                }
+                self.obtainData(locationObservable: self.locationObservable!)
+                self.updateUI()
+            })
+            .disposed(by:bag)
+       // add refresh time
         self.dateFormatter.dateStyle = DateFormatter.Style.short
         self.dateFormatter.timeStyle = DateFormatter.Style.long
         //NSUserDefaults
         valueStored = userDefaults.object(forKey: "unitChange") as? Bool
-         if (valueStored == nil) {
+        if (valueStored == nil) {
             valueStored = false
-           userDefaults.set(convertToMetric, forKey: "unitChange")
-         }
+            userDefaults.set(convertToMetric, forKey: "unitChange")
+        }
     }
     override func didReceiveMemoryWarning() {
-      super.didReceiveMemoryWarning()
-    // Dispose of any resources that can be recreated.
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
     }
     override var prefersStatusBarHidden: Bool {
         return true
     }
     func obtainData(locationObservable: Observable<CLLocationCoordinate2D>) {
-       print("obtiandatacalled")
-        locationObservable.subscribe(onNext: {
-            location in
-            print("refreshLat: \(location.latitude), refreshlon: \(location.longitude)")
-        })
-        .disposed(by: bag)
        
-            //let locationObservable = GeoLocationService.instance.getLocation()
-       weatherForecastModelObservable =
+        weatherForecastModelObservable =
             locationObservable
-                  //.observeOn(MainScheduler.instance)
-                  .flatMap(){ [unowned self] location -> Observable<WeatherForecastModel> in
+               .flatMap(){ [unowned self] location -> Observable<WeatherForecastModel> in
                     print("getweatherforecastmodelfunctioncalled")
                     return (self.getWeatherForecastModel(location: location))
-                           //.retryOnConnect(timeout: 30)
-                }
-        
-     
-        cityResultObservable = GeoLocationService.instance.cityResultObservable?
-                               .retryOnConnect(timeout: 30)
-        cityNameObservable = cityResultObservable?
+            }
+       cityResultObservable = GeoLocationService.instance.cityResultObservable
+       cityNameObservable = cityResultObservable?
             .observeOn(MainScheduler.instance)
             .map() {cityResult -> String in
                 switch cityResult {
@@ -124,7 +112,7 @@ class WeatherViewController: UIViewController {
                 }
                 return self.cityName
         }
-       cityNameObservable?
+        cityNameObservable?
             .subscribe(onNext: {cityName in
                 self.navigationItem.title = cityName
             })
@@ -135,38 +123,38 @@ class WeatherViewController: UIViewController {
         let lon = location.longitude
         print("lat: \(lat), lon: \(lon)")
         let key = "\(Int(lat*10000))\(Int(lon)*10000)"
-          print("key: \(key)")
+        print("key: \(key)")
         guard let realm = try? Realm() else {
             return fetchData(lat: lat, lon: lon)
         }
         let weatherModel = realm.object(ofType: WeatherForecastModel.self, forPrimaryKey: key)
-            if weatherModel != nil {
-                let unixTime = Int(Date().timeIntervalSince1970)
-                let currentTime = weatherModel!.currently!.time
-                if (unixTime - currentTime) > 3600 {
-                    viewModel = ViewModel(lat: lat, lon: lon, apiType: InternetService.self)
-                    flickrImage = (self.viewModel?.flickrImage)!
-                    bindBackground(flickrImage: self.flickrImage)
-                    weatherForecastModelObservable =
-                        viewModel.weatherForecastData
-                            .map() { weatherData in
-                                if weatherData.0.last != nil {
-                                    let weatherModelUpdated = realm.object(ofType: WeatherForecastModel.self, forPrimaryKey: key)
-                                    
-                                    return weatherModelUpdated!
-                                } else {
-                                    self.displayErrorMessage(userMessage: "Weather Data Cannot be Updated", handler: nil)
-                                    return weatherModel!
-                                }
-                             }
-                } else {
-                    weatherForecastModelObservable = Observable.just(weatherModel!)
-                    flickrImage = BehaviorRelay<UIImage?>(value: UIImage(named: "banff")!)
-                    bindBackground(flickrImage: self.flickrImage)
+        if weatherModel != nil {
+            let unixTime = Int(Date().timeIntervalSince1970)
+            let currentTime = weatherModel!.currently!.time
+            if (unixTime - currentTime) > 3600 {
+                viewModel = ViewModel(lat: lat, lon: lon, apiType: InternetService.self)
+                flickrImage = (self.viewModel?.flickrImage)!
+                bindBackground(flickrImage: self.flickrImage)
+                weatherForecastModelObservable =
+                    viewModel.weatherForecastData
+                        .map() { weatherData in
+                            if weatherData.0.last != nil {
+                                let weatherModelUpdated = realm.object(ofType: WeatherForecastModel.self, forPrimaryKey: key)
+                                return weatherModelUpdated!
+                            } else {
+                                self.displayErrorMessage(userMessage: "Weather Data Cannot be Updated", handler: nil)
+                                return weatherModel!
+                            }
                 }
             } else {
-                 weatherForecastModelObservable = fetchData(lat: lat, lon: lon)
-           }
+                print("fromrealm")
+                weatherForecastModelObservable = Observable.just(weatherModel!)
+                flickrImage = BehaviorRelay<UIImage?>(value: UIImage(named: "banff")!)
+                bindBackground(flickrImage: self.flickrImage)
+            }
+        } else {
+            weatherForecastModelObservable = fetchData(lat: lat, lon: lon)
+        }
         return weatherForecastModelObservable
     }
     
@@ -186,7 +174,6 @@ class WeatherViewController: UIViewController {
                     } else {
                         self.displayErrorMessage(userMessage: "Weather Data Cannot be Fetched", handler: nil)
                         weatherForecastModel = self.createEmptyWeatherModel()
-                        print("DefaultWeatherData: " + "\(String(describing: self.weatherForecastModel))")
                     }
                     return weatherForecastModel!
         }
@@ -212,7 +199,7 @@ class WeatherViewController: UIViewController {
         weatherForecastModel.minutely = MinutelyWeatherModel()
         return weatherForecastModel
     }
- 
+    
     func bindBackground(flickrImage: BehaviorRelay<UIImage?>) {
         
         flickrImage.asDriver()
@@ -226,28 +213,25 @@ class WeatherViewController: UIViewController {
             })
             .disposed(by: bag)
     }
-
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        //unitControl.selectedSegmentIndex = selectedIndex
         try? reachability?.startNotifier()
         Reachability.rx.isDisconnected
             .subscribe(onNext:{
-                 self.displayErrorMessage(userMessage: "Not connected to Network",handler: nil)
-                 self.weatherForecastModelObservable = self.displayWeatherWhenError()
-                 self.updateUIWithSearchCityData()
+                self.displayErrorMessage(userMessage: "Not connected to Network",handler: nil)
+                self.weatherForecastModelObservable = self.displayWeatherWhenError()
+                self.updateUI()
                 
             })
             .disposed(by:bag)
+     }
     
-        updateUIWithSearchCityData()
-    }
-   
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         reachability?.stopNotifier()
     }
-
+    
     private lazy var tableViewController: WeatherForecastTableViewController = {
         let viewController = WeatherForecastTableViewController()
         self.add(asChildViewController: viewController)
@@ -302,7 +286,6 @@ private extension WeatherViewController{
         frontScrollView.showsVerticalScrollIndicator = false
         view.addSubview(backScrollView)
         view.addSubview(frontScrollView)
-      
     }
 }
 
@@ -315,7 +298,7 @@ extension WeatherViewController{
             view.left == view.superview!.left
             view.right == view.superview!.right
         }
-       constrain(maskLayer) { view in
+        constrain(maskLayer) { view in
             view.top == view.superview!.top
             view.bottom == view.superview!.bottom
             view.left == view.superview!.left
@@ -340,9 +323,9 @@ extension WeatherViewController{
             view.right == view.superview!.right
         }
         /*constrain(progressHUD) { view in
-            view.centerY == view.superview!.centerY
-            view.centerX == view.superview!.centerX
-        }*/
+         view.centerY == view.superview!.centerY
+         view.centerX == view.superview!.centerX
+         }*/
         constrain(currentWeatherView) { view in
             view.width == view.superview!.width
             view.centerX == view.superview!.centerX
@@ -359,8 +342,8 @@ extension WeatherViewController{
             $0.centerX == $0.superview!.centerX
             $0.top == $1.bottom
             $0.height == self.view.frame.height
-       }
-   }
+        }
+    }
 }
 
 // MARK: Style
@@ -399,7 +382,7 @@ extension WeatherViewController: UIScrollViewDelegate {
         } else {
             // Fallback on earlier versions
         }
-     }
+    }
 }
 //MARK: -set up segmented controll
 extension WeatherViewController {
@@ -422,7 +405,7 @@ extension WeatherViewController {
     @objc func contentChange(_ sender: UISegmentedControl) {
         updateView()
     }
-
+    
     private func add(asChildViewController viewController: UIViewController) {
         addChildViewController(viewController)
         containerView.addSubview(viewController.view)
@@ -438,21 +421,21 @@ extension WeatherViewController {
     }
     
     private func updateView() {
-       switch segmentedControl.selectedSegmentIndex {
-          case 0:
-             remove(asChildViewController: summaryViewController)
-             remove(asChildViewController: graphViewController)
-             add(asChildViewController: tableViewController)
-          case 1:
-             remove(asChildViewController: tableViewController)
-             remove(asChildViewController: summaryViewController)
-             add(asChildViewController: graphViewController)
-          case 2:
-             remove(asChildViewController: graphViewController)
-             remove(asChildViewController: tableViewController)
-             add(asChildViewController: summaryViewController)
-          default:
-          break
+        switch segmentedControl.selectedSegmentIndex {
+        case 0:
+            remove(asChildViewController: summaryViewController)
+            remove(asChildViewController: graphViewController)
+            add(asChildViewController: tableViewController)
+        case 1:
+            remove(asChildViewController: tableViewController)
+            remove(asChildViewController: summaryViewController)
+            add(asChildViewController: graphViewController)
+        case 2:
+            remove(asChildViewController: graphViewController)
+            remove(asChildViewController: tableViewController)
+            add(asChildViewController: summaryViewController)
+        default:
+            break
         }
     }
 }
@@ -460,11 +443,11 @@ extension WeatherViewController {
 extension WeatherViewController: UINavigationControllerDelegate, UINavigationBarDelegate {
     func setupNavigationbar() {
         self.navigationItem.title = cityName
-    
+        
         let navigationBar = navigationController!.navigationBar
         navigationBar.titleTextAttributes =
             [NSAttributedStringKey.foregroundColor: UIColor.white, NSAttributedStringKey.font: UIFont(name: "HelveticaNeue-Bold", size: 19)!]
-       //MARK: - set navigation bar transparent
+        //MARK: - set navigation bar transparent
         navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         navigationBar.shadowImage = UIImage()
         navigationBar.isTranslucent = true
@@ -487,7 +470,7 @@ extension WeatherViewController: UINavigationControllerDelegate, UINavigationBar
         //print("navigationBar.frame.height: " + "\(navigationBar.frame.height)")
     }
 }
-    
+
 extension WeatherViewController: UISearchBarDelegate {
     @objc func searchCity(_ sender: AnyObject) {
         searchController = UISearchController(searchResultsController: nil)
@@ -503,21 +486,21 @@ extension WeatherViewController: UISearchBarDelegate {
         // Make this class the delegate and present the search
         self.searchController!.searchBar.delegate = self
         present(searchController!, animated: true, completion: nil)
-       
+        
     }
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         // this method is being called when search btn in the keyboard tapped
-         //searchBar.setShowsCancelButton(false, animated: false)
-         /*searchBar.isHidden = true
-        if searchBar.isFirstResponder {
-            _ = searchBar.resignFirstResponder()
-        }*/
+        //searchBar.setShowsCancelButton(false, animated: false)
+        /*searchBar.isHidden = true
+         if searchBar.isFirstResponder {
+         _ = searchBar.resignFirstResponder()
+         }*/
         if searchController != nil {
-             searchController!.dismiss(animated: true, completion: nil)
+            searchController!.dismiss(animated: true, completion: nil)
         }
     }
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-       
+        
         guard searchBar.text != nil else {
             //geoCodingViewModel = GeocodingViewModel(cityName: searchBar.text!, apiType: InternetService.self)
             //print("geoCodingViewModel: " + "\(geoCodingViewModel)")
@@ -529,8 +512,8 @@ extension WeatherViewController: UISearchBarDelegate {
             return
         }
         searchCityWeatherData(geoLocation: geoLocation!)
-        updateUIWithSearchCityData()
-   }
+        updateUI()
+    }
     func searchCityWeatherData(geoLocation: Observable<Result<(CLLocationCoordinate2D, String), Error>>) {
         
         self.weatherForecastModelObservable = geoLocation
@@ -563,7 +546,7 @@ extension WeatherViewController: UISearchBarDelegate {
         self.bindBackground(flickrImage: self.flickrImage)
         return Observable.just(weatherForecastModel!)
     }
-    func updateUIWithSearchCityData() {
+    func updateUI() {
         weatherForecastModelObservable?
             .subscribe(onNext: { (weatherForecastModel) in
                 self.currentWeatherView.update(with: weatherForecastModel)
@@ -581,10 +564,10 @@ extension WeatherViewController: UISearchBarDelegate {
 extension WeatherViewController {
     @objc func menuButtonPressed(_ sender: AnyObject) {
         if isMenuButtonPressed {
-          setupUnitSegmentedView()
-          isMenuButtonPressed = false
-          unitControl.addTarget(self, action: #selector(unitChange(_:)), for: .valueChanged)
-          } else {
+            setupUnitSegmentedView()
+            isMenuButtonPressed = false
+            unitControl.addTarget(self, action: #selector(unitChange(_:)), for: .valueChanged)
+        } else {
             if unitControl.superview != nil {
                 unitControl.removeFromSuperview()
                 isMenuButtonPressed = true
@@ -596,7 +579,7 @@ extension WeatherViewController {
         unitSegmentedViewLayout()
         unitSegmentedViewStyle()
         setupUnitSegmentedControl()
- 
+        
     }
     func unitSegmentedViewLayout() {
         constrain(unitControl) {
@@ -604,111 +587,99 @@ extension WeatherViewController {
             $0.left == $0.superview!.left + 5
             $0.width == 180
             $0.height == 40
-         }
+        }
     }
-   func unitSegmentedViewStyle() {
-      unitControl.backgroundColor = UIColor.black.withAlphaComponent(0.6)
-      unitControl.layer.cornerRadius = 5.0
-      unitControl.tintColor = UIColor.white
-      unitControl.setTitleTextAttributes([NSAttributedStringKey.font: UIFont(name: "HelveticaNeue-Bold", size: 15)!], for: .normal)
-      unitControl.sizeToFit()
-   }
-  func setupUnitSegmentedControl() {
-    // Configure Segmented Control
-     unitControl.removeAllSegments()
-     unitControl.insertSegment(withTitle: "Metric", at: 0, animated: false)
-     unitControl.insertSegment(withTitle: "Imperial", at: 1, animated: false)
-    
-     segmentIndexStored = userDefaults.object(forKey: "segmentIndex") as? Bool
-     if (segmentIndexStored == nil) {
-        segmentIndexStored = false
-        userDefaults.set(selectedIndex, forKey: "segmentIndex")
-     }
-     segmentIndex =  UserDefaults.standard.integer(forKey: "segmentIndex")
-     unitControl.selectedSegmentIndex = segmentIndex!
-  }
- @objc func unitChange(_ sender: UISegmentedControl) {
-     let realm = try? Realm()
-     var weatherForecastModelLast: WeatherForecastModel?
-     if realm?.objects(WeatherForecastModel.self).last != nil {
-        weatherForecastModelLast = realm?.objects(WeatherForecastModel.self).last
-     } else {
-         weatherForecastModelLast = self.createEmptyWeatherModel()
-     }
-     weatherForecastModelObservable = Observable.just(weatherForecastModelLast!)
-     switch unitControl.selectedSegmentIndex {
-     case 0:
-        
-        if valueStored == true {
-            userDefaults.removeObject(forKey: "UnitChange")
-        }
-             userDefaults.set(convertToMetric, forKey: "UnitChange")
-        //Set segment index
-        
-        if segmentIndexStored != nil {
-            segmentIndex =  UserDefaults.standard.integer(forKey: "segmentIndex")
-            if segmentIndex == 1 {
-            userDefaults.removeObject(forKey: "segmentIndex")
-            selectedIndex = 0
-            userDefaults.set(selectedIndex, forKey: "segmentIndex")
-            }
-        }
-         updateUIWithSearchCityData()
-     case 1:
-            //let valueStored = userDefaults.object(forKey: "UnitChange") as? Bool
-        if valueStored == true {
-           userDefaults.removeObject(forKey: "UnitChange")
-        }
-        let convertToImperial: String = "convertToImperial"
-           userDefaults.set(convertToImperial, forKey: "UnitChange")
+    func unitSegmentedViewStyle() {
+        unitControl.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+        unitControl.layer.cornerRadius = 5.0
+        unitControl.tintColor = UIColor.white
+        unitControl.setTitleTextAttributes([NSAttributedStringKey.font: UIFont(name: "HelveticaNeue-Bold", size: 15)!], for: .normal)
+        unitControl.sizeToFit()
+    }
+    func setupUnitSegmentedControl() {
+        // Configure Segmented Control
+        unitControl.removeAllSegments()
+        unitControl.insertSegment(withTitle: "Metric", at: 0, animated: false)
+        unitControl.insertSegment(withTitle: "Imperial", at: 1, animated: false)
         
         segmentIndexStored = userDefaults.object(forKey: "segmentIndex") as? Bool
-        if segmentIndexStored != nil {
-            segmentIndex =  UserDefaults.standard.integer(forKey: "segmentIndex")
-            if segmentIndex == 0 {
-            userDefaults.removeObject(forKey: "segmentIndex")
-            selectedIndex = 1
+        if (segmentIndexStored == nil) {
+            segmentIndexStored = false
             userDefaults.set(selectedIndex, forKey: "segmentIndex")
+        }
+        segmentIndex =  UserDefaults.standard.integer(forKey: "segmentIndex")
+        unitControl.selectedSegmentIndex = segmentIndex!
+    }
+    @objc func unitChange(_ sender: UISegmentedControl) {
+        let realm = try? Realm()
+        var weatherForecastModelLast: WeatherForecastModel?
+        if realm?.objects(WeatherForecastModel.self).last != nil {
+            weatherForecastModelLast = realm?.objects(WeatherForecastModel.self).last
+        } else {
+            weatherForecastModelLast = self.createEmptyWeatherModel()
+        }
+        weatherForecastModelObservable = Observable.just(weatherForecastModelLast!)
+        switch unitControl.selectedSegmentIndex {
+        case 0:
+            
+            if valueStored == true {
+                userDefaults.removeObject(forKey: "UnitChange")
             }
-       
+            userDefaults.set(convertToMetric, forKey: "UnitChange")
+            //Set segment index
+            
+            if segmentIndexStored != nil {
+                segmentIndex =  UserDefaults.standard.integer(forKey: "segmentIndex")
+                if segmentIndex == 1 {
+                    userDefaults.removeObject(forKey: "segmentIndex")
+                    selectedIndex = 0
+                    userDefaults.set(selectedIndex, forKey: "segmentIndex")
+                }
+            }
+            updateUI()
+        case 1:
+            //let valueStored = userDefaults.object(forKey: "UnitChange") as? Bool
+            if valueStored == true {
+                userDefaults.removeObject(forKey: "UnitChange")
+            }
+            let convertToImperial: String = "convertToImperial"
+            userDefaults.set(convertToImperial, forKey: "UnitChange")
+            
+            segmentIndexStored = userDefaults.object(forKey: "segmentIndex") as? Bool
+            if segmentIndexStored != nil {
+                segmentIndex =  UserDefaults.standard.integer(forKey: "segmentIndex")
+                if segmentIndex == 0 {
+                    userDefaults.removeObject(forKey: "segmentIndex")
+                    selectedIndex = 1
+                    userDefaults.set(selectedIndex, forKey: "segmentIndex")
+                }
+           }
+            updateUI()
+        default:
+            break
         }
-         updateUIWithSearchCityData()
-      default:
-        break
-        }
-   }
+    }
 }
 
 private extension WeatherViewController {
     @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
-       /* var address: String?
-        if self.navigationItem.title != "" {
-            address = self.navigationItem.title
-        } else {
-            address = "Toronto"
-        }
-        geoLocation = GeoLocationService.instance.locationGeocoding(address: address!)
-        guard geoLocation != nil else {
-            return
-        }
-        searchCityWeatherData(geoLocation: geoLocation!)*/
-       if self.navigationItem.title != "" {
-            geoLocation = GeoLocationService.instance.locationGeocoding(address: self.navigationItem.title!)
-            guard geoLocation != nil else {
-                return
-            }
-            searchCityWeatherData(geoLocation: geoLocation!)
-        } else {
-        print("obtaindatarefreshcalled")
-           obtainData(locationObservable: self.locationObservable!)
-        
-        }
-        updateUIWithSearchCityData()
+         var address: String?
+         if self.navigationItem.title != "" {
+         address = self.navigationItem.title
+         } else {
+         address = "Toronto"
+         }
+         geoLocation = GeoLocationService.instance.locationGeocoding(address: address!)
+         guard geoLocation != nil else {
+         return
+         }
+         searchCityWeatherData(geoLocation: geoLocation!)
+         updateUI()
         let now = Date()
         let updateString = "Last Updated at " + self.dateFormatter.string(from: now)
         self.refreshControl.attributedTitle = NSAttributedString(string: updateString)
         if self.refreshControl.isRefreshing {
             self.refreshControl.endRefreshing()
-       }
+        }
     }
 }

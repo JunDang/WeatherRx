@@ -44,5 +44,4 @@ extension Reactive where Base: CLLocationManager {
                 return a[1] as! [CLLocation]
         }
     }
-    
 }

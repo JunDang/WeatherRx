@@ -20,9 +20,7 @@ class CurrentWeatherView: UIView {
     private let iconImage = UIImageView()
     private let weatherLbl = UILabel()
     private let minutelySummaryLbl = UILabel()
-    //var currentWeather: CurrentlyWeatherModel?
-    //var weatherViewModel: WeatherViewModel?
- 
+  
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()

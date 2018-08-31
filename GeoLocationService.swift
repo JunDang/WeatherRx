@@ -19,19 +19,19 @@ class GeoLocationService {
     var cityResultObservable: Observable<Result<String, Error>>?
     var cityName: String?
     private let bag = DisposeBag()
- 
+    
     private init() {
         locationManager.distanceFilter = kCLDistanceFilterNone
         locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
-       
+        
         locationObservable = locationManager.rx.didUpdateLocations
-                  .catchErrorJustReturn([])
-                  .filter { $0.count > 0 }
-                  .map { $0.last!.coordinate }
-                  .throttle(0.5, scheduler: MainScheduler.instance)
-                  .distinctUntilChanged({ (lhs, rhs) -> Bool in
-                        fabs(lhs.latitude - rhs.latitude) <= 0.0000001 && fabs(lhs.longitude - rhs.longitude) <= 0.0000001
-                  })
+            .catchErrorJustReturn([])
+            .filter { $0.count > 0 }
+            .map { $0.last!.coordinate }
+            .throttle(0.5, scheduler: MainScheduler.instance)
+            .distinctUntilChanged({ (lhs, rhs) -> Bool in
+                fabs(lhs.latitude - rhs.latitude) <= 0.0000001 && fabs(lhs.longitude - rhs.longitude) <= 0.0000001
+            })
         
         locationManager.requestAlwaysAuthorization()
         locationManager.startUpdatingLocation()
@@ -42,6 +42,7 @@ class GeoLocationService {
                 let lon = location.longitude
                 return self.reverseGeocoding(lat: lat, lon: lon)
         }
+        
     }
     func getLocation() -> Observable<CLLocationCoordinate2D> {
         return locationObservable
@@ -76,11 +77,11 @@ class GeoLocationService {
                     let addressComponentsNeighborhood = addressComponents.filter{$0.types.contains("neighborhood")}
                     print("addressComponentsNeighborhood: \(addressComponentsNeighborhood)")
                     if addressComponentsNeighborhood.count > 0 {
-                       cityName = addressComponentsNeighborhood[0].longName
+                        cityName = addressComponentsNeighborhood[0].longName
                     } else if addressComponentsLocality.count > 0 {
-                       cityName = addressComponentsLocality[0].longName
+                        cityName = addressComponentsLocality[0].longName
                     } else {
-                       cityName = addressComponents[0].longName
+                        cityName = addressComponents[0].longName
                     }
                     return Result<(CLLocationCoordinate2D, String), Error>.Success((geoLocation, cityName))
                 case .Failure(let error):
