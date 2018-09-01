@@ -65,16 +65,17 @@ class WeatherViewController: UIViewController {
         self.frontScrollView.addSubview(self.progressHUD)
         reachability = Reachability()
         try? reachability?.startNotifier()
-        Reachability.rx.isConnected
-            .subscribe(onNext:{
-                self.locationObservable = GeoLocationService.instance.getLocation()
-                guard self.locationObservable != nil else {
-                    return
-                }
-                self.obtainData(locationObservable: self.locationObservable!)
-                self.updateUI()
-            })
-            .disposed(by:bag)
+        /*locationObservable = Reachability.rx.isConnected
+            .flatMap(){ _ -> Observable<CLLocationCoordinate2D> in
+                return GeoLocationService.instance.getLocation()
+            }*/
+        locationObservable = GeoLocationService.instance.getLocation()
+                             .retryOnConnect(timeout: 30)
+        guard self.locationObservable != nil else {
+           return
+        }
+        //obtainData(locationObservable: self.locationObservable!)
+        obtainData()
        // add refresh time
         self.dateFormatter.dateStyle = DateFormatter.Style.short
         self.dateFormatter.timeStyle = DateFormatter.Style.long
@@ -92,10 +93,10 @@ class WeatherViewController: UIViewController {
     override var prefersStatusBarHidden: Bool {
         return true
     }
-    func obtainData(locationObservable: Observable<CLLocationCoordinate2D>) {
-       
+    func obtainData() {
+       print("functionCalled")
         weatherForecastModelObservable =
-            locationObservable
+            locationObservable?
                .flatMap(){ [unowned self] location -> Observable<WeatherForecastModel> in
                     print("getweatherforecastmodelfunctioncalled")
                     return (self.getWeatherForecastModel(location: location))
@@ -225,6 +226,7 @@ class WeatherViewController: UIViewController {
                 
             })
             .disposed(by:bag)
+        updateUI()
      }
     
     override func viewWillDisappear(_ animated: Bool) {

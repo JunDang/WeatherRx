@@ -48,6 +48,7 @@ class GeoLocationService {
         return locationObservable
     }
     func locationGeocoding(address: String) -> Observable<Result<(CLLocationCoordinate2D, String), Error>> {
+        locationManager.stopUpdatingLocation()
         let baseURL = URL(string: GoogleGeocodingAPI.baseURLString)!
         let parameters = [
             "key": GoogleGeocodingAPI.apiKey,
