@@ -14,7 +14,7 @@ import RxSwift
 class GeoLocationService {
     static let instance = GeoLocationService()
     private (set) var locationObservable: Observable<CLLocationCoordinate2D>
-    private let locationManager = CLLocationManager()
+    let locationManager = CLLocationManager()
     var geoLocation: Observable<Result<(CLLocationCoordinate2D, String), Error>>?
     var cityResultObservable: Observable<Result<String, Error>>?
     var cityName: String?

@@ -13,6 +13,9 @@ abstract_target 'WeatherRxAbstract' do
     pod 'RxSwiftUtilities'
     pod 'ReachabilitySwift'
     pod 'Charts'
+    pod 'GooglePlaces'
+    pod 'GooglePlacePicker'
+    pod 'GoogleMaps'
      
     target ‘WeatherRx’ do
       pod "RxDataSources"

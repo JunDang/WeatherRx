@@ -16,6 +16,8 @@ import DynamicBlurView
 import CoreLocation
 import RxSwiftUtilities
 import Reachability
+import GooglePlaces
+
 
 
 class WeatherViewController: UIViewController {
@@ -54,6 +56,8 @@ class WeatherViewController: UIViewController {
     var selectedIndex = 0
     var segmentIndexStored: Bool?
     var segmentIndex: Int?
+    var resultsViewController: GMSAutocompleteResultsViewController?
+    var resultView: UITextView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -65,12 +69,9 @@ class WeatherViewController: UIViewController {
         self.frontScrollView.addSubview(self.progressHUD)
         reachability = Reachability()
         try? reachability?.startNotifier()
-        /*locationObservable = Reachability.rx.isConnected
-            .flatMap(){ _ -> Observable<CLLocationCoordinate2D> in
-                return GeoLocationService.instance.getLocation()
-            }*/
+     
         locationObservable = GeoLocationService.instance.getLocation()
-                             .retryOnConnect(timeout: 30)
+                             //.retryOnConnect(timeout: 30)
         guard self.locationObservable != nil else {
            return
         }
@@ -222,6 +223,7 @@ class WeatherViewController: UIViewController {
             .subscribe(onNext:{
                 self.displayErrorMessage(userMessage: "Not connected to Network",handler: nil)
                 self.weatherForecastModelObservable = self.displayWeatherWhenError()
+                GeoLocationService.instance.locationManager.startUpdatingLocation()
                 self.updateUI()
                 
             })
@@ -473,22 +475,55 @@ extension WeatherViewController: UINavigationControllerDelegate, UINavigationBar
     }
 }
 
-extension WeatherViewController: UISearchBarDelegate {
+extension WeatherViewController: UISearchBarDelegate, GMSAutocompleteResultsViewControllerDelegate {
     @objc func searchCity(_ sender: AnyObject) {
-        searchController = UISearchController(searchResultsController: nil)
-        searchController!.hidesNavigationBarDuringPresentation = false
+        resultsViewController = GMSAutocompleteResultsViewController()
+        resultsViewController?.delegate = self as? GMSAutocompleteResultsViewControllerDelegate
+        searchController = UISearchController(searchResultsController: resultsViewController)
+        searchController?.searchResultsUpdater = resultsViewController
+        searchController?.searchBar.sizeToFit()
+        definesPresentationContext = true
+        searchController!.hidesNavigationBarDuringPresentation = true
         searchController!.searchBar.keyboardType = UIKeyboardType.asciiCapable
         let searchBar = searchController!.searchBar
         searchBar.searchBarStyle = UISearchBarStyle.prominent
         searchBar.tintColor = UIColor.white
         searchBar.placeholder = "Search City"
-        searchBar.barTintColor = UIColor(red: (15/255.0), green: (16/255.0), blue: (50/255.0), alpha: 0.8)
+        searchBar.barTintColor = UIColor(red: (15/255.0), green: (16/255.0), blue: (50/255.0), alpha: 0)
         let textFieldInsideUISearchBar = searchBar.value(forKey: "searchField") as? UITextField
         textFieldInsideUISearchBar?.font = UIFont(name: "HelveticaNeue-Bold", size: 17)
         // Make this class the delegate and present the search
         self.searchController!.searchBar.delegate = self
         present(searchController!, animated: true, completion: nil)
         
+    }
+    func resultsController(_ resultsController: GMSAutocompleteResultsViewController,
+                           didAutocompleteWith place: GMSPlace) {
+        searchController?.isActive = false
+        // Do something with the selected place.
+        self.progressHUD.show()
+        print("address: \(place.name)")
+        geoLocation = GeoLocationService.instance.locationGeocoding(address: place.name)
+        guard geoLocation != nil else {
+            return
+        }
+        searchCityWeatherData(geoLocation: geoLocation!)
+        updateUI()
+    }
+    
+    func resultsController(_ resultsController: GMSAutocompleteResultsViewController,
+                           didFailAutocompleteWithError error: Error){
+        // TODO: handle the error.
+        print("Error: ", error.localizedDescription)
+    }
+    
+    // Turn the network activity indicator on and off again.
+    func didRequestAutocompletePredictions(forResultsController resultsController: GMSAutocompleteResultsViewController) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+    }
+    
+    func didUpdateAutocompletePredictions(forResultsController resultsController: GMSAutocompleteResultsViewController) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = false
     }
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         // this method is being called when search btn in the keyboard tapped
@@ -501,7 +536,7 @@ extension WeatherViewController: UISearchBarDelegate {
             searchController!.dismiss(animated: true, completion: nil)
         }
     }
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+   func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         
         guard searchBar.text != nil else {
             //geoCodingViewModel = GeocodingViewModel(cityName: searchBar.text!, apiType: InternetService.self)

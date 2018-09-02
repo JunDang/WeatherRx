@@ -10,7 +10,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Views/HourlyForecastTableViewCell.swift"
-            timestampString = "556739510.299867"
+            timestampString = "557501884.4085129"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "23"
@@ -26,13 +26,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Views/HourlyForecastTableViewCell.swift"
-            timestampString = "556739510.299984"
+            timestampString = "557501884.4087059"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "95"
             endingLineNumber = "95"
-            landmarkName = "layoutView()"
-            landmarkType = "7">
+            landmarkName = "HourlyForecastTableViewCell"
+            landmarkType = "21">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
