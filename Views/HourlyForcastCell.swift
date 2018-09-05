@@ -92,7 +92,7 @@ extension HourlyForecastCell {
         let iconName = WeatherIcon.iconMap[hourlyForecastData.icon]
         iconImage.image = UIImage(named: "\(String(describing: iconName!))")
         let unitChange =  UserDefaults.standard.string(forKey: "UnitChange")
-        if unitChange == "convertToImperial" {
+        if unitChange == "Imperial" {
             tempsLbl.text = "\(hourlyForecastData.temperature.roundToInt())" + "\u{00B0}" + "F"
         } else {
             tempsLbl.text = "\(hourlyForecastData.temperature.toCelcius().roundToInt())" + "\u{00B0}" + "C"

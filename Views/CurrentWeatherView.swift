@@ -91,7 +91,6 @@ private extension CurrentWeatherView{
         constrain(currentTempLbl, lowTempLbl) {
             $0.top == $1.bottom
             $0.left == $1.left
-            //$0.bottom == $0.superview!.bottom
         }
         constrain(minutelySummaryLbl, currentTempLbl) {
             $0.top == $1.bottom
@@ -107,7 +106,7 @@ private extension CurrentWeatherView{
     func setStyle(){
         self.backgroundColor = UIColor.clear
         
-        weatherLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 17)
+        weatherLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 19)
         weatherLbl.textColor = UIColor.white
         weatherLbl.numberOfLines = 2
         weatherLbl.lineBreakMode = NSLineBreakMode.byWordWrapping
@@ -118,22 +117,22 @@ private extension CurrentWeatherView{
         currentTempLbl.textColor = UIColor.white
         currentTempLbl.sizeToFit()
         
-        feelsLikeTempLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 16)
+        feelsLikeTempLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 17)
         feelsLikeTempLbl.textColor = UIColor.white
         feelsLikeTempLbl.sizeToFit()
         
-        minutelySummaryLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 16)
+        minutelySummaryLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 17)
         minutelySummaryLbl.textColor = UIColor.white
         minutelySummaryLbl.numberOfLines = 2
         minutelySummaryLbl.lineBreakMode = NSLineBreakMode.byWordWrapping
         minutelySummaryLbl.sizeToFit()
         
         
-        lowTempLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 16)
+        lowTempLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 17)
         lowTempLbl.textColor = UIColor.white
         lowTempLbl.sizeToFit()
         
-        highTempLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 16)
+        highTempLbl.font = UIFont(name: "HelveticaNeue-Bold", size: 17)
         highTempLbl.textColor = UIColor.white
         highTempLbl.sizeToFit()
    }
@@ -152,7 +151,7 @@ extension CurrentWeatherView{
              minutelySummaryLbl.text = minutelySummary
         
              let unitChange =  UserDefaults.standard.string(forKey: "UnitChange")
-             if unitChange == "convertToImperial" {
+             if unitChange == "Imperial" {
                 currentTempLbl.text = "\(String(describing: currentWeather!.temperature.roundToInt()))" + "\u{00B0}" + "F"
                 feelsLikeTempLbl.text = "Feels like: " + "\(String(describing: currentWeather!.apparentTemperature.roundToInt()))" + "\u{00B0}" + "F"
                 lowTempLbl.text = "min: " + "\(String(describing: currentDaily!.temperatureMin.roundToInt()))" + "\u{00B0}"  + "F"

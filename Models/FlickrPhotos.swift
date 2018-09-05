@@ -28,7 +28,7 @@ struct FlickrPhoto: Codable {
     var secret: String = ""
     
     private enum CodingKeys: String, CodingKey {
-      case farm = "farm", server = "server", id = "id", secret = "secret"
+        case farm = "farm", server = "server", id = "id", secret = "secret"
     }
     init(farm: Int, id: String, server: String, secrect: String) {
         self.farm = farm
@@ -47,8 +47,3 @@ struct FlickrPhoto: Codable {
         return NSURL(string: "http://farm\(String(describing: farm)).staticflickr.com/\(String(describing: server))/\(String(describing: id))_\(String(describing: secret))_b.jpg")!
     }
 }
-
-
-
-
-

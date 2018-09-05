@@ -31,8 +31,7 @@ class WeatherForecastTableViewController: UIViewController, UITableViewDelegate,
         tableView.backgroundColor = UIColor.black.withAlphaComponent(0.6)
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 99
-      
-     }
+    }
   
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
@@ -48,19 +47,14 @@ class WeatherForecastTableViewController: UIViewController, UITableViewDelegate,
             if let weatherForecastModel = weatherForecastModel {
                cell.weatherForecastModel = weatherForecastModel
                cell.collectionView?.reloadData()
-            } else {
-                
             }
             return cell
         } else {
             let cell: DailyForecastTableViewCell = tableView.dequeueReusableCell(withIdentifier: "DailyCell", for: indexPath) as! DailyForecastTableViewCell
             if let weatherForecastModel = weatherForecastModel {
                let dailyWeatherModel = weatherForecastModel.daily?.dailyWeatherModel
-                 //print("dailycount: " + "\(dailyWeatherModel?.count)")
-                 let dailyForecastData = dailyWeatherModel![indexPath.row]
-                 cell.updateDailyCell(with: dailyForecastData)
-            } else {
-                
+               let dailyForecastData = dailyWeatherModel![indexPath.row]
+               cell.updateDailyCell(with: dailyForecastData)
             }
              return cell
        }

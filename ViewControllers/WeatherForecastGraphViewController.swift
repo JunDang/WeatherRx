@@ -133,7 +133,7 @@ extension WeatherForecastGraphViewController {
         var lineChartEntry = [ChartDataEntry]()
         for i in 0..<hourlyWeatherModel!.count {
             let hour = dateFormatter.string(from: hourlyWeatherModel![i].timeDate)
-            if unitChange == "convertToImperial" {
+            if unitChange == "Imperial" {
                temperature = hourlyWeatherModel![i].temperature
                hourlyUnitLbl.text = "\u{00B0}" + "F"
             } else {
@@ -206,9 +206,8 @@ extension WeatherForecastGraphViewController {
         var lineChartEntryMin = [ChartDataEntry]()
         for i in 0..<dailyWeatherModel!.count {
             let day = dateFormatter.string(from: dailyWeatherModel![i].timeDate)
-            if unitChange == "convertToImperial" {
+            if unitChange == "Imperial" {
                 temperatureMax = dailyWeatherModel![i].temperatureMax
-                print("temperatureMax: \(temperatureMax)")
                 temperatureMin = dailyWeatherModel![i].temperatureMin
                 dailyUnitLbl.text = "\u{00B0}" + "F"
             } else {
@@ -287,5 +286,3 @@ extension WeatherForecastGraphViewController {
         dailyChartView.chartDescription?.textColor = UIColor.white
     }
 }
-
-

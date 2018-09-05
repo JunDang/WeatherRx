@@ -43,5 +43,7 @@
 	<string>For retreive weather information</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>For retreive weather information</string>
+	<key>CFBundleDisplayName</key>
+	<string>RxWeather</string>
 </dict>
 </plist>

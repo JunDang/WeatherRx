@@ -32,16 +32,15 @@ class ProgressHUD: UIVisualEffectView {
         self.vibrancyView = UIVisualEffectView(effect: UIVibrancyEffect(blurEffect: blurEffect))
         super.init(coder: aDecoder)!
         self.setup()
-        
     }
-    
+
     func setup() {
         contentView.addSubview(vibrancyView)
         vibrancyView.contentView.addSubview(activityIndictor)
         vibrancyView.contentView.addSubview(label)
         activityIndictor.startAnimating()
         let height: CGFloat = 50.0
-        self.frame = CGRect(120,
+        self.frame = CGRect(123,
                             100, 120, height)
         vibrancyView.frame = self.bounds
         

@@ -71,9 +71,7 @@ extension HourlyForecastTableViewCell {
            let hourlyWeatherModel = weatherForecastModel.hourly?.hourlyWeatherModel
            let hourlyForecastData = hourlyWeatherModel![indexPath.row]
            cell.updateHourlyCell(with: hourlyForecastData)
-      } else {
-        
-    }
+      }
       return cell
    }
 }
@@ -86,8 +84,6 @@ private extension HourlyForecastTableViewCell {
             //$0.bottom == $0.superview!.bottom
             $0.left == $0.superview!.left
             $0.right == $0.superview!.right
-        
-        
        }
     }
 }
@@ -97,7 +93,3 @@ private extension HourlyForecastTableViewCell {
       self.backgroundColor = UIColor.clear
     }
 }
-    
-    
-
-

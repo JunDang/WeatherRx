@@ -184,7 +184,7 @@ extension WeatherForecastSummaryViewController {
         print("windDirection: \(String(describing: windDirection))")
         let windSpeed = todayWeatherData!.windSpeed
         let unitChange =  UserDefaults.standard.string(forKey: "UnitChange")
-        if unitChange == "convertToImperial" {
+        if unitChange == "Imperial" {
             precipIntensityLbl.text = "Precipitation: \(precipIntensity.rounded(toPlaces: 2)) inch \(precipType)"
             windLbl.text = "Wind: \(windDirection!) \(windSpeed.rounded(toPlaces: 2)) MPH"
         } else {
@@ -198,4 +198,3 @@ extension WeatherForecastSummaryViewController {
         cloudCoverLbl.text = "Cloud Cover: \(todayWeatherData!.cloudCover.rounded(toPlaces: 2))"
     }
 }
-

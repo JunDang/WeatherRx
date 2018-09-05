@@ -80,5 +80,3 @@ struct ReverseGeocodingResult: Codable {
     }
     var addressComponents: [AddressComponent] = []
 }
-
-

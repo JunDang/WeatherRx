@@ -9,7 +9,7 @@
 import Foundation
 
 struct WeatherIcon {
-  
+    
     static var iconMap: [String : String] = [
         "clear-day" : "sunny",
         "partly-cloudy-day" : "partlyCloudy",
@@ -24,7 +24,5 @@ struct WeatherIcon {
         "wind" : "wind",
         "drizzle" : "drizzle"
     ]
-
+    
 }
-
-

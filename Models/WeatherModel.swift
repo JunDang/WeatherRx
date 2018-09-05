@@ -10,23 +10,23 @@ import Foundation
 import RealmSwift
 
 @objcMembers class WeatherForecastModel: Object, Decodable {
-   dynamic var latitude: Double = 0.0
-   dynamic var longitude: Double = 0.0
-   dynamic var currently: CurrentlyWeatherModel?
-   dynamic var hourly: HourlyWeatherModel?
-   dynamic var daily: DailyWeatherModel?
-   dynamic var minutely: MinutelyWeatherModel?
-   dynamic var compoundKey: String?
+    dynamic var latitude: Double = 0.0
+    dynamic var longitude: Double = 0.0
+    dynamic var currently: CurrentlyWeatherModel?
+    dynamic var hourly: HourlyWeatherModel?
+    dynamic var daily: DailyWeatherModel?
+    dynamic var minutely: MinutelyWeatherModel?
+    dynamic var compoundKey: String?
     
-   func configure(latitude: Double, longitude: Double){
+    func configure(latitude: Double, longitude: Double){
         self.latitude = latitude
         self.longitude = longitude
         self.compoundKey = "\(Int(self.latitude*10000))\(Int(self.longitude)*10000)"
     }
-   override static func primaryKey() -> String? {
+    override static func primaryKey() -> String? {
         return "compoundKey"
     }
-   enum WeatherCodingKeys : String, CodingKey {
+    enum WeatherCodingKeys : String, CodingKey {
         case latitude = "latitude"
         case longitude = "longitude"
         case currently = "currently"
@@ -34,7 +34,7 @@ import RealmSwift
         case daily = "daily"
         case minutely = "minutely"
     }
- }
+}
 
 @objcMembers class CurrentlyWeatherModel: Object, Decodable {
     dynamic var time: Int = 0
@@ -43,7 +43,7 @@ import RealmSwift
     dynamic var icon: String = "clear-day"
     dynamic var temperature: Double = 0.0
     dynamic var apparentTemperature: Double = 0.0
- 
+    
     private enum CurrentlyCodingKeys : String, CodingKey {
         case time = "time"
         case summary = "summary"
@@ -69,13 +69,13 @@ import RealmSwift
         apparentTemperature = try container.decode(Double.self, forKey: .apparentTemperature)
         timeDate = Date(timeIntervalSince1970: TimeInterval(time))
     }
-  
+    
 }
 
 class DailyWeatherModel: Object, Decodable {
     private enum DailyWeatherCodingKeys : String, CodingKey {
         case dailyWeatherModel = "data" }
-   // @objc var dailyWeatherModel: [DailyForecastData] = []
+    // @objc var dailyWeatherModel: [DailyForecastData] = []
     var dailyWeatherModel = List<DailyForecastData>()
     convenience init(dailyWeatherModel:List<DailyForecastData>) throws {
         self.init()
@@ -143,7 +143,7 @@ class DailyWeatherModel: Object, Decodable {
         self.sunriseTime = sunriseTime
         self.sunsetTime = sunsetTime
         if let precipType = precipType {
-           self.precipType = precipType
+            self.precipType = precipType
         } else {
             self.precipType = ""
         }
@@ -163,7 +163,7 @@ class DailyWeatherModel: Object, Decodable {
         sunriseTimeDate = Date(timeIntervalSince1970: TimeInterval(sunriseTime))
         sunsetTimeDate = Date(timeIntervalSince1970: TimeInterval(sunsetTime))
     }
-   convenience required init(from decoder: Decoder) throws {
+    convenience required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: DailyCodingKeys.self)
         let time = try container.decode(Int.self, forKey: .time)
         let temperatureMax = try container.decode(Double.self, forKey: .temperatureMax)
@@ -236,7 +236,7 @@ class DailyWeatherModel: Object, Decodable {
 @objcMembers class MinutelyWeatherModel: Object, Decodable {
     dynamic var summary: String?
     private enum MinutelyCodingKeys : String, CodingKey {
-       case summary = "summary"
+        case summary = "summary"
     }
     convenience init(summary: String) throws {
         self.init()
@@ -248,16 +248,3 @@ class DailyWeatherModel: Object, Decodable {
         try self.init(summary:summary)
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

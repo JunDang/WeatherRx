@@ -96,15 +96,14 @@ private extension DailyForecastTableViewCell {
 }
 
 extension DailyForecastTableViewCell{
-   
-    func updateDailyCell(with dailyForecastData: DailyForecastData){
+     func updateDailyCell(with dailyForecastData: DailyForecastData){
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "EEEE"
         dayLbl.text = dateFormatter.string(from: dailyForecastData.timeDate)
         let iconName = WeatherIcon.iconMap[dailyForecastData.icon]
         iconImage.image = UIImage(named: "\(String(describing: iconName!))")
         let unitChange =  UserDefaults.standard.string(forKey: "UnitChange")
-        if unitChange == "convertToImperial" {
+        if unitChange == "Imperial" {
             lowTempLbl.text = "\(dailyForecastData.temperatureMin.roundToInt())" + "\u{00B0}" + "F"
             highTempLbl.text = "\(dailyForecastData.temperatureMax.roundToInt())" + "\u{00B0}" + "F"
         } else {
@@ -112,6 +111,4 @@ extension DailyForecastTableViewCell{
             highTempLbl.text = "\(dailyForecastData.temperatureMax.toCelcius().roundToInt())" + "\u{00B0}" + "C"
         }
     }
-
 }
-

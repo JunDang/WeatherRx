@@ -50,8 +50,7 @@ class ViewModel {
     }
     
     func writeWeatherModelInRealm(weatherModelObservable: Observable<Result<WeatherForecastModel, Error>>) {
-        weatherModelObservable
-            //.observeOn(MainScheduler.instance)
+         weatherModelObservable
             .subscribe(onNext: { result in
                 switch result {
                 case .Success(let weatherForecastModel):
@@ -70,7 +69,6 @@ class ViewModel {
     }
     
    func bindOutPut() {
-        print("bindOutput")
         guard let realm = try? Realm() else {
             return
         }
@@ -89,4 +87,3 @@ class ViewModel {
           .disposed(by:bag)
   }
 }
-
