@@ -2,9 +2,11 @@
 //  ImageDataCaching.swift
 //  WeatherRx
 //
-//  Created by Jun Dang on 2018-04-02.
+//  Created by Jun Dang on 2018-09-05.
 //  Copyright © 2018 Jun Dang. All rights reserved.
 //
+
+import Foundation
 
 import Foundation
 import UIKit
@@ -18,8 +20,8 @@ class ImageDataCaching: ImageDataCachingProtocol {
             imageDataCashe.setObject(data, forKey: url)
         }
     }
-   
+    
     static func imageDataFromURLFromChache(url: NSURL) -> NSData? {
-         return imageDataCashe.object(forKey: url) as? NSData
+        return imageDataCashe.object(forKey: url) as? NSData
     }
 }

@@ -25,7 +25,7 @@ class GeoLocationService {
         locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
         
         authorized = Observable.just(CLLocationManager.authorizationStatus())
-             .concat(locationManager.rx.didChangeAuthorizationStatus)
+            .concat(locationManager.rx.didChangeAuthorizationStatus)
             .distinctUntilChanged()
             .map({ authorizedStatus in
                 switch authorizedStatus {
@@ -36,7 +36,7 @@ class GeoLocationService {
                 }
             })
             .catchErrorJustReturn(false)
-     
+        
         locationObservable = locationManager.rx.didUpdateLocations
             .catchErrorJustReturn([])
             .filter { $0.count > 0 }
@@ -45,7 +45,7 @@ class GeoLocationService {
             .distinctUntilChanged({ (lhs, rhs) -> Bool in
                 fabs(lhs.latitude - rhs.latitude) <= 0.001 && fabs(lhs.longitude - rhs.longitude) <= 0.001
             })
-
+        
         locationManager.requestAlwaysAuthorization()
         locationManager.startUpdatingLocation()
         
@@ -55,9 +55,9 @@ class GeoLocationService {
                 let lon = location.longitude
                 return self.reverseGeocoding(lat: lat, lon: lon)
         }
-   }
-  
-  func getLocation() -> Observable<CLLocationCoordinate2D> {
+    }
+    
+    func getLocation() -> Observable<CLLocationCoordinate2D> {
         return authorized
             .flatMap({ authorized -> Observable<CLLocationCoordinate2D> in
                 if authorized {
@@ -67,9 +67,9 @@ class GeoLocationService {
                     return Observable.just(location)
                 }
             })
-   }
+    }
     
-  func locationGeocoding(address: String) -> Observable<Result<(CLLocationCoordinate2D, String), Error>> {
+    func locationGeocoding(address: String) -> Observable<Result<(CLLocationCoordinate2D, String), Error>> {
         let baseURL = URL(string: GoogleGeocodingAPI.baseURLString)!
         let parameters = [
             "key": GoogleGeocodingAPI.apiKey,
@@ -146,7 +146,7 @@ class GeoLocationService {
                 }
             })
     }
-   
+    
     //MARK: - URL request
     private func request(_ baseURL: String = "", parameters: [String: String] = [:]) -> Observable<Result<Data, Error>> {
         let defaultSession = URLSession(configuration: .default)

@@ -53,45 +53,45 @@ struct ReverseGeocodingAPI {
 }
 
 class InternetService: InternetServiceProtocol {
-   
+    
     //MARK: - Flickr
     static func searchImageURL(lat: Double, lon: Double) -> Observable<Result<NSURL, Error>> {
         let baseURLString = FlickrAPI.baseURLString
         let parameters = [
-           "method": FlickrAPI.searchMethod,
-           "api_key": FlickrAPI.apiKey,
-           "format": "json",
-           "nojsoncallback": "1",
-           "per_page": "25",
-           "lat": "\(lat)",
-           "lon": "\(lon)",
-           "group_id": "1463451@N25",//"92767609@N00","1463451@N25"
-           "tagmode": "all"
+            "method": FlickrAPI.searchMethod,
+            "api_key": FlickrAPI.apiKey,
+            "format": "json",
+            "nojsoncallback": "1",
+            "per_page": "25",
+            "lat": "\(lat)",
+            "lon": "\(lon)",
+            "group_id": "1463451@N25",
+            "tagmode": "all"
         ]
         return request(baseURLString, parameters: parameters)
             .map({ result in
                 switch result {
-                   case .Success(let data):
-                   var flickrModel: FlickrModel?
+                case .Success(let data):
+                    var flickrModel: FlickrModel?
                     do {
                         flickrModel = try JSONDecoder().decode(FlickrModel.self, from: data)
                     } catch let parseError {
-                         return Result<NSURL, Error>.Failure(parseError)
+                        return Result<NSURL, Error>.Failure(parseError)
                     }
                     let flickrPhotos = flickrModel!.flickrModel!.flickrPhotos
                     guard flickrPhotos.count > 0 else {
                         return Result<NSURL, Error>.Failure(flickrRequestError.emptyAlbum)
                     }
-                   let randomIndex = Int(arc4random_uniform(UInt32(flickrPhotos.count)))
-                   let photo = flickrPhotos[randomIndex]
-                   let imageURL = photo.createImageURL()
-                   return Result<NSURL, Error>.Success(imageURL)
-                 case .Failure(let error):
+                    let randomIndex = Int(arc4random_uniform(UInt32(flickrPhotos.count)))
+                    let photo = flickrPhotos[randomIndex]
+                    let imageURL = photo.createImageURL()
+                    return Result<NSURL, Error>.Success(imageURL)
+                case .Failure(let error):
                     return Result<NSURL, Error>.Failure(error)
                 }
             })
     }
-   
+    
     static func sendRequest(resultNSURL: Result<NSURL, Error>) -> Observable<Result<Data, Error>> {
         switch resultNSURL {
         case .Success(let imageURL):
@@ -134,15 +134,15 @@ class InternetService: InternetServiceProtocol {
                         case .Failure(let error):
                             return Result<UIImage, Error>.Failure(error)
                         }
-                   }
-           } 
-       case .Failure(let error):
-          return Observable.just(Result<UIImage, Error>.Failure(error))
-      }
-  }
- 
+                }
+            }
+        case .Failure(let error):
+            return Observable.just(Result<UIImage, Error>.Failure(error))
+        }
+    }
+    
     // MARK: - Weather
-   static func getWeatherObservable(lat: Double, lon: Double) -> Observable<Result<WeatherForecastModel, Error>> {
+    static func getWeatherObservable(lat: Double, lon: Double) -> Observable<Result<WeatherForecastModel, Error>> {
         var baseURL = URL(string: DarskyAPI.baseURLString)!
         baseURL.appendPathComponent(DarskyAPI.apiKey)
         baseURL.appendPathComponent("\(lat),\(lon)")
@@ -155,7 +155,7 @@ class InternetService: InternetServiceProtocol {
                     do {
                         weatherForecastModel = try JSONDecoder().decode(WeatherForecastModel.self, from: data)
                     } catch let parseError {
-                         return Result<WeatherForecastModel, Error>.Failure(parseError)
+                        return Result<WeatherForecastModel, Error>.Failure(parseError)
                     }
                     return Result<WeatherForecastModel, Error>.Success(weatherForecastModel!)
                 case .Failure(let error):
@@ -163,7 +163,7 @@ class InternetService: InternetServiceProtocol {
                 }
             })
     }
- 
+    
     //MARK: - URL request
     static private func request(_ baseURL: String = "", parameters: [String: String] = [:]) -> Observable<Result<Data, Error>> {
         let defaultSession = URLSession(configuration: .default)
